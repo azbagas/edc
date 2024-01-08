@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Patient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class PatientController extends Controller
@@ -16,17 +17,19 @@ class PatientController extends Controller
     {
         $query = Patient::query();
 
-        if ($request->searchId) {
-            $query->where('id', 'like', $request->searchId . '%');
-        }
+        $query->when($request->searchId, function ($query) use ($request) {
+            return $query->where('id', 'like', $request->searchId . '%');
+        });
 
-        if ($request->searchName) {
-            $query->where('name', 'like', '%' . $request->searchName . '%');
-        }
+        $query->when($request->searchName, function ($query) use ($request) {
+            return $query->where('name', 'like', '%' . $request->searchName . '%');
+        });
 
-        if ($request->searchAddress) {
-            $query->where('address', 'like', '%' . $request->searchAddress . '%');
-        }
+        $query->when($request->searchAddress, function ($query) use ($request) {
+            return $query->where('address', 'like', '%' . $request->searchAddress . '%');
+        });
+        
+        Session::put('patients_url', request()->fullUrl());
 
         return view('patients.index', [
             'patients' => $query->orderByDesc('id')->paginate(10)->appends($request->all()),
@@ -79,7 +82,7 @@ class PatientController extends Controller
     {
         return view('patients.show', [
             'patient' => Patient::find($id),
-            'appointments' => Appointment::where('patient_id', $id)->orderByDesc('date')->get()
+            'appointments' => Appointment::where('patient_id', $id)->orderByDesc('created_at')->get()
         ]);
     }
 

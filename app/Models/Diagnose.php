@@ -13,6 +13,8 @@ class Diagnose extends Model
 
     protected $guarded = ['id'];
 
+    protected $with = ['disease'];
+
     public function appointments(): BelongsToMany
     {
         return $this->belongsToMany(Appointment::class)->withPivot('note')->withTimestamps();

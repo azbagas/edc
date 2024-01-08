@@ -26,6 +26,10 @@
             <div class="row">
                 <div class="col-md-10 col-lg-8 col-xl-6">
 
+                    <a href="{{ url()->previous() }}" class="btn btn-primary btn-sm mb-3">
+                        <i class="fa fa-arrow-left mr-2"></i>Kembali
+                    </a>
+
                     <div class="card">
                         {{-- <div class="card-header">
                             <h3 class="card-title">Buat Pasien Baru</h3>
@@ -42,7 +46,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="name">Nama Pasien</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror" required auto
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" required autofocus
                                         id="name" name="name" placeholder="Masukkan nama pasien..." value="{{ old('name') }}">
                                     @error('name')
                                         <span class="invalid-feedback">{{ $message }}</span>
@@ -124,7 +128,7 @@
                                     <button type="reset" class="btn btn-default">Reset</button>
                                 </div>
                                 <div>
-                                    <a href="/patients" class="btn btn-default mr-3">Batal</a >
+                                    
                                     <button type="submit" class="btn btn-primary">Buat pasien</button>
 
                                 </div>

@@ -18,19 +18,18 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col">
+                    
+                    <a href="/patients/create" class="btn btn-primary">
+                        <i class="fa fa-plus mr-2"></i>Buat pasien baru
+                    </a>
+                    
+                </div>
+            </div>
             <div class="row">
                 <div class="col">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title mt-2">Daftar Semua Pasien</h3>
-
-                            <div class="card-tools">
-                                <a href="/patients/create" class="btn btn-primary">
-                                    <i class="fa fa-plus mr-2"></i>Buat pasien baru
-                                </a>
-                            </div>
-                        </div>
-                        <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover table-bordered">
                                 <thead>
@@ -119,11 +118,6 @@
             </div>
             <!-- /.row -->
         </div><!-- /.container-fluid -->
-
-
-        {{-- Modal tambah pasien baru --}}
-        @include('patients._create-modal')
-
 
     </div>
 @endsection

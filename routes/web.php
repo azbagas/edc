@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
 use App\Models\Patient;
@@ -28,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     Route::resource('/patients', PatientController::class);
+    Route::resource('/appointments', AppointmentController::class);
 
     Route::post('/logout', [LoginController::class, 'logout']);
 });

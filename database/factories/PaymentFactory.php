@@ -20,7 +20,8 @@ class PaymentFactory extends Factory
         return [
             'payment_type_id' => fake()->numberBetween(1, PaymentType::all()->count()),
             'operational_cost' => fake()->randomElement([0, 20000, 50000, 75000]),
-            'note' => fake()->randomElement(['', fake()->sentence()])
+            'note' => fake()->randomElement(['', fake()->sentence()]),
+            'status' => fake()->randomElement(['Lunas', 'Belum lunas'])
         ];
     }
 }

@@ -18,6 +18,7 @@ use App\Models\Owner;
 use App\Models\Patient;
 use App\Models\Payment;
 use App\Models\PaymentType;
+use App\Models\Status;
 use App\Models\Treatment;
 use App\Models\TreatmentType;
 use Illuminate\Database\Seeder;
@@ -61,6 +62,17 @@ class DatabaseSeeder extends Seeder
         $this->seedFromCSV('app/seeder-klinik/doctors.csv', Doctor::class);
         $this->seedFromCSV('app/seeder-klinik/assistants.csv', Assistant::class);
         $this->seedFromCSV('app/seeder-klinik/patients.csv', Patient::class);
+
+        // status
+        $statuses = ['Menunggu' => 'secondary',
+                  'Sedang diperiksa' => 'warning',
+                  'Selesai' => 'success'];
+        foreach ($statuses as $name => $type) {
+            Status::create([
+                'name' => $name,
+                'type' => $type
+            ]);
+        }
         
         // appointment
         $appointments = Appointment::factory()->count(20)
@@ -142,5 +154,7 @@ class DatabaseSeeder extends Seeder
                 'doctor_percentage' => $appointment->doctor->doctor_percentage
             ]);
         }
+
+        $this->call([AdditionalFakeSeeder::class]);
     }
 }

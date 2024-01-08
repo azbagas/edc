@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col">
 
-                    <a href="{{ url()->previous() }}" class="btn btn-primary btn-sm mb-3">
+                    <a href="{{ session('patients_url') }}" class="btn btn-primary btn-sm mb-3">
                         <i class="fa fa-arrow-left mr-2"></i>Kembali
                     </a>
 
@@ -113,7 +113,7 @@
                             @foreach ($appointments as $appointment)
                                 <!-- Timeline time label -->
                                 <div class="time-label">
-                                    <span class="bg-success font-weight-normal">{{ \Carbon\Carbon::createFromFormat('Y-m-d', $appointment->date)->translatedFormat('l, j F Y') }}</span>
+                                    <span class="bg-success font-weight-normal">{{ \Carbon\Carbon::parse($appointment->created_at)->translatedFormat('l, j F Y') }}</span>
                                 </div>
                                 <div>
                                     <!-- Before each timeline item corresponds to one icon on the left scale -->
@@ -126,7 +126,7 @@
                                         <h3 class="timeline-header">
                                             <div class="row">
                                                 <div class="col-md-auto order-md-last mb-3">
-                                                    <span class="badge badge-success">{{ $appointment->status }}</span>
+                                                    <span class="badge badge-{{ $appointment->status->type }}">{{ $appointment->status->name }}</span>
                                                 </div>
                                                 <div class="col">
                                                     <div class="row mb-3 mb-md-2">
@@ -170,7 +170,15 @@
                                                     <b class="d-block">Diagnosa</b>
                                                     <ul>
                                                         @forelse ($appointment->diagnoses as $diagnose)
-                                                            <li>{{ $diagnose->name }}</li>
+                                                            <li class="@if(!$loop->last) mb-2 @endif">
+                                                                {{ $diagnose->name }} ({{ $diagnose->diagnose_code }})<br>
+                                                                <i>Catatan: </i>
+                                                                @if ($diagnose->pivot->note)
+                                                                    {{ $diagnose->pivot->note }}
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </li>
                                                         @empty 
                                                             <li>Tidak ada treatment</li>
                                                         @endforelse
@@ -182,9 +190,17 @@
                                                     <b class="d-block">Tindakan</b>
                                                     <ul>
                                                         @forelse ($appointment->treatments as $treatment)
-                                                            <li>{{ $treatment->name }}</li>
+                                                            <li class="@if(!$loop->last) mb-2 @endif">
+                                                                {{ $treatment->treatment_type->name }}: {{ $treatment->name }}<br>
+                                                                <i>Catatan: </i>
+                                                                @if ($treatment->pivot->note)
+                                                                    {{ $treatment->pivot->note }}
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </li>
                                                         @empty 
-                                                            <li>Tidak ada treatment</li>
+                                                            <li>Tidak ada tindakan</li>
                                                         @endforelse
                                                     </ul>
                                                 </div>

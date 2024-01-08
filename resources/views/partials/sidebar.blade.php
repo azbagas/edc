@@ -44,7 +44,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/appointments" class="nav-link {{ Request::is('appointments*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-notes-medical"></i>
                         <p>Pertemuan</p>
                     </a>

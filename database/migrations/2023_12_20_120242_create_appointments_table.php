@@ -18,9 +18,8 @@ return new class extends Migration
             $table->foreignId('assistant_id')->constrained();
             $table->foreignId('patient_id')->constrained();
             $table->text('complaint');
-            $table->date('date');
             $table->date('next_appointment_date')->nullable();
-            $table->enum('status', ['Menunggu', 'Diperiksa', 'Selesai', 'Batal']);
+            $table->foreignId('status_id')->constrained();
             $table->timestamps();
         });
     }

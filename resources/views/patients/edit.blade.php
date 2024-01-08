@@ -26,6 +26,10 @@
             <div class="row">
                 <div class="col-md-10 col-lg-8 col-xl-6">
 
+                    <a href="{{ url()->previous() }}" class="btn btn-primary btn-sm mb-3">
+                        <i class="fa fa-arrow-left mr-2"></i>Kembali
+                    </a>
+
                     <div class="card">
                         {{-- <div class="card-header">
                             <h3 class="card-title">Buat Pasien Baru</h3>
@@ -122,10 +126,9 @@
 
                             </div>
                             <div class="card-footer d-flex justify-content-end">
-                                <div>
-                                    <a href="{{ url()->previous() }}" class="btn btn-default mr-3">Batal</a >
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                </div>
+                        
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                
                             </div>
                         </form>
                     </div>

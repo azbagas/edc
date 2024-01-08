@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('operational_cost', 16, 2)->default(0);
             $table->decimal('doctor_percentage');
             $table->text('note')->nullable();
+            $table->enum('status', ['Lunas', 'Belum lunas']);
             $table->timestamps();
         });
     }

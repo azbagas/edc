@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Assistant;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,9 +27,9 @@ class AppointmentFactory extends Factory
             'assistant_id' => fake()->numberBetween(1, Assistant::all()->count()),
             'patient_id' => Patient::pluck('id')->random(),
             'complaint' => fake()->sentence(),
-            'date' => fake()->dateTimeBetween('-1 month', 'now'),
             'next_appointment_date' => fake()->dateTimeBetween('+1 day', '+1 month'),
-            'status' => fake()->randomElement(['Menunggu', 'Diperiksa', 'Selesai'])
+            'status_id' => fake()->numberBetween(1, Status::all()->count()),
+            'created_at' => fake()->dateTimeBetween('-2 month', 'now')
         ];
     }
 }

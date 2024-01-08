@@ -13,6 +13,8 @@ class Treatment extends Model
 
     protected $guarded = ['id'];
 
+    protected $with = ['treatment_type'];
+
     public function appointments(): BelongsToMany
     {
         return $this->belongsToMany(Appointment::class)->withPivot('price', 'note')->withTimestamps();
