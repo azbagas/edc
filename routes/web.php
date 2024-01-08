@@ -3,6 +3,7 @@
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
+use App\Models\Appointment;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::resource('/patients', PatientController::class);
     Route::resource('/appointments', AppointmentController::class);
+    Route::get('/appointments/create/{patient}', [AppointmentController::class, 'create']);
 
     Route::post('/logout', [LoginController::class, 'logout']);
 });

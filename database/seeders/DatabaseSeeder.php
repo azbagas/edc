@@ -7,21 +7,22 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Admin;
-use App\Models\Appointment;
-use App\Models\Doctor;
-use App\Models\Medicine;
-use App\Models\Assistant;
-use App\Models\Diagnose;
-use App\Models\Disease;
-use App\Models\MedicineType;
 use App\Models\Owner;
+use App\Models\Doctor;
+use App\Models\Status;
+use App\Models\Disease;
 use App\Models\Patient;
 use App\Models\Payment;
-use App\Models\PaymentType;
-use App\Models\Status;
+use App\Models\Diagnose;
+use App\Models\Medicine;
+use App\Models\Assistant;
 use App\Models\Treatment;
+use App\Models\Appointment;
+use App\Models\PaymentType;
+use App\Models\MedicineType;
 use App\Models\TreatmentType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -43,63 +44,63 @@ class DatabaseSeeder extends Seeder
         fclose($csvFile);
     }
 
+    public function generateRandomArrayNumberUnique($maxNumber, $minNumber = 1) {
+        // Function for generate array of integer uniquely
+        // with 70%-90% amount
+        $array = [];
+        $countNumber = mt_rand(1, 5);
+        for ($i=0; $i < $countNumber; $i++) {
+            do {
+                $number = mt_rand($minNumber, $maxNumber);
+            } while (in_array($number, $array));
+            array_push($array, $number);
+        }
+        return $array;
+    }
+
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // roles
-        $roles = ['owner', 'admin', 'doctor'];
-        foreach ($roles as $role) {
-            Role::create([
-                'name' => $role
-            ]);
+        $this->seedFromCSV('app/initial-data/users.csv', User::class);
+        $this->seedFromCSV('app/initial-data/roles.csv', Role::class);
+        $this->seedFromCSV('app/initial-data/owners.csv', Owner::class);
+        $this->seedFromCSV('app/initial-data/admins.csv', Admin::class);
+        $this->seedFromCSV('app/initial-data/doctors.csv', Doctor::class);
+        $this->seedFromCSV('app/initial-data/assistants.csv', Assistant::class);
+        $this->seedFromCSV('app/initial-data/patients.csv', Patient::class);
+        $this->seedFromCSV('app/initial-data/statuses.csv', Status::class);
+
+        // role user
+        $users = User::all();
+        // user 1 dan 2: owner dan admin
+        for ($user_id = 1; $user_id <= 2; $user_id++) { 
+            $users[$user_id - 1]->roles()->attach(1);
+            $users[$user_id - 1]->roles()->attach(2);
         }
-
-        $this->seedFromCSV('app/seeder-klinik/users.csv', User::class);
-        $this->seedFromCSV('app/seeder-klinik/owners.csv', Owner::class);
-        $this->seedFromCSV('app/seeder-klinik/admins.csv', Admin::class);
-        $this->seedFromCSV('app/seeder-klinik/doctors.csv', Doctor::class);
-        $this->seedFromCSV('app/seeder-klinik/assistants.csv', Assistant::class);
-        $this->seedFromCSV('app/seeder-klinik/patients.csv', Patient::class);
-
-        // status
-        $statuses = ['Menunggu' => 'secondary',
-                  'Sedang diperiksa' => 'warning',
-                  'Selesai' => 'success'];
-        foreach ($statuses as $name => $type) {
-            Status::create([
-                'name' => $name,
-                'type' => $type
-            ]);
+        // user 3 dan 4: admin
+        for ($user_id = 3; $user_id <= 4; $user_id++) { 
+            $users[$user_id - 1]->roles()->attach(2);
+        }
+        // user 5 - 8: doctor
+        for ($user_id = 5; $user_id <= 8; $user_id++) { 
+            $users[$user_id - 1]->roles()->attach(3);
         }
         
         // appointment
-        $appointments = Appointment::factory()->count(20)
+        $appointments = Appointment::factory()->count(30)
                                                 ->create();
-
-        function generateRandomArrayNumberUnique($maxNumber, $minNumber = 1) {
-            // Function for generate array of integer uniquely
-            // with 70%-90% amount
-            $array = [];
-            $countNumber = mt_rand(1, 5);
-            for ($i=0; $i < $countNumber; $i++) {
-                do {
-                    $number = mt_rand($minNumber, $maxNumber);
-                } while (in_array($number, $array));
-                array_push($array, $number);
-            }
-            return $array;
-        }
         
-        $this->seedFromCSV('app/seeder-klinik/medicine_types.csv', MedicineType::class);
-        $this->seedFromCSV('app/seeder-klinik/medicines.csv', Medicine::class);
+        $this->seedFromCSV('app/initial-data/medicine_types.csv', MedicineType::class);
+        $this->seedFromCSV('app/initial-data/medicines.csv', Medicine::class);
 
         // appointment medicine
         $randomAppointments = $appointments->random(6);
 
+        $medicines_count = Medicine::all()->count();
         foreach ($randomAppointments as $appointment) {
-            $medicineIDs = generateRandomArrayNumberUnique(Medicine::all()->count());
+            $medicineIDs = $this->generateRandomArrayNumberUnique($medicines_count);
             foreach ($medicineIDs as $medicineID) {
                 $appointment->medicines()
                                 ->attach($medicineID, 
@@ -108,12 +109,13 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        $this->seedFromCSV('app/seeder-klinik/treatment_types.csv', TreatmentType::class);
-        $this->seedFromCSV('app/seeder-klinik/treatments.csv', Treatment::class);
+        $this->seedFromCSV('app/initial-data/treatment_types.csv', TreatmentType::class);
+        $this->seedFromCSV('app/initial-data/treatments.csv', Treatment::class);
         
         // appointment treatment
+        $treatments_count = Treatment::all()->count();
         foreach ($appointments as $appointment) {
-            $treatmentIDs = generateRandomArrayNumberUnique(Treatment::all()->count());
+            $treatmentIDs = $this->generateRandomArrayNumberUnique($treatments_count);
             foreach ($treatmentIDs as $treatmentID) {
                 $appointment->treatments()
                             ->attach($treatmentID,
@@ -122,12 +124,13 @@ class DatabaseSeeder extends Seeder
             }
         }
         
-        $this->seedFromCSV('app/seeder-klinik/diseases.csv', Disease::class);
-        $this->seedFromCSV('app/seeder-klinik/diagnoses.csv', Diagnose::class);
+        $this->seedFromCSV('app/initial-data/diseases.csv', Disease::class);
+        $this->seedFromCSV('app/initial-data/diagnoses.csv', Diagnose::class);
         
         // appointment diagnose
+        $diagnoses_count = Diagnose::all()->count();
         foreach ($appointments as $appointment) {
-            $diagnoseIDs = generateRandomArrayNumberUnique(Diagnose::all()->count());
+            $diagnoseIDs = $this->generateRandomArrayNumberUnique($diagnoses_count);
             foreach ($diagnoseIDs as $diagnoseID) {
                 $appointment->diagnoses()
                             ->attach($diagnoseID,
@@ -135,7 +138,7 @@ class DatabaseSeeder extends Seeder
             }
         }
         
-        $this->seedFromCSV('app/seeder-klinik/payment_types.csv', PaymentType::class);
+        $this->seedFromCSV('app/initial-data/payment_types.csv', PaymentType::class);
         
         // payment
         foreach ($appointments as $appointment) {
@@ -155,6 +158,16 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        $this->call([AdditionalFakeSeeder::class]);
+        // Fake tanggal lahir dan phone user
+        $patients = DB::table('patients')->get();
+        foreach ($patients as $patient) {
+
+            DB::table('patients')
+                ->where('id', $patient->id)
+                ->update([
+                    'date_of_birth' => fake()->date(max:'2017-12-12'),
+                    'phone' => fake()->phoneNumber()
+                ]);
+        }
     }
 }

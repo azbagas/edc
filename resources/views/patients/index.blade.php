@@ -94,7 +94,7 @@
                                                 <a href="/patients/{{ $patient->id }}" class="btn btn-primary btn-sm">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a href="#" class="btn btn-success btn-sm">
+                                                <a href="appointments/create/{{ $patient->id }}" class="btn btn-success btn-sm">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                             </td>

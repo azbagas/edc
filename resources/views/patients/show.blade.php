@@ -161,7 +161,7 @@
                                         <div class="timeline-body">
                                             <div class="row mb-3">
                                                 <div class="col">
-                                                    <b class="d-block">Komplain</b>
+                                                    <b class="d-block">Keluhan</b>
                                                     <span>{{ $appointment->complaint }}</span>
                                                 </div>
                                             </div>

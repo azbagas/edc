@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Assistant;
 use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\Status;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -47,9 +50,14 @@ class AppointmentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Patient $patient)
     {
-        //
+        // dd(Auth::user()->admin->id);
+        return view('appointments.create', [
+            'patient' => $patient,
+            'doctors' => Doctor::all(),
+            'assistants' => Assistant::all()
+        ]);
     }
 
     /**
@@ -57,7 +65,26 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'patient_id' => 'required',
+            'doctor_id' => 'required',
+            'assistant_id' => 'required',
+            'complaint' => 'required',
+        ]);
+
+        if (Auth::user()->role->name != 'admin') {
+            return back()->with('error', 'Anda bukan admin!');
+        }
+
+        // $validatedData['admin_id'] = 
+
+        // $validatedData['']
+
+        // Appointment::create()
+
+        // Patient::create($validatedData);
+
+        // return redirect('/patients')->with('success', 'Pasien berhasil dibuat');
     }
 
     /**
