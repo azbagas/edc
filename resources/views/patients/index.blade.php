@@ -48,7 +48,7 @@
                                                     name="searchAddress" value="{{ request('searchAddress') }}"
                                                     placeholder="Cari alamat pasien...">
                                             </td>
-                                            <td colspan="3">
+                                            <td colspan="4">
                                                 <div class="row">
                                                     <div class="col-6 col-xl-7">
                                                         <button type="submit" class="btn btn-block btn-info">
@@ -65,11 +65,12 @@
                                         </form>
                                     </tr>
                                     <tr>
-                                        <th>No Pasien</th>
+                                        <th class="col-2">No Pasien</th>
                                         <th>Nama Pasien</th>
                                         <th>Alamat</th>
                                         <th>Tanggal Lahir</th>
                                         <th>Jenis Kelamin</th>
+                                        <th>No Telepon</th>
                                         <th class="text-nowrap">Aksi</th>
                                     </tr>
                                 </thead>
@@ -79,14 +80,9 @@
                                             <td>{{ $patient->id }}</td>
                                             <td>{{ $patient->name }}</td>
                                             <td>{{ $patient->address }}</td>
-                                            <td>
-                                                @if ($patient->date_of_birth)
-                                                    {{ $patient->date_of_birth }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
+                                            <td>{{ $patient->date_of_birth }}</td>
                                             <td>{{ $patient->gender }}</td>
+                                            <td>{{ $patient->phone }}</td>
                                             <td class="text-nowrap">
                                                 <a href="/patients/{{ $patient->id }}/edit" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pen"></i>
@@ -101,7 +97,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="text-center">
+                                            <td colspan="7" class="text-center">
                                                 <span>Tidak ada pasien dengan data tersebut.</span>
                                             </td>
                                         </tr>
@@ -113,10 +109,16 @@
                         </div>
                         <!-- /.card-body -->
                     </div>
-                    {{ $patients->onEachSide(1)->links() }}
                 </div>
             </div>
             <!-- /.row -->
+            
+            <div class="row">
+                <div class="col">
+                    {{ $patients->onEachSide(1)->links() }}
+
+                </div>
+            </div>
         </div><!-- /.container-fluid -->
 
     </div>

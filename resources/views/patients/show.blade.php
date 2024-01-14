@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col">
 
-                    <a href="{{ session('patients_url') }}" class="btn btn-primary btn-sm mb-3">
+                    <a href="{{ session('patients_url') ?? '/patients' }}" class="btn btn-primary btn-sm mb-3">
                         <i class="fa fa-arrow-left mr-2"></i>Kembali
                     </a>
 
@@ -45,57 +45,31 @@
                                 <a href="/patients/{{ $patient->id }}/edit" class="btn btn-warning btn-sm">
                                     <i class="fa fa-pen"></i> Edit
                                 </a>
+                                <a href="/../appointments/create/{{ $patient->id }}" class="btn btn-success btn-sm">
+                                    <i class="fa fa-plus"></i> Tambah ke pertemuan
+                                </a>
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-3 col-xl-2">
-                                    <p class="font-weight-bold mb-0">Nomor Pasien</p>
-                                </div>
-                                <div class="col-sm-9 col-xl-10">
-                                    <p><span class="d-none d-sm-inline mr-2">:</span>{{ $patient->id }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3 col-xl-2">
-                                    <p class="font-weight-bold mb-0">Nama</p>
-                                </div>
-                                <div class="col-sm-9 col-xl-10">
-                                    <p><span class="d-none d-sm-inline mr-2">:</span>{{ $patient->name }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3 col-xl-2">
-                                    <p class="font-weight-bold mb-0">Tanggal Lahir</p>
-                                </div>
-                                <div class="col-sm-9 col-xl-10">
-                                    <p><span class="d-none d-sm-inline mr-2">:</span>{{ $patient->date_of_birth }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3 col-xl-2">
-                                    <p class="font-weight-bold mb-0">Jenis Kelamin</p>
-                                </div>
-                                <div class="col-sm-9 col-xl-10">
-                                    <p><span class="d-none d-sm-inline mr-2">:</span>{{ $patient->gender }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3 col-xl-2">
-                                    <p class="font-weight-bold mb-0">Nomor Telepon</p>
-                                </div>
-                                <div class="col-sm-9 col-xl-10">
-                                    <p><span class="d-none d-sm-inline mr-2">:</span>{{ $patient->phone }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-3 col-xl-2">
-                                    <p class="font-weight-bold mb-0">Alamat</p>
-                                </div>
-                                <div class="col-sm-9 col-xl-10">
-                                    <p><span class="d-none d-sm-inline mr-2">:</span>{{ $patient->address }}</p>
-                                </div>
-                            </div>
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4 col-md-3 col-xl-2">Nomor Pasien</dt>
+                                <dd class="col-sm-8 col-md-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $patient->id }}</dd>
+
+                                <dt class="col-sm-4 col-md-3 col-xl-2">Nama</dt>
+                                <dd class="col-sm-8 col-md-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $patient->name }}</dd>
+
+                                <dt class="col-sm-4 col-md-3 col-xl-2">Tanggal Lahir</dt>
+                                <dd class="col-sm-8 col-md-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $patient->date_of_birth }} ({{ $patient->age }} tahun)</dd>
+
+                                <dt class="col-sm-4 col-md-3 col-xl-2">Jenis Kelamin</dt>
+                                <dd class="col-sm-8 col-md-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $patient->gender }}</dd>
+                                
+                                <dt class="col-sm-4 col-md-3 col-xl-2">Nomor Telepon</dt>
+                                <dd class="col-sm-8 col-md-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $patient->phone }}</dd>
+                                
+                                <dt class="col-sm-4 col-md-3 col-xl-2">Alamat</dt>
+                                <dd class="col-sm-8 col-md-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $patient->address }}</dd>
+                            </dl>
                         </div>
                     </div>
 
@@ -180,12 +154,12 @@
                                                                 @endif
                                                             </li>
                                                         @empty 
-                                                            <li>Tidak ada treatment</li>
+                                                            <li>Tidak ada diagnosa</li>
                                                         @endforelse
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row mb-3">
                                                 <div class="col">
                                                     <b class="d-block">Tindakan</b>
                                                     <ul>
@@ -205,10 +179,24 @@
                                                     </ul>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <b class="d-block">Obat</b>
+                                                    <ul>
+                                                        @forelse ($appointment->medicines as $medicine)
+                                                            <li class="@if(!$loop->last) mb-2 @endif">
+                                                                {{ $medicine->name }} {{ $medicine->dose }} x{{ $medicine->pivot->quantity }} {{ $medicine->unit }}
+                                                            </li>
+                                                        @empty 
+                                                            <li>Tidak ada obat</li>
+                                                        @endforelse
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                         <!-- Placement of additional controls. Optional -->
                                         <div class="timeline-footer">
-                                            <a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>
+                                            <a href="/appointments/{{ $appointment->id }}" class="btn btn-primary btn-sm">Lihat Detail</a>
                                             {{-- <a class="btn btn-danger btn-sm">Delete</a> --}}
                                         </div>
                                     </div>

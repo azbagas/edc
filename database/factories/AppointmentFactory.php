@@ -23,12 +23,12 @@ class AppointmentFactory extends Factory
     {
         return [
             'doctor_id' => fake()->numberBetween(1, Doctor::all()->count()),
-            'admin_id' => fake()->numberBetween(1, Admin::all()->count()),
+            'admin_id' => fake()->numberBetween(3, 4),
             'assistant_id' => fake()->numberBetween(1, Assistant::all()->count()),
             'patient_id' => Patient::pluck('id')->random(),
             'complaint' => fake()->sentence(),
             'next_appointment_date' => fake()->dateTimeBetween('+1 day', '+1 month'),
-            'status_id' => fake()->numberBetween(1, Status::all()->count()),
+            'status_id' => 3, // selesai
             'created_at' => fake()->dateTimeBetween('-2 month', 'now')
         ];
     }

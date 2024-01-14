@@ -29,14 +29,14 @@
                     <!-- small box -->
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>5</h3>
+                            <h3>{{ $todayAppointments }}</h3>
 
                             <p>Pertemuan Hari Ini</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-medkit"></i>
                         </div>
-                        <a href="#" class="small-box-footer">Lihat selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="/appointments" class="small-box-footer">Lihat selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->

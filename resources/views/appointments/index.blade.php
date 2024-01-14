@@ -35,6 +35,7 @@
                                                 <option value="yesterday" {{ request('date') == 'yesterday' ? 'selected' : '' }}>Kemarin</option>
                                                 <option value="sevenDaysBefore" {{ request('date') == 'sevenDaysBefore' ? 'selected' : '' }}>7 hari terakhir</option>
                                                 <option value="thisMonth" {{ request('date') == 'thisMonth' ? 'selected' : '' }}>Bulan ini</option>
+                                                <option value="allTime" {{ request('date') == 'allTime' ? 'selected' : '' }}>Semua waktu</option>
                                             </select>
                                         </div>
                                     </div>
@@ -83,32 +84,6 @@
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover table-bordered">
                                 <thead>
-                                    {{-- <tr>
-                                        <form action="">
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
-                                                <select class="form-control" name="doctor">
-                                                    <option value="">Semua dokter</option>
-                                                    @foreach ($doctors as $doctor)
-                                                        <option value="{{ $doctor->id }}">{{ $doctor->user->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td></td>
-                                            <td>
-                                                <select class="form-control">
-                                                    <option>Semua status</option>
-                                                    <option>option 2</option>
-                                                    <option>option 3</option>
-                                                    <option>option 4</option>
-                                                    <option>option 5</option>
-                                                </select>
-                                            </td>
-                                            <td></td>
-                                        </form>
-                                    </tr> --}}
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
@@ -136,9 +111,16 @@
                                                 <a href="/appointments/{{ $appointment->id }}/edit" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pen"></i>
                                                 </a>
-                                                <a href="/appointments/{{ $appointment->id }}" class="btn btn-primary btn-sm">
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
+                                                @if ($appointment->status->name == 'Selesai')
+                                                    <a href="/appointments/{{ $appointment->id }}" class="btn btn-primary btn-sm">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                @endif
+                                                @if ($appointment->status->name != 'Selesai')
+                                                    <a href="/appointments/{{ $appointment->id }}/examination" class="btn btn-success btn-sm">
+                                                        <i class="fa fa-search"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
@@ -154,10 +136,16 @@
                         </div>
                         <!-- /.card-body -->
                     </div>
-                    {{ $appointments->onEachSide(1)->links() }}
                 </div>
             </div>
             <!-- /.row -->
+            
+            <div class="row">
+                <div class="col">
+                    {{ $appointments->onEachSide(1)->links() }}
+                </div>
+            </div>
+
         </div><!-- /.container-fluid -->
 
 

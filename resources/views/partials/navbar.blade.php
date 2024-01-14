@@ -5,6 +5,9 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
                     class="fas fa-bars"></i></a>
         </li>
+        <li class="nav-item d-none d-sm-flex align-items-sm-center">
+            <span id="time"></span>
+        </li>
         {{-- <li class="nav-item d-none d-sm-inline-block">
             <a href="index3.html" class="nav-link">Home</a>
         </li>
@@ -140,3 +143,31 @@
         </li>
     </ul>
 </nav>
+
+@push('navbarScripts')
+    <script>
+        $(document).ready(function() {
+            moment.locale('id');
+            
+            let showTime = '';
+
+            // Fungsi untuk memperbarui jam secara real-time
+            function updateClock() {
+                // Gunakan Moment.js untuk mendapatkan waktu saat ini
+                let currentTime = moment().format('dddd, D MMMM YYYY | HH:mm');
+
+                if (showTime != currentTime) {
+                    showTime = currentTime;
+                    // Update elemen HTML dengan waktu saat ini menggunakan jQuery
+                    $('#time').text(showTime);
+                }
+            }
+
+            // Panggil fungsi updateClock setiap detik (1000 milidetik)
+            setInterval(updateClock, 1000);
+
+            // Panggil fungsi updateClock untuk pertama kali
+            updateClock();
+        });
+    </script>
+@endpush

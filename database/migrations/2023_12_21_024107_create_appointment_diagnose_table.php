@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('appointment_diagnose', function (Blueprint $table) {
             $table->foreignId('appointment_id')->constrained();
             $table->foreignId('diagnose_id')->constrained();
-            $table->text('note');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

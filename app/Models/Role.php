@@ -13,6 +13,10 @@ class Role extends Model
 
     protected $guarded = ['id'];
 
+    public const IS_OWNER = 1;
+    public const IS_ADMIN = 2;
+    public const IS_DOCTOR = 3;
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();

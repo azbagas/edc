@@ -16,13 +16,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    
 
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    
+    
     @yield('styles')
 </head>
 
@@ -77,9 +83,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
     <!-- Moment js -->
     <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/id.min.js"></script>
     <!-- InputMask -->
     <script src="{{ asset('plugins/inputmask/jquery.inputmask.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 
+    @stack('navbarScripts')
     @stack('sidebarScripts')
     @stack('scripts')
 
@@ -90,6 +100,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         @if (session()->has('error'))
             toastr.error("{{ session('error') }}")
+        @endif
+
+        @if (session()->has('info'))
+            toastr.info("{{ session('info') }}")
         @endif
     </script>
 </body>

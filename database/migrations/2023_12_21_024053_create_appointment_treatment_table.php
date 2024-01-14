@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('appointment_id')->constrained();
             $table->foreignId('treatment_id')->constrained();
             $table->decimal('price', 16, 2);
-            $table->text('note');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('patient_id')->constrained();
             $table->text('complaint');
             $table->date('next_appointment_date')->nullable();
-            $table->foreignId('status_id')->constrained()->default(1);
+            $table->foreignId('status_id')->constrained();
             $table->timestamps();
         });
     }

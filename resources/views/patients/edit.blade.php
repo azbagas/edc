@@ -41,13 +41,13 @@
                             <div class="card-body">
 
                                 <div class="form-group">
-                                    <label for="id">No Pasien</label>
+                                    <label for="id">No Pasien<span class="text-danger">*</span></label>
                                     {{-- Cuma tampilan aja, gak dipassing --}}
                                     <input type="text" class="form-control" id="id" name="id"
                                         value="{{ $patient->id }}" disabled>
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">Nama Pasien</label>
+                                    <label for="name">Nama Pasien<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror" required
                                         id="name" name="name" placeholder="Masukkan nama pasien..." value="{{ old('name', $patient->name) }}">
                                     @error('name')
@@ -57,7 +57,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="date_of_birth">Tanggal Lahir</label>
+                                            <label for="date_of_birth">Tanggal Lahir<span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i
@@ -75,7 +75,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Jenis Kelamin</label>
+                                            <label>Jenis Kelamin<span class="text-danger">*</span></label>
 
                                             <div class="row">
                                                 <div class="col-sm-4 col-md-5">
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="address">Alamat</label>
+                                    <label for="address">Alamat<span class="text-danger">*</span></label>
                                     <textarea id="address" name="address" class="form-control @error('address') is-invalid @enderror" rows="3" required
                                         placeholder="Masukkan alamat...">{{ old('address', $patient->address) }}</textarea>
                                     @error('address')

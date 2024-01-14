@@ -28,6 +28,13 @@ class Patient extends Model
         );
     }
 
+    protected function age(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => Carbon::parse($attributes['date_of_birth'])->age 
+        );
+    }
+
     // protected function gender(): Attribute
     // {
     //     return Attribute::make(

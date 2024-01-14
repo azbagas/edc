@@ -166,7 +166,7 @@ class DatabaseSeeder extends Seeder
                 ->where('id', $patient->id)
                 ->update([
                     'date_of_birth' => fake()->date(max:'2017-12-12'),
-                    'phone' => fake()->phoneNumber()
+                    'phone' => fake()->numerify('08##########')
                 ]);
         }
     }

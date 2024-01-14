@@ -54,7 +54,7 @@ class PatientController extends Controller
             'name' => 'required',
             'date_of_birth' => 'required|date_format:d-m-Y',
             'gender' => 'required',
-            'phone' => 'required|numeric',
+            'phone' => 'nullable|numeric',
             'address' => 'required'
         ]);
 
@@ -105,7 +105,7 @@ class PatientController extends Controller
             'name' => 'required',
             'date_of_birth' => 'required|date_format:d-m-Y',
             'gender' => 'required',
-            'phone' => 'required|numeric',
+            'phone' => 'nullable|numeric',
             'address' => 'required'
         ]);
 
