@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Doctor;
 use App\Models\Status;
 use App\Models\Disease;
@@ -13,8 +14,8 @@ use App\Models\Appointment;
 use App\Models\PaymentType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
@@ -35,17 +36,10 @@ class AppointmentController extends Controller
             return $query->where('status_id', $request->status);
         });
 
-        $query->when($request->date, function ($query) use ($request) {
-            if ($request->date == 'yesterday') {
-                return $query->whereDate('created_at', now()->subDay());
-            } elseif ($request->date == 'thisMonth') {
-                return $query->whereYear('created_at', now()->year)
-                             ->whereMonth('created_at', now()->month);
-            } elseif ($request->date == 'sevenDaysBefore') {
-                return $query->whereBetween('created_at', [now()->subDays(7), now()->endOfDay()]);
-            } elseif ($request->date == 'allTime') {
-                return;
-            }
+        $query->when($request->start_date, function ($query) use ($request) {
+            $start_date = Carbon::createFromFormat('d-m-Y', $request->start_date);
+            $end_date = Carbon::createFromFormat('d-m-Y', $request->end_date);
+            return $query->whereBetween('created_at', [$start_date->startOfDay(), $end_date->endOfDay()]);
         }, function ($query) {
             return $query->whereDate('created_at', now()->today());
         });
@@ -164,6 +158,16 @@ class AppointmentController extends Controller
         ]);
 
         $appointment->update($validatedData);
+        
+        // Kalo sudah melakukan payment maka ubah doctor_percentage karena takut dokter yang diubah
+        if ($appointment->payment) {
+            $payment = $appointment->payment;
+            $doctor = Doctor::find($validatedData['doctor_id']);
+
+            $payment->update([
+                'doctor_percentage' => $doctor->doctor_percentage
+            ]);
+        }
 
         return redirect($request->fromUrl)->with('success', 'Pertemuan berhasil diedit');
     }
@@ -194,7 +198,6 @@ class AppointmentController extends Controller
 
     public function examination_update(Request $request, Appointment $appointment)
     {
-        // dd($request->all());
         // Fix format harga
         if ($request->treatment_price) {
             $treatmentPrices = $request->treatment_price;
@@ -321,9 +324,11 @@ class AppointmentController extends Controller
     public function payment_update(Appointment $appointment, Request $request)
     {
         // Change format operational cost
-        $operationalCost = $request->operational_cost;
-        $operationalCost = change_currency_format_to_decimal($operationalCost);
-        $request->merge(['operational_cost' => $operationalCost]);
+        if ($request->operational_cost) {
+            $operationalCost = $request->operational_cost;
+            $operationalCost = change_currency_format_to_decimal($operationalCost);
+            $request->merge(['operational_cost' => $operationalCost]);
+        }
 
         $validatedData = $request->validate([
             'payment_type_id' => 'required',
@@ -347,6 +352,8 @@ class AppointmentController extends Controller
 
         $grandTotal = $subTotalTreatments + $subTotalMedicines;
 
+        
+
         if (!$appointment->payment) {
             Payment::create([
                 'appointment_id' => $appointment->id,
@@ -356,6 +363,14 @@ class AppointmentController extends Controller
                 'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
                 'status' => 'Lunas'
             ]);
+
+            if ($appointment->status_id == 2) {
+                $appointment->update([
+                    'status_id' => 3
+                ]);
+            }
+
+            return redirect('/appointments/'. $appointment->id)->with('success', 'Pemeriksaan berhasil!');
         } else {
             $payment = $appointment->payment;
             $payment->update([
@@ -366,14 +381,9 @@ class AppointmentController extends Controller
                 'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
                 'status' => 'Lunas'
             ]);
-        }
 
-        if ($appointment->status_id == 2) {
-            $appointment->update([
-                'status_id' => 3
-            ]);
+            return redirect('/appointments/'. $appointment->id)->with('success', 'Berhasil diedit!');
         }
-
-        return redirect('/appointments/'. $appointment->id)->with('success', 'Pemeriksaan berhasil');
+        
     }
 }

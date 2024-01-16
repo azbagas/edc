@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DependantDropdownController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
 use App\Models\Appointment;
@@ -40,6 +42,17 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/appointments/{appointment}/payment', [AppointmentController::class, 'payment']);
     Route::put('/appointments/{appointment}/payment', [AppointmentController::class, 'payment_update']);
+
+    Route::resource('/income', IncomeController::class)->only([
+        'index'
+    ]);
+    Route::resource('/expenses', ExpenseController::class)->except([
+        'show'
+    ]);
+
+
+
+
     
     Route::get('/get-diseases', [DependantDropdownController::class, 'getDiseases'])->name('getDiseases');
     Route::get('/get-treatment-types', [DependantDropdownController::class, 'getTreatmentTypes'])->name('getTreatmentTypes');

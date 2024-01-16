@@ -11,7 +11,7 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/patients">Data Pasien</a></li>
+                        <li class="breadcrumb-item"><a href="{{ session('patients_url') ?? '/patients'  }}">Data Pasien</a></li>
                         <li class="breadcrumb-item active">Buat Pasien baru</li>
                     </ol>
                 </div>
@@ -25,10 +25,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10 col-lg-8 col-xl-6">
-
-                    <a href="{{ url()->previous() }}" class="btn btn-primary btn-sm mb-3">
-                        <i class="fa fa-arrow-left mr-2"></i>Kembali
-                    </a>
 
                     <div class="card">
                         {{-- <div class="card-header">

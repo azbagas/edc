@@ -2,6 +2,18 @@
 
 @section('title', 'Pertemuan')
 
+@section('styles')
+    <style>
+        #date_range:hover {
+            cursor: pointer;
+        }
+
+        #date_range {
+            caret-color: transparent;
+        }
+    </style>
+@endsection
+
 @section('header')
     <div class="content-header">
         <div class="container-fluid">
@@ -21,22 +33,28 @@
             <div class="row">
                 <div class="col">
                     <div class="card">
-                        <form action="/appointments" method="GET" id="filter-form">
+                        <form action="/appointments" method="GET" id="filter-form" spellcheck="false" autocomplete="off">
                             <div class="card-header">
                                 <h3 class="card-title">Filter</h3>
                             </div>
                             <div class="card-body">
+                                
                                 <div class="row">
                                     <div class="col-md-7 col-xl-5">
                                         <div class="form-group">
-                                            <label for="date">Waktu</label>
-                                            <select class="form-control" name="date" id="date">
-                                                <option value="">Hari ini</option>
-                                                <option value="yesterday" {{ request('date') == 'yesterday' ? 'selected' : '' }}>Kemarin</option>
-                                                <option value="sevenDaysBefore" {{ request('date') == 'sevenDaysBefore' ? 'selected' : '' }}>7 hari terakhir</option>
-                                                <option value="thisMonth" {{ request('date') == 'thisMonth' ? 'selected' : '' }}>Bulan ini</option>
-                                                <option value="allTime" {{ request('date') == 'allTime' ? 'selected' : '' }}>Semua waktu</option>
-                                            </select>
+                                            <label for="date_range">Waktu</label>
+                            
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="far fa-calendar-alt"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control float-right" id="date_range">
+                                                <input type="hidden" name="start_date">
+                                                <input type="hidden" name="end_date">
+                                            </div>
+                                            <!-- /.input group -->
                                         </div>
                                     </div>
                                 </div>
@@ -91,6 +109,7 @@
                                         <th>No Pasien</th>
                                         <th>Nama Pasien</th>
                                         <th>Dokter</th>
+                                        <th>Asisten</th>
                                         <th>Keluhan</th>
                                         <th>Status</th>
                                         <th class="text-nowrap">Aksi</th>
@@ -100,11 +119,12 @@
                                     @forelse ($appointments as $appointment)
                                         <tr>
                                             <td>{{ ($appointments->total()-$loop->index)-(($appointments->currentpage()-1) * $appointments->perpage() ) }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($appointment->created_at)->format('d-m-Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($appointment->created_at)->translatedFormat('j M Y') }}</td>
                                             <td>{{ \Carbon\Carbon::parse($appointment->created_at)->format('H:i') }}</td>
                                             <td>{{ $appointment->patient_id }}</td>
                                             <td>{{ $appointment->patient->name }}</td>
                                             <td>{{ $appointment->doctor->user->name }}</td>
+                                            <td>{{ $appointment->assistant->name }}</td>
                                             <td>{{ $appointment->complaint }}</td>
                                             <td><span class="badge badge-{{ $appointment->status->type }}">{{ $appointment->status->name }}</span></td>
                                             <td class="text-nowrap">
@@ -125,7 +145,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="9" class="text-center">
+                                            <td colspan="10" class="text-center">
                                                 <span>Belum ada pertemuan.</span>
                                             </td>
                                         </tr>
@@ -156,18 +176,52 @@
 <script>
     $(document).ready(function() {
 
+        let filterForm = $('#filter-form');
+
         $('#doctor').on('change', function() {
-            let filterForm = $('#filter-form');
             filterForm.submit();
         });
 
         $('#status').on('change', function() {
-            let filterForm = $('#filter-form');
             filterForm.submit();
         });
 
         $('#date').on('change', function() {
-            let filterForm = $('#filter-form');
+            filterForm.submit();
+        });
+
+        //Date range picker
+        let start = moment();
+        @if(request('start_date'))
+            startStr = "{{ request('start_date') }}";
+            start = moment(startStr, "DD-MM-YYYY");
+        @endif
+        $('input[name="start_date"]').val(start.format('DD-MM-YYYY'));
+
+        let end = moment();
+        @if(request('end_date'))
+            endStr = "{{ request('end_date') }}";
+            end = moment(endStr, "DD-MM-YYYY");
+        @endif
+        $('input[name="end_date"]').val(end.format('DD-MM-YYYY'));
+
+        $('#date_range').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Hari ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 hari terakhir': [moment().subtract(6, 'days'), moment()],
+                'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'Semua waktu': [moment(0), moment().add(5, 'years').endOf('year')]
+            },
+            locale: {
+                format: 'D MMMM YYYY'
+            }
+        }, function(start, end, label) {
+            $('input[name="start_date"]').val(start.format('DD-MM-YYYY'));
+            $('input[name="end_date"]').val(end.format('DD-MM-YYYY'));
             filterForm.submit();
         });
 

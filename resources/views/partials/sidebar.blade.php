@@ -154,7 +154,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ Request::is('income*') || Request::is('expenses*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-money-bill"></i>
                         <p>
@@ -164,13 +164,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/expenses" class="nav-link {{ Request::is('expenses*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Pengeluaran</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/income" class="nav-link {{ Request::is('income*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Pendapatan</p>
                             </a>
@@ -205,7 +205,7 @@
                     </a>
                 </li>
                 {{-- tambah class menu-open kalo mau buka --}}
-                {{-- <li class="nav-item">
+                {{-- <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>

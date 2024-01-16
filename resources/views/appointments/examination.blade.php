@@ -38,14 +38,6 @@
                     </div>
                 @endif
                 
-                {{-- Tombol kembali --}}
-                <div class="row">
-                    <div class="col">
-                        <a href="{{ url()->previous() }}" class="btn btn-primary btn-sm mb-3">
-                            <i class="fa fa-arrow-left mr-2"></i>Kembali
-                        </a>
-                    </div>
-                </div>
     
                 {{-- Informasi pemeriksaan --}}
                 <div class="row">

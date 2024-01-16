@@ -9,7 +9,12 @@
                 <div class="col-sm-6">
                     <h1 class="m-0">Detail Pertemuan</h1>
                 </div><!-- /.col -->
-
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ session('appointments_url') ?? '/appointments' }}">Pertemuan</a></li>
+                        <li class="breadcrumb-item active">Detail Pertemuan</li>
+                    </ol>
+                </div>
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -19,11 +24,6 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col">
-                    <a href="{{ session('appointments_url') ?? '/appointments' }}" class="btn btn-primary btn-sm mb-3">
-                        <i class="fa fa-arrow-left mr-2"></i>Kembali
-                    </a>
-                </div>
                 <div class="col text-right">
                     <a href="/appointments/{{ $appointment->id }}/examination" class="btn btn-warning btn-sm mb-3">
                         <i class="fa fa-pen mr-2"></i>Edit
@@ -130,12 +130,12 @@
                                                 <td>{{ $treatment->treatment_type->name }}</td>
                                                 <td>{{ $treatment->name }}</td>
                                                 <td>{{ $treatment->pivot->note }}</td>
-                                                <td class="col-2 text-right">Rp{{ number_format($treatment->pivot->price, 2, ',', '.') }}</td>
+                                                <td class="col-2 text-right">Rp{{ change_decimal_format_to_currency($treatment->pivot->price, 2, ',', '.') }}</td>
                                             </tr>
                                             @if ($loop->last)
                                                 <tr class="font-weight-bold">
                                                     <td colspan="4" class="text-right">Total</td>
-                                                    <td class="text-right">Rp{{ number_format($subTotalTreatments, 2, ',', '.') }}</td>
+                                                    <td class="text-right">Rp{{ change_decimal_format_to_currency($subTotalTreatments, 2, ',', '.') }}</td>
                                                 </tr>
                                             @endif
                                         @empty
@@ -169,14 +169,14 @@
                                             <tr>
                                                 <td class="col-1">{{ $loop->iteration }}</td>
                                                 <td>{{ $medicine->name }} @if ($medicine->dose) {{ $medicine->dose }} @endif</td>
-                                                <td>Rp{{ number_format($medicine->pivot->price, 2, ',', '.') }}</td>
+                                                <td>Rp{{ change_decimal_format_to_currency($medicine->pivot->price, 2, ',', '.') }}</td>
                                                 <td>{{ $medicine->pivot->quantity }} {{ $medicine->unit }}</td>
-                                                <td class="col-2 text-right">Rp{{ number_format($medicine->pivot->quantity * $medicine->pivot->price, 2, ',', '.') }}</td>
+                                                <td class="col-2 text-right">Rp{{ change_decimal_format_to_currency($medicine->pivot->quantity * $medicine->pivot->price, 2, ',', '.') }}</td>
                                             </tr>
                                             @if ($loop->last)
                                                 <tr class="font-weight-bold">
                                                     <td colspan="4" class="text-right">Total</td>
-                                                    <td class="text-right">Rp{{ number_format($subTotalMedicines, 2, ',', '.') }}</td>
+                                                    <td class="text-right">Rp{{ change_decimal_format_to_currency($subTotalMedicines, 2, ',', '.') }}</td>
                                                 </tr>
                                             @endif
                                         @empty
@@ -207,17 +207,17 @@
                                 <h5>Total</h5>
                                 <dl class="row">
                                     <dt class="col-sm-4 col-md-3 col-lg-4">Total tindakan</dt>
-                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ number_format($subTotalTreatments, 2, ',', '.') }}</dd>
+                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($subTotalTreatments, 2, ',', '.') }}</dd>
 
                                     <dt class="col-sm-4 col-md-3 col-lg-4">Total obat</dt>
-                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ number_format($subTotalMedicines, 2, ',', '.') }}</dd>
+                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($subTotalMedicines, 2, ',', '.') }}</dd>
                                     
                                     <div class="col-12">
                                         <hr class="p-1 m-0">
                                     </div>
                                     
                                     <dt class="col-sm-4 col-md-3 col-lg-4">Grand total</dt>
-                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ number_format($appointment->payment->amount, 2, ',', '.') }}</dd>
+                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($appointment->payment->amount, 2, ',', '.') }}</dd>
                                 </dl>
                             </div>
 
@@ -248,11 +248,17 @@
                             <h3 class="card-title">
                                 Informasi Pembayaran
                             </h3>
+
+                            <div class="card-tools">
+                                <a href="/appointments/{{ $appointment->id }}/payment" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-pen"></i> Edit
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <dl class="row">
                                 <dt class="col-sm-5 col-md-4 col-lg-3 col-xl-2">Biaya Operasional</dt>
-                                <dd class="col-sm-7 col-md-8 col-lg-9 col-xl-10"><span class="d-none d-sm-inline">:</span> Rp{{ number_format($appointment->payment->operational_cost, 2, ',', '.') }}</dd>
+                                <dd class="col-sm-7 col-md-8 col-lg-9 col-xl-10"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($appointment->payment->operational_cost, 2, ',', '.') }}</dd>
                             </dl>
                         </div>
                     </div>

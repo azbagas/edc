@@ -9,7 +9,12 @@
                 <div class="col-sm-6">
                     <h1 class="m-0">Pembayaran</h1>
                 </div><!-- /.col -->
-
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/appointments">Pertemuan</a></li>
+                        <li class="breadcrumb-item active">Pembayaran</li>
+                    </ol>
+                </div>
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -21,9 +26,6 @@
             <div class="row">
                 <div class="col">
 
-                    <a href="{{ url()->previous() }}" class="btn btn-primary btn-sm mb-3">
-                        <i class="fa fa-arrow-left mr-2"></i>Kembali
-                    </a>
 
                     <div class="invoice p-3 mb-3">
 
@@ -120,12 +122,12 @@
                                                 <td>{{ $treatment->treatment_type->name }}</td>
                                                 <td>{{ $treatment->name }}</td>
                                                 <td>{{ $treatment->pivot->note }}</td>
-                                                <td class="col-2 text-right">Rp{{ number_format($treatment->pivot->price, 2, ',', '.') }}</td>
+                                                <td class="col-2 text-right">Rp{{ change_decimal_format_to_currency($treatment->pivot->price) }}</td>
                                             </tr>
                                             @if ($loop->last)
                                                 <tr class="font-weight-bold">
                                                     <td colspan="4" class="text-right">Total</td>
-                                                    <td class="text-right">Rp{{ number_format($subTotalTreatments, 2, ',', '.') }}</td>
+                                                    <td class="text-right">Rp{{ change_decimal_format_to_currency($subTotalTreatments) }}</td>
                                                 </tr>
                                             @endif
                                         @empty
@@ -159,14 +161,14 @@
                                             <tr>
                                                 <td class="col-1">{{ $loop->iteration }}</td>
                                                 <td>{{ $medicine->name }} @if ($medicine->dose) {{ $medicine->dose }} @endif</td>
-                                                <td>Rp{{ number_format($medicine->pivot->price, 2, ',', '.') }}</td>
+                                                <td>Rp{{ change_decimal_format_to_currency($medicine->pivot->price) }}</td>
                                                 <td>{{ $medicine->pivot->quantity }} {{ $medicine->unit }}</td>
-                                                <td class="col-2 text-right">Rp{{ number_format($medicine->pivot->quantity * $medicine->pivot->price, 2, ',', '.') }}</td>
+                                                <td class="col-2 text-right">Rp{{ change_decimal_format_to_currency($medicine->pivot->quantity * $medicine->pivot->price) }}</td>
                                             </tr>
                                             @if ($loop->last)
                                                 <tr class="font-weight-bold">
                                                     <td colspan="4" class="text-right">Total</td>
-                                                    <td class="text-right">Rp{{ number_format($subTotalMedicines, 2, ',', '.') }}</td>
+                                                    <td class="text-right">Rp{{ change_decimal_format_to_currency($subTotalMedicines) }}</td>
                                                 </tr>
                                             @endif
                                         @empty
@@ -192,17 +194,17 @@
                                 <h5>Total</h5>
                                 <dl class="row">
                                     <dt class="col-sm-4 col-md-3 col-lg-4">Total tindakan</dt>
-                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ number_format($subTotalTreatments, 2, ',', '.') }}</dd>
+                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($subTotalTreatments) }}</dd>
 
                                     <dt class="col-sm-4 col-md-3 col-lg-4">Total obat</dt>
-                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ number_format($subTotalMedicines, 2, ',', '.') }}</dd>
+                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($subTotalMedicines) }}</dd>
                                     
                                     <div class="col-12">
                                         <hr class="p-1 m-0">
                                     </div>
                                     
                                     <dt class="col-sm-4 col-md-3 col-lg-4">Grand total</dt>
-                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ number_format($grandTotal, 2, ',', '.') }}</dd>
+                                    <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($grandTotal) }}</dd>
                                 </dl>
                             </div>
 
@@ -234,7 +236,7 @@
                                             <label for="payment_type_id">Metode pembayaran<span class="text-danger">*</span></label>
                                             <select class="form-control @error('payment_type_id') is-invalid @enderror" name="payment_type_id" id="payment_type_id" required>
                                                 @foreach ($paymentTypes as $paymentType)
-                                                    <option value="{{ $paymentType->id }}" @selected($paymentType->id == old('payment_type_id', $appointment->payment->payment_type_id))>
+                                                    <option value="{{ $paymentType->id }}" @selected($paymentType->id == old('payment_type_id', $appointment->payment->payment_type_id ?? false))>
                                                         {{ $paymentType->name }}
                                                     </option>
                                                 @endforeach
@@ -253,7 +255,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">Rp</span>
                                                 </div>
-                                                <input id="operational_cost" type="text" name="operational_cost" class="form-control rupiah" placeholder="0,00" value="{{ $appointment->payment->operational_cost/1 ?? 0 }}" required>
+                                                <input id="operational_cost" type="text" name="operational_cost" class="form-control rupiah" placeholder="0,00" value="{{ optional($appointment->payment)->operational_cost ? change_decimal_format_to_currency($appointment->payment->operational_cost) : 0 }}" required>
                                             </div>
                                         </div>
                                     </div>

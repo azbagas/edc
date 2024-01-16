@@ -26,10 +26,6 @@
             <div class="row">
                 <div class="col">
 
-                    <a href="{{ url()->previous() }}" class="btn btn-primary btn-sm mb-3">
-                        <i class="fa fa-arrow-left mr-2"></i>Kembali
-                    </a>
-
                     <div class="card">
                         <form action="/appointments" method="POST" autocomplete="off" spellcheck="false">
                             @csrf
