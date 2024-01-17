@@ -29,7 +29,7 @@ class PatientController extends Controller
             return $query->where('address', 'like', '%' . $request->searchAddress . '%');
         });
         
-        Session::put('patients_url', request()->fullUrl());
+        session(['patients_url' => request()->fullUrl()]);
 
         return view('patients.index', [
             'patients' => $query->orderByDesc('id')->paginate(10)->appends($request->all()),

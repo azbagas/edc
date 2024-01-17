@@ -146,7 +146,7 @@
                                                 <form action="/expenses/{{ $expense->id }}" method="POST" class="d-inline">
                                                     @method('delete')
                                                     @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm" id="delete-button">
+                                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -238,7 +238,7 @@
         });
 
         // Sweet alert delete expense
-        $('#delete-button').click(function(event) {
+        $('.delete-button').click(function(event) {
             let form = $(this).closest("form");
             event.preventDefault();
             Swal.fire({

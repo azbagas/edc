@@ -34,7 +34,7 @@
                                 <form action="/patients/{{ $patient->id }}" method="POST" class="d-inline">
                                     @method('delete')
                                     @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm" id="delete-button">
+                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
                                         <i class="fa fa-trash"></i> Hapus Pasien
                                     </button>
                                 </form>
@@ -219,7 +219,7 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#delete-button').click(function(event) {
+            $('.delete-button').click(function(event) {
                 let form = $(this).closest("form");
                 event.preventDefault();
                 Swal.fire({

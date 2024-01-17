@@ -56,7 +56,7 @@
                         <p>Data Pasien</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ Request::is('treatment-types*') || Request::is('treatments*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-stethoscope"></i>
                         <p>
@@ -66,13 +66,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/treatment-types" class="nav-link {{ Request::is('treatment-types*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Jenis Tindakan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/treatments" class="nav-link {{ Request::is('treatments*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Tindakan</p>
                             </a>

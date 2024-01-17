@@ -1,14 +1,16 @@
 <?php
 
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\DependantDropdownController;
-use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\IncomeController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\PatientController;
-use App\Models\Appointment;
 use App\Models\Patient;
+use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\TreatmentTypeController;
+use App\Http\Controllers\DependantDropdownController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +49,12 @@ Route::middleware(['auth'])->group(function () {
         'index'
     ]);
     Route::resource('/expenses', ExpenseController::class)->except([
+        'show'
+    ]);
+    Route::resource('/treatment-types', TreatmentTypeController::class)->except([
+        'show'
+    ]);
+    Route::resource('/treatments', TreatmentController::class)->except([
         'show'
     ]);
 
