@@ -44,12 +44,15 @@ class AppointmentController extends Controller
             return $query->whereDate('created_at', now()->today());
         });
 
-        Session::put('appointments_url', request()->fullUrl());
+        $per_page = $request->per_page ?? 10;
+
+        session(['appointments_url' => request()->fullUrl()]);
 
         return view('appointments.index', [
-            'appointments' => $query->latest()->paginate(10)->appends($request->all()),
+            'appointments' => $query->latest()->paginate($per_page)->appends($request->all()),
             'doctors' => Doctor::all(),
-            'statuses' => Status::all()
+            'statuses' => Status::all(),
+            'per_page_options' => [10, 25, 50]
         ]);
     }
 

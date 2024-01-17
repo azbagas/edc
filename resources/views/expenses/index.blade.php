@@ -101,6 +101,7 @@
                                 </div>
 
                                 <input type="hidden" name="date_order" value="{{ request('date_order') ?? 'asc' }}">
+                                <input type="hidden" name="per_page" value="{{ request('per_page') }}">
 
                                 <div class="row">
                                     <div class="col-md-7 col-xl-5">
@@ -178,6 +179,23 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <span class="text-muted">
+                            Tampilkan baris per halaman
+                        </span>
+                        
+                        <select id="per_page" class="form-control-sm">
+                            @foreach ($per_page_options as $per_page_option)
+                                <option value="{{ $per_page_option }}" @selected(request('per_page') == $per_page_option )>{{ $per_page_option }}</option>
+                            @endforeach
+                        </select>
+                        
+                    </div>
+                </div>
+            </div>
+
         </div><!-- /.container-fluid -->
 
 
@@ -198,6 +216,12 @@
             } else {
                 $('input[name="date_order"]').val('asc');
             }
+            filterForm.submit();
+        });
+
+        // per page
+        $('#per_page').on('change', function() {
+            $('input[name="per_page"]').val($(this).val());
             filterForm.submit();
         });
 

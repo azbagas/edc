@@ -28,12 +28,15 @@ class PatientController extends Controller
         $query->when($request->searchAddress, function ($query) use ($request) {
             return $query->where('address', 'like', '%' . $request->searchAddress . '%');
         });
+
+        $per_page = $request->per_page ?? 10;
         
         session(['patients_url' => request()->fullUrl()]);
 
         return view('patients.index', [
-            'patients' => $query->orderByDesc('id')->paginate(10)->appends($request->all()),
-            'newPatientId' => Patient::max('id') + 1
+            'patients' => $query->orderByDesc('id')->paginate($per_page)->appends($request->all()),
+            'newPatientId' => Patient::max('id') + 1,
+            'per_page_options' => [10, 25, 50]
         ]);
     }
 

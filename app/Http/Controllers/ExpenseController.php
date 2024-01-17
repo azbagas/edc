@@ -34,13 +34,16 @@ class ExpenseController extends Controller
             return $query->orderBy('date', 'asc');
         });
 
+        $per_page = $request->per_page ?? 10;
+
         session(['expenses_url' => request()->fullUrl()]);
 
         $expenses = $query->get();
 
         return view('expenses.index', [
-            'expenses' => $query->paginate(10)->appends($request->all()),
-            'total_expenses' => $expenses->sum('amount')
+            'expenses' => $query->paginate($per_page)->appends($request->all()),
+            'total_expenses' => $expenses->sum('amount'),
+            'per_page_options' => [10, 25, 50]
         ]);
     }
 

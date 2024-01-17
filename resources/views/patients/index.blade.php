@@ -34,7 +34,7 @@
                             <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
-                                        <form action="/patients" method="GET" autocomplete="off" spellcheck="false">
+                                        <form action="/patients" method="GET" autocomplete="off" spellcheck="false" id="filter-form">
                                             <td>
                                                 <input type="text" class="form-control" id="searchId" name="searchId"
                                                     value="{{ request('searchId') }}" placeholder="Cari no pasien...">
@@ -62,6 +62,7 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <input type="hidden" name="per_page" value="{{ request('per_page') }}">
                                         </form>
                                     </tr>
                                     <tr>
@@ -119,7 +120,40 @@
 
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <span class="text-muted">
+                            Tampilkan baris per halaman
+                        </span>
+                        
+                        <select id="per_page" class="form-control-sm">
+                            @foreach ($per_page_options as $per_page_option)
+                                <option value="{{ $per_page_option }}" @selected(request('per_page') == $per_page_option )>{{ $per_page_option }}</option>
+                            @endforeach
+                        </select>
+                        
+                    </div>
+                </div>
+            </div>
         </div><!-- /.container-fluid -->
 
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+
+        let filterForm = $('#filter-form');
+
+        // per page
+        $('#per_page').on('change', function() {
+            $('input[name="per_page"]').val($(this).val());
+            filterForm.submit();
+        });
+
+    });
+</script>
+@endpush
