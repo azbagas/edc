@@ -89,9 +89,9 @@ class TreatmentTypeController extends Controller
     {
         try {
             TreatmentType::destroy($treatmentType->id);
-            return redirect(session('treatment_types_url', '/expenses'))->with('success', 'Jenis tindakan berhasil dihapus!');
+            return redirect(session('treatment_types_url', '/treatment-types'))->with('success', 'Jenis tindakan berhasil dihapus!');
         } catch (\Exception $e) {
-            return redirect(session('treatment_types_url', '/expenses'))->with('error', 'Gagal menghapus jenis tindakan!');
+            return redirect(session('treatment_types_url', '/treatment-types'))->with('error', 'Gagal menghapus jenis tindakan!');
         }
     }
 }

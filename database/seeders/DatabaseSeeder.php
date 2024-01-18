@@ -13,7 +13,7 @@ use App\Models\Status;
 use App\Models\Disease;
 use App\Models\Patient;
 use App\Models\Payment;
-use App\Models\Diagnose;
+use App\Models\Diagnosis;
 use App\Models\Medicine;
 use App\Models\Assistant;
 use App\Models\Treatment;
@@ -125,15 +125,15 @@ class DatabaseSeeder extends Seeder
         }
         
         $this->seedFromCSV('app/initial-data/diseases.csv', Disease::class);
-        $this->seedFromCSV('app/initial-data/diagnoses.csv', Diagnose::class);
+        $this->seedFromCSV('app/initial-data/diagnoses.csv', Diagnosis::class);
         
-        // appointment diagnose
-        $diagnoses_count = Diagnose::all()->count();
+        // appointment diagnosis
+        $diagnoses_count = Diagnosis::all()->count();
         foreach ($appointments as $appointment) {
-            $diagnoseIDs = $this->generateRandomArrayNumberUnique($diagnoses_count);
-            foreach ($diagnoseIDs as $diagnoseID) {
+            $diagnosisIDs = $this->generateRandomArrayNumberUnique($diagnoses_count);
+            foreach ($diagnosisIDs as $diagnosisID) {
                 $appointment->diagnoses()
-                            ->attach($diagnoseID,
+                            ->attach($diagnosisID,
                                         ['note' => fake()->randomElement(['', fake()->sentence()])]);
             }
         }

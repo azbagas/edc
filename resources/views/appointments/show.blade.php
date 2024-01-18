@@ -77,7 +77,7 @@
                             </div>
                         </div>
 
-                        <h5>Diagnosa</h5>
+                        <h5>Diagnosis</h5>
                         <div class="row mb-3">
                             <div class="col-12 table-responsive">
                                 <table class="table table-bordered">
@@ -85,22 +85,22 @@
                                         <tr>
                                             <th class="col-1">No</th>
                                             <th>Penyakit</th>
-                                            <th>Diagnosa</th>
+                                            <th>Diagnosis</th>
                                             <th>Keterangan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($appointment->diagnoses as $diagnose)
+                                        @forelse ($appointment->diagnoses as $diagnosis)
                                             <tr>
                                                 <td class="col-1">{{ $loop->iteration }}</td>
-                                                <td>{{ $diagnose->disease->disease_code }} - {{ $diagnose->disease->name }}</td>
-                                                <td>{{ $diagnose->diagnose_code }} - {{ $diagnose->name }}</td>
-                                                <td>{{ $diagnose->pivot->note }}</td>
+                                                <td>{{ $diagnosis->disease->disease_code }} - {{ $diagnosis->disease->name }}</td>
+                                                <td>{{ $diagnosis->diagnosis_code }} - {{ $diagnosis->name }}</td>
+                                                <td>{{ $diagnosis->pivot->note }}</td>
                                             </tr>
                                         @empty
                                             <tr>
                                                 <td colspan="4">
-                                                    Tidak ada diagnosa
+                                                    Tidak ada diagnosis
                                                 </td>
                                             </tr>
                                         @endforelse

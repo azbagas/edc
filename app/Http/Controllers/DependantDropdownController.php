@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Diagnose;
+use App\Models\Diagnosis;
 use App\Models\Disease;
 use App\Models\Medicine;
 use App\Models\MedicineType;
@@ -32,9 +32,9 @@ class DependantDropdownController extends Controller
 
     public function getDiagnoses(Request $request)
     {
-        $diagnoses = Diagnose::where('disease_id', $request->disease)
+        $diagnoses = Diagnosis::where('disease_id', $request->disease)
                              ->without('disease')
-                             ->get(['id', 'diagnose_code', 'name']);
+                             ->get(['id', 'diagnosis_code', 'name']);
         return response()->json($diagnoses);
     }
 

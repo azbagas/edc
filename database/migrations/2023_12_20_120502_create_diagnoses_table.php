@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('diagnoses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('disease_id')->constrained();
-            $table->string('diagnose_code');
+            $table->string('diagnosis_code');
             $table->string('name');
             $table->timestamps();
         });

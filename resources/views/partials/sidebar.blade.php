@@ -79,7 +79,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ Request::is('diseases*') || Request::is('diagnoses*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-disease"></i>
                         <p>
@@ -89,15 +89,15 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/diseases" class="nav-link {{ Request::is('diseases*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Penyakit</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/diagnoses" class="nav-link {{ Request::is('diagnoses*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Diagnosa</p>
+                                <p>Diagnosis</p>
                             </a>
                         </li>
                     </ul>

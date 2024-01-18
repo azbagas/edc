@@ -123,27 +123,27 @@
                 </div>
                 <!-- /.row -->
     
-                {{-- Diagnosa --}}
+                {{-- Diagnosis --}}
                 <div class="row">
                     <div class="col">
                         <div class="card card-primary card-outline">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Diagnosa
+                                    Diagnosis
                                 </h3>
                             </div>
                             <div class="card-body">
     
-                                {{-- Diagnose container --}}
-                                <div id="diagnose-container">
+                                {{-- Diagnosis container --}}
+                                <div id="diagnosis-container">
 
                                 </div>
-                                {{-- End of diagnose container --}}
+                                {{-- End of diagnosis container --}}
     
                                 <div class="row">
                                     <div class="col">
-                                        <button type="button" class="btn btn-success btn-sm" id="add-diagnose">
-                                            <i class="fa fa-plus mr-2"></i>Tambah Diagnosa
+                                        <button type="button" class="btn btn-success btn-sm" id="add-diagnosis">
+                                            <i class="fa fa-plus mr-2"></i>Tambah Diagnosis
                                         </button>
                                     </div>
                                 </div>
@@ -242,14 +242,14 @@
     <script>
         $(document).ready(function() {
 
-            // ------------------ Diagnosa ------------------
-            // Function add diagnose section
-            function addDiagnose (i, diagnose = []) {
-                // isDiagnose untuk mengecek apakah sudah ada diagnose sebelumnya
-                let isDiagnose = diagnose.length != 0;
+            // ------------------ Diagnosis ------------------
+            // Function add diagnosis section
+            function addDiagnosis (i, diagnosis = []) {
+                // isDiagnosis untuk mengecek apakah sudah ada diagnosis sebelumnya
+                let isDiagnosis = diagnosis.length != 0;
 
-                $('#diagnose-container').append(`
-                                <div class="diagnose-section">
+                $('#diagnosis-container').append(`
+                                <div class="diagnosis-section">
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
@@ -261,15 +261,15 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <label for="diagnose-${i}">Diagnosa<span class="text-danger">*</span></label>
-                                                <select id="diagnose-${i}" name="diagnose[]" class="form-control select2" style="width: 100%;" data-placeholder="-- Pilih diagnosa --" disabled required>
+                                                <label for="diagnosis-${i}">Diagnosis<span class="text-danger">*</span></label>
+                                                <select id="diagnosis-${i}" name="diagnosis[]" class="form-control select2" style="width: 100%;" data-placeholder="-- Pilih diagnosis --" disabled required>
                                                     <option></option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-2 order-first order-md-last">
                                             <div class="d-flex justify-content-end">
-                                                <button type="button" class="btn btn-danger btn-sm diagnose-delete-button">
+                                                <button type="button" class="btn btn-danger btn-sm diagnosis-delete-button">
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </div>
@@ -278,8 +278,8 @@
                                     <div class="row">
                                         <div class="col-md-10">
                                             <div class="form-group">
-                                                <label for="diagnose-note-${i}">Keterangan</label>
-                                                <textarea id="diagnose-note-${i}" name="diagnose_note[]" class="form-control" rows="3"
+                                                <label for="diagnosis-note-${i}">Keterangan</label>
+                                                <textarea id="diagnosis-note-${i}" name="diagnosis_note[]" class="form-control" rows="3"
                                                     placeholder="Masukkan keterangan..."></textarea>
                                             </div>
                                         </div>
@@ -290,11 +290,11 @@
                 
                 // Buat select menjadi select2
                 $(`#disease-${i}`).select2();
-                $(`#diagnose-${i}`).select2();
+                $(`#diagnosis-${i}`).select2();
 
-                if (isDiagnose) {
+                if (isDiagnosis) {
                     $.each(diseases, function (key, value) {
-                        if (value.id == diagnose.disease_id) {
+                        if (value.id == diagnosis.disease_id) {
                             $(`#disease-${i}`).append('<option value="' + value.id + '" selected>' + value.disease_code + ' - ' + value.name + '</option>');
                         } else {
                             $(`#disease-${i}`).append('<option value="' + value.id + '">' + value.disease_code + ' - ' + value.name + '</option>');
@@ -303,21 +303,21 @@
                     $(`#disease-${i}`).prop('disabled', false);
 
                     $.ajax({
-                        url: '{{ route('getDiagnoses') }}?disease=' + diagnose.disease_id,
+                        url: '{{ route('getDiagnoses') }}?disease=' + diagnosis.disease_id,
                         type: 'get',
                         success: function (res) {
                             $.each(res, function (key, value) {
-                                if (value.id == diagnose.id) {
-                                    $(`#diagnose-${i}`).append('<option value="' + value.id + '" selected>' + value.diagnose_code + ' - ' + value.name + '</option>');
+                                if (value.id == diagnosis.id) {
+                                    $(`#diagnosis-${i}`).append('<option value="' + value.id + '" selected>' + value.diagnosis_code + ' - ' + value.name + '</option>');
                                 } else {
-                                    $(`#diagnose-${i}`).append('<option value="' + value.id + '">' + value.diagnose_code + ' - ' + value.name + '</option>');
+                                    $(`#diagnosis-${i}`).append('<option value="' + value.id + '">' + value.diagnosis_code + ' - ' + value.name + '</option>');
                                 }
                             });
-                            $(`#diagnose-${i}`).prop('disabled', false);
+                            $(`#diagnosis-${i}`).prop('disabled', false);
                         }
                     });
 
-                    $(`#diagnose-note-${i}`).val(diagnose.pivot.note);
+                    $(`#diagnosis-note-${i}`).val(diagnosis.pivot.note);
                     
                 } else {
                     $.each(diseases, function (key, value) {
@@ -328,30 +328,30 @@
                 }
                 
                 // Buat agar bisa delete
-                $('.diagnose-delete-button').on('click', function () {
-                    $(this).parents('.diagnose-section').remove();
+                $('.diagnosis-delete-button').on('click', function () {
+                    $(this).parents('.diagnosis-section').remove();
                 });
 
                 $(`#disease-${i}`).on('change', function () {
-                    $(`#diagnose-${i}`).prop('disabled', true);
+                    $(`#diagnosis-${i}`).prop('disabled', true);
 
                     let diseaseId = this.value;
-                    $(`#diagnose-${i}`).html('<option></option>');
+                    $(`#diagnosis-${i}`).html('<option></option>');
 
                     $.ajax({
                         url: '{{ route('getDiagnoses') }}?disease=' + diseaseId,
                         type: 'get',
                         success: function (res) {
                             $.each(res, function (key, value) {
-                                $(`#diagnose-${i}`).append('<option value="' + value.id + '">' + value.diagnose_code + ' - ' + value.name + '</option>');
+                                $(`#diagnosis-${i}`).append('<option value="' + value.id + '">' + value.diagnosis_code + ' - ' + value.name + '</option>');
                             });
-                            $(`#diagnose-${i}`).prop('disabled', false);
+                            $(`#diagnosis-${i}`).prop('disabled', false);
                         }
                     });
                 });
             }
 
-            let diagnoseCounter = 0;
+            let diagnosisCounter = 0;
 
             let diseases = null;
             $.ajax({
@@ -363,11 +363,11 @@
                     // Inisialisasi diagnoses kalo ada
                     let diagnoses = @json($appointment->diagnoses ?? []);
                     if (diagnoses.length > 0) {
-                        diagnoseCounter = diagnoses.length + 1;
+                        diagnosisCounter = diagnoses.length + 1;
                     
                         let i = 0;
-                        diagnoses.forEach(diagnose => {
-                            addDiagnose(i, diagnose);
+                        diagnoses.forEach(diagnosis => {
+                            addDiagnosis(i, diagnosis);
                             i++;
                         });
                     }
@@ -375,9 +375,9 @@
                 }
             });
 
-            $('#add-diagnose').on('click', function () {
-                addDiagnose(diagnoseCounter);
-                diagnoseCounter++;
+            $('#add-diagnosis').on('click', function () {
+                addDiagnosis(diagnosisCounter);
+                diagnosisCounter++;
             });
 
 

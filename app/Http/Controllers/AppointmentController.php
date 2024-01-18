@@ -214,17 +214,17 @@ class AppointmentController extends Controller
 
         try {
             DB::transaction(function () use($request, $appointment) {
-                // Masukkan diagnose
-                if ($request->diagnose) {
-                    $requestDiagnoses = $request->diagnose;
-                    $requestDiagnoseNotes = $request->diagnose_note;
-                    $diagnoseIn = [];
+                // Masukkan diagnosis
+                if ($request->diagnosis) {
+                    $requestDiagnoses = $request->diagnosis;
+                    $requestDiagnosisNotes = $request->diagnosis_note;
+                    $diagnosisIn = [];
                     
-                    foreach ($requestDiagnoses as $i => $diagnoseId) {
-                        $diagnoseIn[$diagnoseId] = ['note' => $requestDiagnoseNotes[$i]];
+                    foreach ($requestDiagnoses as $i => $diagnosisId) {
+                        $diagnosisIn[$diagnosisId] = ['note' => $requestDiagnosisNotes[$i]];
                     }
 
-                    $appointment->diagnoses()->sync($diagnoseIn);
+                    $appointment->diagnoses()->sync($diagnosisIn);
                 } else {
                     if ($appointment->diagnoses) {
                         $appointment->diagnoses()->detach();

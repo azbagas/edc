@@ -48,7 +48,7 @@ class Appointment extends Model
 
     public function diagnoses(): BelongsToMany
     {
-        return $this->belongsToMany(Diagnose::class)->withPivot('note')->withTimestamps();
+        return $this->belongsToMany(Diagnosis::class)->withPivot('note')->withTimestamps();
     }
 
     public function payment(): HasOne
