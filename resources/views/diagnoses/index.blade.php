@@ -59,9 +59,9 @@
                                             <label for="disease">Penyakit</label>
                                             <select class="form-control" name="disease_id" id="disease">
                                                 <option value="">Semua penyakit</option>
-                                                @foreach ($diseases as $disease)
+                                                @foreach ($all_diseases as $disease)
                                                     <option value="{{ $disease->id }}" {{ request('disease_id') == $disease->id ? 'selected' : '' }}>
-                                                       {{ $disease->disease_code }} {{ $disease->name }}
+                                                       {{ $disease->disease_code }} - {{ $disease->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -69,12 +69,10 @@
                                     </div>
                                 </div>
 
-                                <input type="hidden" name="per_page" value="{{ request('per_page') }}">
-
                                 <div class="row">
                                     <div class="col-md-7 col-xl-5">
                                         <a href="/diagnoses" class="btn btn-default btn-sm">
-                                            Reset pencarian
+                                            Reset filter
                                         </a>
                                     </div>
                                 </div>
@@ -83,38 +81,41 @@
                     </div>
                     <div class="card">
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover table-bordered">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Kode Diagnosis</th>
-                                        <th>Diagnosis</th>
                                         <th>Kode Penyakit</th>
                                         <th>Penyakit</th>
+                                        <th>Kode Diagnosis</th>
+                                        <th>Diagnosis</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($diagnoses as $diagnosis)
-                                        <tr>
-                                            <td class="col-1">{{ $diagnoses->firstItem() + $loop->index }}</td>
-                                            <td>{{ $diagnosis->diagnosis_code }}</td>
-                                            <td>{{ $diagnosis->name }}</td>
-                                            <td>{{ $diagnosis->disease->disease_code }}</td>
-                                            <td>{{ $diagnosis->disease->name }}</td>
-                                            <td class="text-nowrap col-1">
-                                                <form action="/diagnoses/{{ $diagnosis->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="/diagnoses/{{ $diagnosis->id }}/edit" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pen"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                    @forelse ($diseases as $disease)
+                                        @foreach ($disease->diagnoses as $diagnosis)
+                                            <tr>
+                                                @if ($loop->first)
+                                                    <td rowspan="{{ $disease->diagnoses->count() }}">{{ $disease->disease_code }}</td>
+                                                    <td rowspan="{{ $disease->diagnoses->count() }}">{{ $disease->name }}</td>
+                                                @endif
+
+                                                <td style="padding: 12px;">{{ $diagnosis->diagnosis_code }}</td>
+                                                <td>{{ $diagnosis->name }}</td>
+                                                <td class="text-nowrap col-1">
+                                                    <form action="/diagnoses/{{ $diagnosis->id }}" method="POST" class="d-inline">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="/diagnoses/{{ $diagnosis->id }}/edit" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-pen"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     @empty
                                         <tr>
                                             <td colspan="16" class="text-center">
@@ -131,29 +132,6 @@
                 </div>
             </div>
             <!-- /.row -->
-            
-            <div class="row">
-                <div class="col">
-                    {{ $diagnoses->onEachSide(1)->links() }}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <div class="mb-3">
-                        <span class="text-muted">
-                            Tampilkan baris per halaman
-                        </span>
-                        
-                        <select id="per_page" class="form-control-sm">
-                            @foreach ($per_page_options as $per_page_option)
-                                <option value="{{ $per_page_option }}" @selected(request('per_page') == $per_page_option )>{{ $per_page_option }}</option>
-                            @endforeach
-                        </select>
-                        
-                    </div>
-                </div>
-            </div>
 
         </div><!-- /.container-fluid -->
 
@@ -166,12 +144,6 @@
     $(document).ready(function() {
 
         let filterForm = $('#filter-form');
-
-        // per page
-        $('#per_page').on('change', function() {
-            $('input[name="per_page"]').val($(this).val());
-            filterForm.submit();
-        });
 
         // Filter disease
         $('#disease').on('change', function() {

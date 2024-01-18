@@ -13,25 +13,24 @@ class DiagnosisController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Diagnosis::query();
+        $query = Disease::query();
 
         $query->when($request->name, function ($query) use ($request) {
-            return $query->where('name', 'like', '%' . $request->name . '%')
-                         ->orWhere('diagnosis_code', 'like', '%' . $request->name . '%');
+            return $query->whereHas('diagnoses', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->name . '%')
+                      ->orWhere('diagnosis_code', 'like', '%' . $request->name . '%');
+            });
         });
 
         $query->when($request->disease_id, function ($query) use ($request) {
-            return $query->where('disease_id',  $request->disease_id);
+            return $query->where('id',  $request->disease_id);
         });
 
-        $per_page = $request->per_page ?? 10;
-        
         session(['diagnoses_url' => request()->fullUrl()]);
 
         return view('diagnoses.index', [
-            'diagnoses' => $query->orderBy('diagnosis_code', 'asc')->paginate($per_page)->appends($request->all()),
-            'diseases' => Disease::orderBy('disease_code', 'asc')->get(),
-            'per_page_options' => [10, 25, 50]
+            'diseases' => $query->orderBy('disease_code', 'asc')->with('diagnoses')->get(),
+            'all_diseases' => Disease::all()
         ]);
     }
 

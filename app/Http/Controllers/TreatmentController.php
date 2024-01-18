@@ -13,24 +13,23 @@ class TreatmentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Treatment::query();
+        $query = TreatmentType::query();
 
         $query->when($request->name, function ($query) use ($request) {
-            return $query->where('name', 'like', '%' . $request->name . '%');
+            return $query->whereHas('treatments', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->name . '%');
+            });
         });
 
         $query->when($request->treatment_type, function ($query) use ($request) {
-            return $query->where('treatment_type_id',  $request->treatment_type);
+            return $query->where('id',  $request->treatment_type);
         });
-
-        $per_page = $request->per_page ?? 10;
         
         session(['treatments_url' => request()->fullUrl()]);
 
         return view('treatments.index', [
-            'treatments' => $query->orderBy('name', 'asc')->paginate($per_page)->appends($request->all()),
-            'treatment_types' => TreatmentType::orderBy('name', 'asc')->get(),
-            'per_page_options' => [10, 25, 50]
+            'treatment_types' => $query->orderBy('name', 'asc')->get(),
+            'all_treatment_types' => TreatmentType::orderBy('name', 'asc')->get()
         ]);
     }
 
