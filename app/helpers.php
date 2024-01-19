@@ -18,3 +18,10 @@ if (!function_exists('change_decimal_format_to_currency')) {
         return number_format($decimal, 2, ',', '.');
     }
 }
+
+if (!function_exists('change_decimal_format_to_percentage')) {
+    function change_decimal_format_to_percentage($decimal)
+    {
+        return ($decimal * 100) . '%';
+    }
+}

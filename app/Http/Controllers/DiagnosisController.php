@@ -29,7 +29,9 @@ class DiagnosisController extends Controller
         session(['diagnoses_url' => request()->fullUrl()]);
 
         return view('diagnoses.index', [
-            'diseases' => $query->orderBy('disease_code', 'asc')->with('diagnoses')->get(),
+            'diseases' => $query->with(['diagnoses' => function ($query) {
+                            $query->orderBy('diagnosis_code', 'asc');
+                          }])->orderBy('disease_code', 'asc')->get(),
             'all_diseases' => Disease::all()
         ]);
     }

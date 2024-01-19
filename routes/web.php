@@ -8,11 +8,14 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\DiseaseController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\TreatmentTypeController;
 use App\Http\Controllers\DependantDropdownController;
+use App\Http\Controllers\DoctorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +66,15 @@ Route::middleware(['auth'])->group(function () {
         'show'
     ]);
     Route::resource('/diagnoses', DiagnosisController::class)->except([
+        'show'
+    ]);
+    Route::resource('/medicine-types', MedicineTypeController::class)->except([
+        'show'
+    ]);
+    Route::resource('/medicines', MedicineController::class)->except([
+        'show'
+    ]);
+    Route::resource('/doctors', DoctorController::class)->except([
         'show'
     ]);
 

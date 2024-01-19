@@ -28,7 +28,10 @@ class TreatmentController extends Controller
         session(['treatments_url' => request()->fullUrl()]);
 
         return view('treatments.index', [
-            'treatment_types' => $query->orderBy('name', 'asc')->get(),
+            // 'treatment_types' => $query->orderBy('name', 'asc')->with('treatments')->get(),
+            'treatment_types' => $query->with(['treatments' => function ($query) {
+                                    $query->orderBy('name', 'asc');
+                                 }])->orderBy('name', 'asc')->get(),
             'all_treatment_types' => TreatmentType::orderBy('name', 'asc')->get()
         ]);
     }
