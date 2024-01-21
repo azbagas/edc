@@ -154,7 +154,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item {{ Request::is('income*') || Request::is('expenses*') ? 'menu-open' : '' }}">
+                <li class="nav-item {{ Request::is('income*') || Request::is('expenses*') || Request::is('payment-types*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-money-bill"></i>
                         <p>
@@ -173,6 +173,12 @@
                             <a href="/income" class="nav-link {{ Request::is('income*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Pendapatan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/payment-types" class="nav-link {{ Request::is('payment-types*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Metode Pembayaran</p>
                             </a>
                         </li>
                     </ul>

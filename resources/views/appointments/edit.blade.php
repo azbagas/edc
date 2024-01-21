@@ -2,6 +2,18 @@
 
 @section('title', 'Edit Pertemuan')
 
+@section('styles')
+    <style>
+        #date_time:hover {
+            cursor: pointer;
+        }
+
+        #date_time {
+            caret-color: transparent;
+        }
+    </style>
+@endsection
+
 @section('header')
     <div class="content-header">
         <div class="container-fluid">
@@ -33,6 +45,23 @@
                             <input type="hidden" name="fromUrl" value="{{ old('fromUrl', url()->previous()) }}">
                             <div class="card-body">
                                 <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="date_time">Tanggal<span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="far fa-calendar-alt"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="hidden" name="date_time">
+                                                <input type="text" class="form-control float-right" id="date_time">
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-4 col-xl-2">
                                         <div class="form-group">
                                             <label for="patient_id">No Pasien<span class="text-danger">*</span></label>
@@ -63,7 +92,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-xl-4">
+                                    <div class="col-xl-2">
                                         <div class="form-group">
                                             <label for="assistant_id">Asisten<span class="text-danger">*</span></label>
                                             <select class="form-control @error('assistant_id') is-invalid @enderror" name="assistant_id" id="assistant_id" required>
@@ -77,6 +106,13 @@
                                             @error('assistant_id')
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2">
+                                        <div class="form-group">
+                                            <label for="admin">Admin<span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control"
+                                                id="admin" name="admin" value="{{ $appointment->admin->user->name }}" readonly>
                                         </div>
                                     </div>
 
@@ -115,3 +151,32 @@
         </div><!-- /.container-fluid -->
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        // Initial date_time
+        let start = moment();
+        @if(old('date_time', $appointment->date_time))
+            startStr = "{{ old('date_time', $appointment->date_time) }}";
+            start = moment(startStr, "Y-MM-DD HH:mm");
+        @endif
+        $('input[name="date_time"]').val(start.format('Y-MM-DD HH:mm'));
+
+        $('#date_time').daterangepicker({
+            singleDatePicker: true,
+            timePicker: true,
+            timePicker24Hour: true,
+            showDropdowns: true,
+            startDate: start,
+            locale: {
+                format: 'D MMMM YYYY, HH:mm'
+            },
+            minDate: moment("01-01-2020", "DD-MM-YYYY"),
+            maxDate: moment().add(5, 'years').endOf('year')
+        }, function(start, end, label) {
+            $('input[name="date_time"]').val(start.format('Y-MM-DD HH:mm'));
+        });
+    });
+</script>
+@endpush

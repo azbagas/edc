@@ -18,9 +18,9 @@ class IncomeController extends Controller
         $query->when($request->start_date, function ($query) use ($request) {
             $start_date = Carbon::createFromFormat('d-m-Y', $request->start_date);
             $end_date = Carbon::createFromFormat('d-m-Y', $request->end_date);
-            return $query->whereBetween('created_at', [$start_date->startOfDay(), $end_date->endOfDay()]);
+            return $query->whereBetween('date_time', [$start_date->startOfDay(), $end_date->endOfDay()]);
         }, function ($query) {
-            return $query->whereDate('created_at', now()->today());
+            return $query->whereDate('date_time', now()->today());
         });
 
         $query->has('payment');

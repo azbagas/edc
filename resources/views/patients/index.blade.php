@@ -27,44 +27,66 @@
                     
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <form action="/patients" method="GET" id="filter-form" spellcheck="false" autocomplete="off">
+                            <div class="card-header">
+                                <h3 class="card-title">Filter</h3>
+                            </div>
+                            <div class="card-body">
+                                <input type="hidden" name="per_page" value="{{ request('per_page') }}">
+
+                                <div class="row">
+                                    <div class="col-md-7 col-xl-2">
+                                        <div class="form-group">
+                                            <label for="id">No Pasien</label>
+                                            <input type="text" id="id" name="id" class="form-control" placeholder="Cari no pasien..." value="{{ request('id') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-xl-5">
+                                        <div class="form-group">
+                                            <label for="name">Nama Pasien</label>
+                                            <input type="text" id="name" name="name" class="form-control" placeholder="Cari nama pasien..." value="{{ request('name') }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-7 col-xl-7">
+                                        <div class="form-group">
+                                            <label for="address">Alamat Pasien</label>
+                                            <input type="text" id="address" name="address" class="form-control" placeholder="Cari alamat pasien..." value="{{ request('address') }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-7 col-xl-7">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="/patients" class="btn btn-default btn-sm">
+                                                Reset pencarian
+                                            </a>
+                                            <button type="submit" class="btn btn-info">
+                                                <i class="fa fa-search mr-2"></i>Cari Pasien
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
             <div class="row">
                 <div class="col">
                     <div class="card">
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover table-bordered">
                                 <thead>
-                                    <tr>
-                                        <form action="/patients" method="GET" autocomplete="off" spellcheck="false" id="filter-form">
-                                            <td>
-                                                <input type="text" class="form-control" id="searchId" name="searchId"
-                                                    value="{{ request('searchId') }}" placeholder="Cari no pasien...">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" id="searchName" name="searchName"
-                                                    value="{{ request('searchName') }}" placeholder="Cari nama pasien...">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" id="searchAddress"
-                                                    name="searchAddress" value="{{ request('searchAddress') }}"
-                                                    placeholder="Cari alamat pasien...">
-                                            </td>
-                                            <td colspan="4">
-                                                <div class="row">
-                                                    <div class="col-6 col-xl-7">
-                                                        <button type="submit" class="btn btn-block btn-info">
-                                                            <i class="fa fa-search mr-2"></i>Cari Pasien
-                                                        </button>
-                                                    </div>
-                                                    <div class="col-6 col-xl-5">
-                                                        <a href="/patients" class="btn btn-block btn-default">
-                                                            Reset Pencarian
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <input type="hidden" name="per_page" value="{{ request('per_page') }}">
-                                        </form>
-                                    </tr>
                                     <tr>
                                         <th class="col-2">No Pasien</th>
                                         <th>Nama Pasien</th>
@@ -91,7 +113,7 @@
                                                 <a href="/patients/{{ $patient->id }}" class="btn btn-primary btn-sm">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a href="appointments/create/{{ $patient->id }}" class="btn btn-success btn-sm">
+                                                <a href="appointments/create?patient={{ $patient->id }}" class="btn btn-success btn-sm">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                             </td>

@@ -83,7 +83,7 @@
                                     @forelse ($appointments as $appointment)
                                         <tr>
                                             <td>{{ $appointments->firstItem() + $loop->index }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($appointment->created_at)->translatedFormat('d M Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('d M Y') }}</td>
                                             <td>{{ $appointment->patient->id }}</td>
                                             <td>{{ $appointment->patient->name }}</td>
                                             <td class="text-right">{{ change_decimal_format_to_currency($appointment->payment->amount) }}</td>

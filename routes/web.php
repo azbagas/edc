@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Models\Patient;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
@@ -12,10 +13,12 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\TreatmentTypeController;
 use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PaymentTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +45,6 @@ Route::middleware(['auth'])->group(function () {
     
     Route::resource('/patients', PatientController::class);
     Route::resource('/appointments', AppointmentController::class);
-    Route::get('/appointments/create/{patient}', [AppointmentController::class, 'create']);
 
     Route::get('/appointments/{appointment}/examination', [AppointmentController::class, 'examination']);
     Route::put('/appointments/{appointment}/examination', [AppointmentController::class, 'examination_update']);
@@ -75,6 +77,15 @@ Route::middleware(['auth'])->group(function () {
         'show'
     ]);
     Route::resource('/doctors', DoctorController::class)->except([
+        'show'
+    ]);
+    Route::resource('/admins', AdminController::class)->except([
+        'show'
+    ]);
+    Route::resource('/assistants', AssistantController::class)->except([
+        'show'
+    ]);
+    Route::resource('/payment-types', PaymentTypeController::class)->except([
         'show'
     ]);
 

@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Doctor;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class DoctorController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $query = Doctor::query();
+        $query = Admin::query();
+
+        $query->whereHas('user', function ($query) use ($request) {
+            $query->has('admin')->doesntHave('owner');
+        });
 
         $query->when($request->name, function ($query) use ($request) {
             return $query->whereHas('user', function ($query) use ($request) {
@@ -26,10 +30,10 @@ class DoctorController extends Controller
 
         $per_page = $request->per_page ?? 10;
         
-        session(['doctors_url' => request()->fullUrl()]);
+        session(['admins_url' => request()->fullUrl()]);
 
-        return view('doctors.index', [
-            'doctors' => $query->paginate($per_page)->appends($request->all()),
+        return view('admins.index', [
+            'admins' => $query->paginate($per_page)->appends($request->all()),
             'per_page_options' => [10, 25, 50]
         ]);
     }
@@ -39,7 +43,7 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return view('doctors.create');
+        return view('admins.create');
     }
 
     /**
@@ -51,11 +55,9 @@ class DoctorController extends Controller
             'username' => 'required|alpha_num:ascii|unique:users,username|min:3',
             'password' => 'required|min:5|confirmed',
             'name' => 'required',
-            'sip' => 'required',
             'email' => 'nullable|email:rfc,dns|unique:users,email',
             'phone' => 'required|numeric',
-            'address' => 'required',
-            'doctor_percentage' => 'required|numeric|min:0|max:1'
+            'address' => 'required'
         ]);
 
         try {
@@ -69,28 +71,25 @@ class DoctorController extends Controller
                             'address' => $validatedData['address'],
                             'phone' => $validatedData['phone'],
                         ]);
-                
-                // Create doctor
-                Doctor::create([
-                    'user_id' => $user->id,
-                    'sip' => $validatedData['sip'],
-                    'doctor_percentage' => $validatedData['doctor_percentage']
+
+                Admin::create([
+                    'user_id' => $user->id
                 ]);
 
                 // Attach roles
-                $user->roles()->attach(Role::IS_DOCTOR);
+                $user->roles()->attach(Role::IS_ADMIN);
             });
 
-            return redirect(session('doctors_url', '/doctors'))->with('success', 'Berhasil menambahkan dokter!');
+            return redirect(session('admins_url', '/admins'))->with('success', 'Berhasil menambahkan admin!');
         } catch (\Exception $e) {
-            return redirect(session('doctors_url', '/doctors'))->with('error', 'Gagal menambahkan dokter!');
+            return redirect(session('admins_url', '/admins'))->with('error', 'Gagal menambahkan admin!');
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Doctor $doctor)
+    public function show(Admin $admin)
     {
         //
     }
@@ -98,38 +97,36 @@ class DoctorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Doctor $doctor)
+    public function edit(Admin $admin)
     {
-        return view('doctors.edit', [
-            'doctor' => $doctor
+        return view('admins.edit', [
+            'admin' => $admin
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Doctor $doctor)
+    public function update(Request $request, Admin $admin)
     {
         $rules = [
             'name' => 'required',
-            'sip' => 'required',
             'email' => 'nullable|email:rfc,dns',
             'phone' => 'required|numeric',
             'address' => 'required',
-            'doctor_percentage' => 'required|numeric|min:0|max:1',
             'is_active' => 'required|boolean'
         ];
 
-        if ($doctor->user->email != $request->email) {
+        if ($admin->user->email != $request->email) {
             $rules['email'] = 'nullable|email:rfc,dns|unique:users,email';
         }
 
         $validatedData = $request->validate($rules);
 
         try {
-            DB::transaction(function() use($validatedData, $doctor) {
+            DB::transaction(function() use($validatedData, $admin) {
                 // Update user
-                $user = $doctor->user;
+                $user = $admin->user;
                 
                 $user->update([
                     'email' => $validatedData['email'],
@@ -138,32 +135,25 @@ class DoctorController extends Controller
                     'phone' => $validatedData['phone'],
                     'is_active' => $validatedData['is_active']
                 ]);
-
-                // Update doctor
-                $doctor->update([
-                    'sip' => $validatedData['sip'],
-                    'doctor_percentage' => $validatedData['doctor_percentage']
-                ]);
-
             });
 
-            return redirect(session('doctors_url', '/doctors'))->with('success', 'Dokter berhasil diedit!');
+            return redirect(session('admins_url', '/admins'))->with('success', 'Admin berhasil diedit!');
         } catch (\Exception $e) {
-            return redirect(session('doctors_url', '/doctors'))->with('error', 'Dokter gagal diedit!');
+            return redirect(session('admins_url', '/admins'))->with('error', 'Admin gagal diedit!');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Doctor $doctor)
+    public function destroy(Admin $admin)
     {
         try {
-            DB::transaction(function () use ($doctor) {
-                $user = $doctor->user;
+            DB::transaction(function () use ($admin) {
+                $user = $admin->user;
                 
-                // Hapus Doctor
-                Doctor::destroy($doctor->id);
+                // Hapus admin
+                Admin::destroy($admin->id);
 
                 // Hapus role
                 $user->roles()->detach();
@@ -174,9 +164,9 @@ class DoctorController extends Controller
                 }
             });
     
-            return redirect(session('doctors_url', '/doctors'))->with('success', 'Dokter berhasil dihapus!');
+            return redirect(session('admins_url', '/admins'))->with('success', 'Admin berhasil dihapus!');
         } catch (\Exception $e) {
-            return redirect(session('doctors_url', '/doctors'))->with('error', 'Dokter gagal dihapus!');
+            return redirect(session('admins_url', '/admins'))->with('error', 'Admin gagal dihapus!');
         }
     }
 }

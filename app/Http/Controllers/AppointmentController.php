@@ -39,9 +39,9 @@ class AppointmentController extends Controller
         $query->when($request->start_date, function ($query) use ($request) {
             $start_date = Carbon::createFromFormat('d-m-Y', $request->start_date);
             $end_date = Carbon::createFromFormat('d-m-Y', $request->end_date);
-            return $query->whereBetween('created_at', [$start_date->startOfDay(), $end_date->endOfDay()]);
+            return $query->whereBetween('date_time', [$start_date->startOfDay(), $end_date->endOfDay()]);
         }, function ($query) {
-            return $query->whereDate('created_at', now()->today());
+            return $query->whereDate('date_time', now()->today());
         });
 
         $per_page = $request->per_page ?? 10;
@@ -49,7 +49,7 @@ class AppointmentController extends Controller
         session(['appointments_url' => request()->fullUrl()]);
 
         return view('appointments.index', [
-            'appointments' => $query->latest()->paginate($per_page)->appends($request->all()),
+            'appointments' => $query->orderBy('date_time', 'desc')->paginate($per_page)->appends($request->all()),
             'doctors' => Doctor::all(),
             'statuses' => Status::all(),
             'per_page_options' => [10, 25, 50]
@@ -59,14 +59,16 @@ class AppointmentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Patient $patient)
+    public function create(Request $request)
     {
-        // dd(Auth::user()->roles);
+        $patient = Patient::findOrFail($request->patient);
+        
         return view('appointments.create', [
             'patient' => $patient,
             'doctors' => Doctor::all(),
             'assistants' => Assistant::all()
         ]);
+
     }
 
     /**
@@ -79,6 +81,7 @@ class AppointmentController extends Controller
         }
 
         $validatedData = $request->validate([
+            'date_time' => 'required|date_format:Y-m-d H:i',
             'patient_id' => 'required',
             'doctor_id' => 'required',
             'assistant_id' => 'required',
@@ -154,6 +157,7 @@ class AppointmentController extends Controller
         }
 
         $validatedData = $request->validate([
+            'date_time' => 'required|date_format:Y-m-d H:i',
             'patient_id' => 'required',
             'doctor_id' => 'required',
             'assistant_id' => 'required',

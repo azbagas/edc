@@ -17,16 +17,16 @@ class PatientController extends Controller
     {
         $query = Patient::query();
 
-        $query->when($request->searchId, function ($query) use ($request) {
-            return $query->where('id', 'like', $request->searchId . '%');
+        $query->when($request->id, function ($query) use ($request) {
+            return $query->where('id', 'like', $request->id . '%');
         });
 
-        $query->when($request->searchName, function ($query) use ($request) {
-            return $query->where('name', 'like', '%' . $request->searchName . '%');
+        $query->when($request->name, function ($query) use ($request) {
+            return $query->where('name', 'like', '%' . $request->name . '%');
         });
 
-        $query->when($request->searchAddress, function ($query) use ($request) {
-            return $query->where('address', 'like', '%' . $request->searchAddress . '%');
+        $query->when($request->address, function ($query) use ($request) {
+            return $query->where('address', 'like', '%' . $request->address . '%');
         });
 
         $per_page = $request->per_page ?? 10;

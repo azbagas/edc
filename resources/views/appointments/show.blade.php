@@ -42,7 +42,7 @@
                                 <h4>
                                     <i class="fas fa-tooth"></i> Ely Dental Clinic
                                     <small
-                                        class="float-right">{{ \Carbon\Carbon::parse($appointment->created_at)->translatedFormat('l, j F Y') }}</small>
+                                        class="float-right">{{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('l, j F Y') }}</small>
                                 </h4>
                             </div>
                         </div>
@@ -246,7 +246,7 @@
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">
-                                Informasi Pembayaran
+                                Catatan Klinik
                             </h3>
 
                             <div class="card-tools">

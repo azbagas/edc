@@ -52,7 +52,7 @@
                             <div class="card-body">
                                 <dl class="row mb-0">
                                     <dt class="col-sm-3 col-xl-2">Tanggal</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ \Carbon\Carbon::parse($appointment->created_at)->format('d-m-Y') }}</dd>
+                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('j F Y') }}</dd>
     
                                     <dt class="col-sm-3 col-xl-2">Dokter</dt>
                                     <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->doctor->user->name }}</dd>

@@ -122,8 +122,8 @@
                                     @forelse ($appointments as $appointment)
                                         <tr>
                                             <td>{{ ($appointments->total()-$loop->index)-(($appointments->currentpage()-1) * $appointments->perpage() ) }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($appointment->created_at)->translatedFormat('j M Y') }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($appointment->created_at)->format('H:i') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('j M Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($appointment->date_time)->format('H:i') }}</td>
                                             <td>{{ $appointment->patient_id }}</td>
                                             <td>{{ $appointment->patient->name }}</td>
                                             <td>{{ $appointment->doctor->user->name }}</td>

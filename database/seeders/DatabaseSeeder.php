@@ -11,11 +11,12 @@ use App\Models\Owner;
 use App\Models\Doctor;
 use App\Models\Status;
 use App\Models\Disease;
+use App\Models\Expense;
 use App\Models\Patient;
 use App\Models\Payment;
-use App\Models\Diagnosis;
 use App\Models\Medicine;
 use App\Models\Assistant;
+use App\Models\Diagnosis;
 use App\Models\Treatment;
 use App\Models\Appointment;
 use App\Models\PaymentType;
@@ -157,6 +158,10 @@ class DatabaseSeeder extends Seeder
                 'doctor_percentage' => $appointment->doctor->doctor_percentage
             ]);
         }
+
+        // expense
+        Expense::factory()->count(30)
+                          ->create();
 
         // Fake tanggal lahir dan phone user
         $patients = DB::table('patients')->get();
