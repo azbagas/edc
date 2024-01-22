@@ -139,12 +139,12 @@
                                                 <div class="col">
                                                     <b class="d-block">Diagnosa</b>
                                                     <ul>
-                                                        @forelse ($appointment->diagnoses as $diagnose)
+                                                        @forelse ($appointment->diagnoses as $diagnosis)
                                                             <li class="@if(!$loop->last) mb-2 @endif">
-                                                                {{ $diagnose->name }} ({{ $diagnose->diagnose_code }})<br>
+                                                                {{ $diagnosis->name }} ({{ $diagnosis->diagnosis_code }})<br>
                                                                 <i>Catatan: </i>
-                                                                @if ($diagnose->pivot->note)
-                                                                    {{ $diagnose->pivot->note }}
+                                                                @if ($diagnosis->pivot->note)
+                                                                    {{ $diagnosis->pivot->note }}
                                                                 @else
                                                                     -
                                                                 @endif

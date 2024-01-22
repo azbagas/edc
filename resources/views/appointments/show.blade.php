@@ -259,6 +259,24 @@
                             <dl class="row">
                                 <dt class="col-sm-5 col-md-4 col-lg-3 col-xl-2">Biaya Operasional</dt>
                                 <dd class="col-sm-7 col-md-8 col-lg-9 col-xl-10"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($appointment->payment->operational_cost, 2, ',', '.') }}</dd>
+                                
+                                <dt class="col-sm-5 col-md-4 col-lg-3 col-xl-2">Datang kembali tanggal</dt>
+                                <dd class="col-sm-7 col-md-8 col-lg-9 col-xl-10"><span class="d-none d-sm-inline">:</span>
+                                    @if ($appointment->next_appointment_date_time)
+                                        {{ \Carbon\Carbon::parse($appointment->next_appointment_date_time)->translatedFormat('j F Y, H:i') }}        
+                                    @else
+                                        -
+                                    @endif
+                                </dd>
+
+                                <dt class="col-sm-5 col-md-4 col-lg-3 col-xl-2">Catatan</dt>
+                                <dd class="col-sm-7 col-md-8 col-lg-9 col-xl-10"><span class="d-none d-sm-inline">:</span>
+                                    @if ($appointment->payment->note)
+                                        {{ $appointment->payment->note }}        
+                                    @else
+                                        -
+                                    @endif
+                                </dd>
                             </dl>
                         </div>
                     </div>
