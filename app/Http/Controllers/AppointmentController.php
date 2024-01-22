@@ -109,9 +109,9 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
-        if (!$appointment->payment) {
-            return redirect()->back()->with('info', 'Belum diperiksa');
-        }
+        // if (!$appointment->payment) {
+        //     return redirect()->back()->with('info', 'Belum diperiksa');
+        // }
 
         $subTotalTreatments = 0;
         if (!$appointment->treatments->isEmpty()) {
@@ -199,8 +199,7 @@ class AppointmentController extends Controller
         }
 
         return view('appointments.examination', [
-            'appointment' => $appointment,
-            'appointmentHistories' => Appointment::where('patient_id', $appointment->patient_id)->where('id', '<>', $appointment->id)->orderByDesc('created_at')->get()
+            'appointment' => $appointment
         ]);
     }
 
@@ -340,9 +339,7 @@ class AppointmentController extends Controller
 
         $validatedData = $request->validate([
             'payment_type_id' => 'required',
-            'operational_cost' => 'required',
-            'note' => 'nullable',
-            'date_time' => 'nullable|date_format:Y-m-d H:i',
+            'operational_cost' => 'required'
         ]);
 
         $subTotalTreatments = 0;
@@ -362,60 +359,37 @@ class AppointmentController extends Controller
 
         $grandTotal = $subTotalTreatments + $subTotalMedicines;
 
+        
+
         if (!$appointment->payment) {
+            Payment::create([
+                'appointment_id' => $appointment->id,
+                'payment_type_id' => $validatedData['payment_type_id'],
+                'amount' => $grandTotal,
+                'operational_cost' => $validatedData['operational_cost'],
+                'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
+                'status' => 'Lunas'
+            ]);
 
-            // Create payment baru
-            try {
-                DB::transaction(function () use($appointment, $validatedData, $grandTotal) {
-                    Payment::create([
-                        'appointment_id' => $appointment->id,
-                        'payment_type_id' => $validatedData['payment_type_id'],
-                        'amount' => $grandTotal,
-                        'operational_cost' => $validatedData['operational_cost'],
-                        'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
-                        'status' => 'Lunas',
-                        'note' => $validatedData['note']
-                    ]);
-        
-                    $appointmentData = ['next_appointment_date_time' => $validatedData['date_time']];
-
-                    if ($appointment->status_id == 2) {
-                        $appointmentData['status_id'] = 3;
-                    }
-
-                    $appointment->update($appointmentData);
-                });
-                
-                return redirect('/appointments/'. $appointment->id)->with('success', 'Pemeriksaan berhasil!');
-            } catch (\Exception $e) {
-                return back()->with('error', 'Gagal');
+            if ($appointment->status_id == 2) {
+                $appointment->update([
+                    'status_id' => 3
+                ]);
             }
+
+            return redirect('/appointments/'. $appointment->id)->with('success', 'Pemeriksaan berhasil!');
         } else {
+            $payment = $appointment->payment;
+            $payment->update([
+                'appointment_id' => $appointment->id,
+                'payment_type_id' => $validatedData['payment_type_id'],
+                'amount' => $grandTotal,
+                'operational_cost' => $validatedData['operational_cost'],
+                'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
+                'status' => 'Lunas'
+            ]);
 
-            // Update payment yang sudah ada
-            try {
-                $payment = $appointment->payment;
-                DB::transaction(function () use($payment, $appointment, $validatedData, $grandTotal) {
-                    $payment->update([
-                        'appointment_id' => $appointment->id,
-                        'payment_type_id' => $validatedData['payment_type_id'],
-                        'amount' => $grandTotal,
-                        'operational_cost' => $validatedData['operational_cost'],
-                        'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
-                        'status' => 'Lunas',
-                        'next_appointment_date_time' => $validatedData['date_time'],
-                        'note' => $validatedData['note']
-                    ]);
-        
-                    $appointment->update([
-                        'next_appointment_date_time' => $validatedData['date_time']
-                    ]);
-                });
-
-                return redirect('/appointments/'. $appointment->id)->with('success', 'Berhasil diedit!');   
-            } catch (\Exception $e) {
-                return back()->with('error', 'Gagal');
-            }
+            return redirect('/appointments/'. $appointment->id)->with('success', 'Berhasil diedit!');
         }
         
     }

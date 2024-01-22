@@ -59,9 +59,6 @@
     
                                     <dt class="col-sm-3 col-xl-2">Asisten</dt>
                                     <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->assistant->name }}</dd>
-                                    
-                                    <dt class="col-sm-3 col-xl-2">Admin</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->admin->user->name }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -99,14 +96,6 @@
                                     <dt class="col-sm-3 col-xl-2">Alamat</dt>
                                     <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->address }}</dd>
                                 </dl>
-                                <div class="row">
-                                    <div class="col">
-                                        @include('appointments._show-appointment-histories-modal')
-                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-lg">
-                                            Lihat riwayat pertemuan
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
