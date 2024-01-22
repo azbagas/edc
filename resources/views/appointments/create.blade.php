@@ -123,7 +123,7 @@
                                     <div class="col-xl-8">
                                         <div class="form-group">
                                             <label for="complaint">Keluhan<span class="text-danger">*</span></label>
-                                            <textarea id="complaint" name="complaint" class="form-control @error('complaint') is-invalid @enderror" rows="3" 
+                                            <textarea id="complaint" name="complaint" class="form-control @error('complaint') is-invalid @enderror" rows="3"  required
                                                 placeholder="Masukkan keluhan pasien...">{{ old('complaint') }}</textarea>
                                             @error('complaint')
                                                 <span class="invalid-feedback">{{ $message }}</span>
