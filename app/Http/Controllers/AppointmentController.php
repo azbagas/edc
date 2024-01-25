@@ -333,14 +333,22 @@ class AppointmentController extends Controller
     {
         // Change format operational cost
         if ($request->operational_cost) {
-            $operationalCost = $request->operational_cost;
-            $operationalCost = change_currency_format_to_decimal($operationalCost);
-            $request->merge(['operational_cost' => $operationalCost]);
+            $request->merge(['operational_cost' => change_currency_format_to_decimal($request->operational_cost)]);
+        }
+
+        if ($request->lab_cost) {
+            $request->merge(['lab_cost' => change_currency_format_to_decimal($request->lab_cost)]);
+        }
+
+        if ($request->patient_money) {
+            $request->merge(['patient_money' => change_currency_format_to_decimal($request->patient_money)]);
         }
 
         $validatedData = $request->validate([
             'payment_type_id' => 'required',
             'operational_cost' => 'required',
+            'lab_cost' => 'required',
+            'patient_money' => 'required',
             'note' => 'nullable',
             'date_time' => 'nullable|date_format:Y-m-d H:i',
         ]);
@@ -362,6 +370,12 @@ class AppointmentController extends Controller
 
         $grandTotal = $subTotalTreatments + $subTotalMedicines;
 
+        if ($validatedData['patient_money'] >= $grandTotal) {
+            $validatedData['status'] = 'Lunas';
+        } else {
+            $validatedData['status'] = 'Belum lunas';
+        }
+
         if (!$appointment->payment) {
 
             // Create payment baru
@@ -372,8 +386,10 @@ class AppointmentController extends Controller
                         'payment_type_id' => $validatedData['payment_type_id'],
                         'amount' => $grandTotal,
                         'operational_cost' => $validatedData['operational_cost'],
+                        'lab_cost' => $validatedData['lab_cost'],
+                        'patient_money' => $validatedData['patient_money'],
                         'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
-                        'status' => 'Lunas',
+                        'status' =>  $validatedData['status'],
                         'note' => $validatedData['note']
                     ]);
         
@@ -401,9 +417,10 @@ class AppointmentController extends Controller
                         'payment_type_id' => $validatedData['payment_type_id'],
                         'amount' => $grandTotal,
                         'operational_cost' => $validatedData['operational_cost'],
+                        'lab_cost' => $validatedData['lab_cost'],
+                        'patient_money' => $validatedData['patient_money'],
                         'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
-                        'status' => 'Lunas',
-                        'next_appointment_date_time' => $validatedData['date_time'],
+                        'status' =>  $validatedData['status'],
                         'note' => $validatedData['note']
                     ]);
         

@@ -155,6 +155,7 @@ class DatabaseSeeder extends Seeder
             Payment::factory()->create([
                 'appointment_id' => $appointment->id,
                 'amount' => $amount,
+                'patient_money' => $amount,
                 'doctor_percentage' => $appointment->doctor->doctor_percentage
             ]);
         }
@@ -170,7 +171,7 @@ class DatabaseSeeder extends Seeder
             DB::table('patients')
                 ->where('id', $patient->id)
                 ->update([
-                    'date_of_birth' => fake()->date(max:'2017-12-12'),
+                    'date_of_birth' => fake()->date(max:'2023-01-01'),
                     'phone' => fake()->numerify('08##########')
                 ]);
         }

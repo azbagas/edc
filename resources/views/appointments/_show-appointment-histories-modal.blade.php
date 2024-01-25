@@ -17,8 +17,7 @@
                                 @foreach ($appointmentHistories as $appointmentHistory)
                                     <!-- Timeline time label -->
                                     <div class="time-label">
-                                        <span
-                                            class="bg-success font-weight-normal">{{ \Carbon\Carbon::parse($appointmentHistory->created_at)->translatedFormat('l, j F Y') }}</span>
+                                        <span class="bg-success font-weight-normal">{{ \Carbon\Carbon::parse($appointmentHistory->created_at)->translatedFormat('l, j F Y') }}</span>
                                     </div>
                                     <div>
                                         <!-- Before each timeline item corresponds to one icon on the left scale -->
@@ -33,6 +32,7 @@
                                                     <div class="col-md-auto order-md-last mb-3">
                                                         <span
                                                             class="badge badge-{{ $appointmentHistory->status->type }}">{{ $appointmentHistory->status->name }}</span>
+                                                            <span class="badge badge-{{ ($appointmentHistory->payment->status ?? '') == 'Lunas' ? 'success' : 'danger' }}">{{ $appointmentHistory->payment->status ?? '' }}</span>
                                                     </div>
                                                     <div class="col">
                                                         <div class="row mb-3 mb-md-2">

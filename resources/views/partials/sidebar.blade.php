@@ -183,7 +183,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ Request::is('reports*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-file"></i>
                         <p>
@@ -193,9 +193,38 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('community-health-center-daily') }}" class="nav-link {{ Request::is('reports/community-health-center/daily*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Laporan untuk Puskesmas</p>
+                                <p>Laporan untuk Puskesmas (Harian)</p>
+                            </a>
+                        </li> 
+                        <li class="nav-item">
+                            <a href="{{ route('community-health-center-monthly') }}" class="nav-link {{ Request::is('reports/community-health-center/monthly*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan untuk Puskesmas (Bulanan)</p>
+                            </a>
+                        </li> 
+                    </ul>
+                </li>
+                <li class="nav-item {{ Request::is('recap*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-scroll"></i>
+                        <p>
+                            Rekap
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('recap-daily') }}" class="nav-link {{ Request::is('recap/daily*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Rekap (Harian)</p>
+                            </a>
+                        </li> 
+                        <li class="nav-item">
+                            <a href="{{ route('recap-monthly') }}" class="nav-link {{ Request::is('recap/monthly*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Rekap (Bulanan)</p>
                             </a>
                         </li> 
                     </ul>

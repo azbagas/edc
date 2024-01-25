@@ -24,11 +24,17 @@ class IncomeController extends Controller
         });
 
         $query->has('payment');
+        
+        $query->when($request->status, function ($query) use ($request) {
+            return $query->whereHas('payment', function ($query) use ($request) {
+                return $query->where('status', $request->status);
+            });
+        });
 
         $per_page = $request->per_page ?? 10;
 
         return view('income.index', [
-            'appointments' => $query->latest()->paginate($per_page)->appends($request->all()),
+            'appointments' => $query->orderBy('date_time', 'desc')->paginate($per_page)->appends($request->all()),
             'per_page_options' => [10, 25, 50]
         ]);
     }

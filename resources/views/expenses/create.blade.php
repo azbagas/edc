@@ -119,7 +119,7 @@
             // Initial date
             let start = moment();
             @if(old('date'))
-                startStr = "{{ old('date') }}";
+                let startStr = "{{ old('date') }}";
                 start = moment(startStr, "DD-MM-YYYY");
             @endif
             $('input[name="date"]').val(start.format('DD-MM-YYYY'));

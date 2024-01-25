@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('payment_type_id')->constrained();
             $table->decimal('amount', 16, 2);
             $table->decimal('operational_cost', 16, 2)->default(0);
+            $table->decimal('lab_cost', 16, 2)->default(0);
+            $table->decimal('patient_money', 16, 2);
             $table->decimal('doctor_percentage');
             $table->text('note')->nullable();
             $table->enum('status', ['Lunas', 'Belum lunas']);

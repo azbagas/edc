@@ -113,6 +113,7 @@
                                         <th>Nama Pasien</th>
                                         <th>Dokter</th>
                                         <th>Asisten</th>
+                                        <th>Admin</th>
                                         <th>Keluhan</th>
                                         <th>Status</th>
                                         <th class="text-nowrap">Aksi</th>
@@ -128,6 +129,7 @@
                                             <td>{{ $appointment->patient->name }}</td>
                                             <td>{{ $appointment->doctor->user->name }}</td>
                                             <td>{{ $appointment->assistant->name }}</td>
+                                            <td>{{ $appointment->admin->user->name }}</td>
                                             <td>{{ $appointment->complaint }}</td>
                                             <td><span class="badge badge-{{ $appointment->status->type }}">{{ $appointment->status->name }}</span></td>
                                             <td class="text-nowrap">
@@ -148,7 +150,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="10" class="text-center">
+                                            <td colspan="16" class="text-center">
                                                 <span>Belum ada pertemuan.</span>
                                             </td>
                                         </tr>

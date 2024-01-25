@@ -15,7 +15,7 @@ if (!function_exists('change_decimal_format_to_currency')) {
     function change_decimal_format_to_currency($decimal)
     {
         // Contoh: 45000 -> "45.000,00"
-        return number_format($decimal, 2, ',', '.');
+        return number_format($decimal, 0, ',', '.');
     }
 }
 

@@ -238,7 +238,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="d-flex justify-content-end mb-3">
-                            <button type="submit" class="btn btn-primary mt-5">Lanjut ke pembayaran <i class="fa fa-arrow-right"></i></button>
+                            <button type="submit" class="btn btn-primary">Lanjut ke pembayaran <i class="fa fa-arrow-right"></i></button>
                         </div>
                     </div>
                 </div>

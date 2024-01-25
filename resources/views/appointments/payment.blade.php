@@ -41,7 +41,7 @@
 
                     <div class="invoice p-3 mb-3">
 
-                        <div class="row mb-2">
+                        <div class="row mb-3">
                             <div class="col-12">
                                 <h4>
                                     <i class="fas fa-tooth"></i> Ely Dental Clinic
@@ -85,6 +85,12 @@
                                     <dt class="col-sm-3 col-xl-2">Dokter</dt>
                                     <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span>
                                         {{ $appointment->doctor->user->name }}</dd>
+
+                                    <dt class="col-sm-3 col-xl-2">Asisten</dt>
+                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->assistant->name }}</dd>
+                                    
+                                    <dt class="col-sm-3 col-xl-2">Admin</dt>
+                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->admin->user->name }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -282,6 +288,38 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-xl-4">
+                                        <div class="form-group">
+                                            <label for="grand_total">Grand total</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Rp</span>
+                                                </div>
+                                                <input id="grand_total" type="text" name="grand_total"
+                                                    class="form-control rupiah" placeholder="0,00"
+                                                    value="{{ change_decimal_format_to_currency($grandTotal) }}"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-4">
+                                        <div class="form-group">
+                                            <label for="patient_money">Uang pasien<span class="text-danger">*</span></label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Rp</span>
+                                                </div>
+                                                <input id="patient_money" type="text" name="patient_money"
+                                                    class="form-control rupiah" placeholder="0,00"
+                                                    value="{{ change_decimal_format_to_currency(old('patient_money', $appointment->payment->patient_money ?? $grandTotal)) }}"
+                                                    required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -310,7 +348,24 @@
                                                 </div>
                                                 <input id="operational_cost" type="text" name="operational_cost"
                                                     class="form-control rupiah" placeholder="0,00"
-                                                    value="{{ optional($appointment->payment)->operational_cost ? change_decimal_format_to_currency($appointment->payment->operational_cost) : 0 }}"
+                                                    value="{{ change_decimal_format_to_currency(old('operational_cost', $appointment->payment->operational_cost ?? 0)) }}"
+                                                    required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-4">
+                                        <div class="form-group">
+                                            <label for="lab_cost">Biaya lab</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Rp</span>
+                                                </div>
+                                                <input id="lab_cost" type="text" name="lab_cost"
+                                                    class="form-control rupiah" placeholder="0,00"
+                                                    value="{{ change_decimal_format_to_currency(old('lab_cost', $appointment->payment->lab_cost ?? 0)) }}"
                                                     required>
                                             </div>
                                         </div>
@@ -340,7 +395,7 @@
                                         <div class="form-group">
                                             <label for="note">Catatan</label>
                                             <textarea id="note" name="note" class="form-control @error('note') is-invalid @enderror" rows="3" 
-                                                placeholder="Masukkan catatan (opsional)...">{{ old('note', $appointment->payment->note) }}</textarea>
+                                                placeholder="Masukkan catatan (opsional)...">{{ old('note', $appointment->payment->note ?? null) }}</textarea>
                                             @error('note')
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
@@ -354,7 +409,7 @@
 
                 <div class="row">
                     <div class="col text-right">
-                        <button type="submit" class="btn btn-success mb-3 mt-5">Selesai</button>
+                        <button type="submit" class="btn btn-success mb-3">Selesai</button>
                     </div>
                 </div>
             </form>
@@ -389,6 +444,7 @@
                 timePicker: true,
                 timePicker24Hour: true,
                 showDropdowns: true,
+                drops: 'up',
                 locale: {
                     format: 'D MMMM YYYY, HH:mm',
                     cancelLabel: 'Clear'

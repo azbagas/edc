@@ -16,7 +16,7 @@ class Appointment extends Model
 
     protected $guarded = ['id'];
 
-    protected $with = ['doctor', 'assistant', 'admin', 'patient', 'treatments', 'diagnoses', 'status'];
+    protected $with = ['doctor', 'assistant', 'admin', 'patient', 'treatments', 'diagnoses', 'medicines', 'status', 'payment'];
 
     public function patient(): BelongsTo
     {

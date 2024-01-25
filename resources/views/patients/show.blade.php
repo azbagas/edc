@@ -41,7 +41,7 @@
                                 <a href="/patients/{{ $patient->id }}/edit" class="btn btn-warning btn-sm">
                                     <i class="fa fa-pen"></i> Edit
                                 </a>
-                                <a href="/../appointments/create/{{ $patient->id }}" class="btn btn-success btn-sm">
+                                <a href="/../appointments/create?patient={{ $patient->id }}" class="btn btn-success btn-sm">
                                     <i class="fa fa-plus"></i> Tambah ke pertemuan
                                 </a>
                             </div>
@@ -97,6 +97,7 @@
                                             <div class="row">
                                                 <div class="col-md-auto order-md-last mb-3">
                                                     <span class="badge badge-{{ $appointment->status->type }}">{{ $appointment->status->name }}</span>
+                                                    <span class="badge badge-{{ ($appointment->payment->status ?? '') == 'Lunas' ? 'success' : 'danger' }}">{{ $appointment->payment->status ?? '' }}</span>
                                                 </div>
                                                 <div class="col">
                                                     <div class="row mb-3 mb-md-2">

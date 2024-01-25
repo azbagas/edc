@@ -19,6 +19,8 @@ use App\Http\Controllers\TreatmentTypeController;
 use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PaymentTypeController;
+use App\Http\Controllers\RecapController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard.index', [
             'totalPatients' => Patient::count(),
-            'todayAppointments' => Appointment::whereDate('created_at', now()->today())->count()
+            'todayAppointments' => Appointment::whereDate('date_time', now()->today())->count()
         ]);
     });
     
@@ -89,8 +91,11 @@ Route::middleware(['auth'])->group(function () {
         'show'
     ]);
 
-
-
+    Route::get('/reports/community-health-center/daily', [ReportController::class, 'communityHealthCenterDaily'])->name('community-health-center-daily');
+    Route::get('/reports/community-health-center/monthly', [ReportController::class, 'communityHealthCenterMonthly'])->name('community-health-center-monthly');
+    
+    Route::get('/recap/daily', [RecapController::class, 'recapDaily'])->name('recap-daily');
+    Route::get('/recap/monthly', [RecapController::class, 'recapMonthly'])->name('recap-monthly');
 
     
     Route::get('/get-diseases', [DependantDropdownController::class, 'getDiseases'])->name('getDiseases');
