@@ -3,21 +3,26 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Appointment;
 use App\Models\Disease;
-use App\Models\TreatmentType;
+use App\Models\Appointment;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
+use App\Models\TreatmentType;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
 {
     public function communityHealthCenterDaily(Request $request) {
         $query = Appointment::query();
 
+        $startDate = now()->today();
+        $endDate = now()->today();
+
         // Filter waktu
-        $query->when($request->start_date, function ($query) use ($request) {
-            $start_date = Carbon::createFromFormat('d-m-Y', $request->start_date);
-            $end_date = Carbon::createFromFormat('d-m-Y', $request->end_date);
-            return $query->whereBetween('date_time', [$start_date->startOfDay(), $end_date->endOfDay()]);
+        $query->when($request->start_date, function ($query) use ($request, &$startDate, &$endDate) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->start_date);
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->end_date);
+            return $query->whereBetween('date_time', [$startDate->startOfDay(), $endDate->endOfDay()]);
         }, function ($query) {
             return $query->whereDate('date_time', now()->today());
         });
@@ -136,6 +141,26 @@ class ReportController extends Controller
         $patientTypesCount = array_values($patientTypesCount);
         $treatmentTypesCount = array_values($treatmentTypesCount);
         $diseasesCount = array_values($diseasesCount);
+
+        if ($request->download == 'pdf') {
+            if ($startDate->format('d-m-Y') == $endDate->format('d-m-Y')) {
+                $title = 'Laporan_untuk_puskesmas_' . ($startDate->format('d-m-Y'));
+            } else {
+                $title = 'Laporan_untuk_puskesmas_' . ($startDate->format('d-m-Y')) . '_' . ($endDate->format('d-m-Y'));
+            }
+
+            $pdf = Pdf::loadView('reports.print-community-health-center-daily', [
+                'title' => $title,
+                'patientTypesCount' => $patientTypesCount,
+                'treatmentTypesCount' => $treatmentTypesCount,
+                'diseasesCount' => $diseasesCount,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'doctor' => Doctor::findOrFail(1)
+            ]);
+    
+            return $pdf->stream($title);
+        }
 
         return view('reports.community-health-center-daily', [
             'patientTypesCount' => $patientTypesCount,
@@ -294,6 +319,21 @@ class ReportController extends Controller
         $years = [];
         for ($i = 2020; $i <= now()->addYears(5)->year; $i++) {
             $years[$i] = $i;
+        }
+
+        if ($request->download == 'pdf') {
+            $title = 'Laporan_untuk_puskesmas_' . ($request->year ?? now()->year) . '-' . ($request->month ?? now()->format('m'));
+            $pdf = Pdf::loadView('reports.print-community-health-center-monthly', [
+                'title' => $title,
+                'patientTypesCount' => $patientTypesCount,
+                'treatmentTypesCount' => $treatmentTypesCount,
+                'diseasesCount' => $diseasesCount,
+                'months' => $months,
+                'years' => $years,
+                'doctor' => Doctor::findOrFail(1)
+            ]);
+    
+            return $pdf->stream($title);
         }
 
         return view('reports.community-health-center-monthly', [

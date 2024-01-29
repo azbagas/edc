@@ -40,6 +40,13 @@
                             </h3>
 
                             <div class="card-tools">
+                                <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
+                                    @method('delete')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                        <i class="fa fa-trash"></i> Hapus pertemuan
+                                    </button>
+                                </form>
                                 <a href="/patients/{{ $appointment->patient_id }}" class="btn btn-primary btn-sm">
                                     <i class="fa fa-eye"></i> Lihat pasien
                                 </a>
@@ -244,15 +251,13 @@
                                 @endif
         
         
-                                {{-- <div class="row no-print">
+                                <div class="row no-print">
                                     <div class="col-12">
-                                        <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
-                                                class="fas fa-print"></i> Print</a>
-                                        <button type="button" class="btn btn-primary" style="margin-right: 5px;">
+                                        <a href="/appointments/{{ $appointment->id }}?download=pdf" target="_blank" class="btn btn-default">
                                             <i class="fas fa-download"></i> Download PDF
-                                        </button>
+                                        </a>
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -335,7 +340,24 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-
+            // Sweet alert delete appointment
+            $('.delete-button').click(function(event) {
+                let form = $(this).closest("form");
+                event.preventDefault();
+                Swal.fire({
+                    title: "Anda yakin ingin menghapus pertemuan ini?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Ya, hapus!",
+                    cancelButtonText: "Tidak"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            })
         });
     </script>
 @endpush

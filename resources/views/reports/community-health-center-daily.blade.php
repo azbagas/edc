@@ -11,6 +11,10 @@
         #date_range {
             caret-color: transparent;
         }
+
+        #date_header {
+            text-transform: uppercase
+        }
     </style>
 @endsection
 
@@ -166,6 +170,11 @@
                             </div>
                         </div>
                         <!-- /.card-body -->
+                        <div class="card-footer">
+                            <a href="{{ route('community-health-center-daily', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'download' => 'pdf']) }}" target="_blank" class="btn btn-default">
+                                <i class="fas fa-download"></i> Download PDF
+                            </a>
+                        </div>
                     </div>
 
                 </div>
@@ -199,7 +208,11 @@
         @endif
         $('input[name="end_date"]').val(end.format('DD-MM-YYYY'));
 
-        $('#date_header').html(start.format('D MMMM YYYY') + ' - ' + end.format('D MMMM YYYY'));
+        if (start.format('D MMMM YYYY') == end.format('D MMMM YYYY')) {
+            $('#date_header').html(start.format('D MMMM YYYY'));
+        } else {
+            $('#date_header').html(start.format('D MMMM YYYY') + ' - ' + end.format('D MMMM YYYY'));
+        }
 
         $('#date_range').daterangepicker({
             startDate: start,
@@ -218,7 +231,12 @@
         }, function(start, end, label) {
             $('input[name="start_date"]').val(start.format('DD-MM-YYYY'));
             $('input[name="end_date"]').val(end.format('DD-MM-YYYY'));
-            $('#date_header').html(start.format('D MMMM YYYY') + ' - ' + end.format('D MMMM YYYY'));
+            // $('#date_header').html(start.format('D MMMM YYYY') + ' - ' + end.format('D MMMM YYYY'));
+            if (start.format('D MMMM YYYY') == end.format('D MMMM YYYY')) {
+                $('#date_header').html(start.format('D MMMM YYYY'));
+            } else {
+                $('#date_header').html(start.format('D MMMM YYYY') + ' - ' + end.format('D MMMM YYYY'));
+            }
             filterForm.submit();
         });
 

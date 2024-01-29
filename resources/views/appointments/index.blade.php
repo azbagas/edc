@@ -133,6 +133,15 @@
                                             <td>{{ $appointment->complaint }}</td>
                                             <td><span class="badge badge-{{ $appointment->status->type }}">{{ $appointment->status->name }}</span></td>
                                             <td class="text-nowrap">
+                                                @if ($appointment->status->name != 'Selesai')
+                                                    <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endif
                                                 <a href="/appointments/{{ $appointment->id }}/edit" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-pen"></i>
                                                 </a>
@@ -217,6 +226,25 @@
             $('input[name="per_page"]').val($(this).val());
             filterForm.submit();
         });
+
+        // Sweet alert delete appointment
+        $('.delete-button').click(function(event) {
+            let form = $(this).closest("form");
+            event.preventDefault();
+            Swal.fire({
+                title: "Anda yakin ingin menghapus pertemuan ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Tidak"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        })
 
         //Date range picker
         let start = moment();

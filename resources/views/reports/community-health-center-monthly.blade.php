@@ -183,6 +183,11 @@
                             </div>
                         </div>
                         <!-- /.card-body -->
+                        <div class="card-footer">
+                            <a href="{{ route('community-health-center-monthly', ['month' => request('month'), 'year' => request('year'), 'download' => 'pdf']) }}" target="_blank" class="btn btn-default">
+                                <i class="fas fa-download"></i> Download PDF
+                            </a>
+                        </div>
                     </div>
 
                 </div>

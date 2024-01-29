@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Doctor;
-use App\Models\Appointment;
 use App\Models\Payment;
-use App\Models\PaymentType;
 use Carbon\CarbonPeriod;
+use App\Models\Appointment;
+use App\Models\PaymentType;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
 class RecapController extends Controller
@@ -375,6 +376,17 @@ class RecapController extends Controller
         }
 
         // dd($finalResults->toArray());
+        if ($request->download == 'pdf') {
+            $title = 'Rekap_bulanan_' . ($request->year ?? now()->year) . '-' . ($request->month ?? now()->format('m'));
+            $pdf = Pdf::loadView('recap.print-recap-monthly', [
+                'title' => $title,
+                'finalResults' => $finalResults,
+                'months' => $months,
+                'years' => $years
+            ])->setPaper('a4', 'landscape');
+    
+            return $pdf->stream($title);
+        }
 
         return view('recap.recap-monthly', [
             'finalResults' => $finalResults,

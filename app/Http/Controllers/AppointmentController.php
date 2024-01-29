@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Doctor;
 use App\Models\Status;
-use App\Models\Disease;
 use App\Models\Patient;
 use App\Models\Payment;
 use App\Models\Medicine;
 use App\Models\Assistant;
 use App\Models\Appointment;
 use App\Models\PaymentType;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -65,8 +65,8 @@ class AppointmentController extends Controller
         
         return view('appointments.create', [
             'patient' => $patient,
-            'doctors' => Doctor::all(),
-            'assistants' => Assistant::all()
+            'doctors' => Doctor::active()->get(),
+            'assistants' => Assistant::active()->get()
         ]);
 
     }
@@ -107,7 +107,7 @@ class AppointmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Appointment $appointment)
+    public function show(Appointment $appointment, Request $request)
     {
         if (!$appointment->payment) {
             return redirect()->back()->with('info', 'Belum diperiksa');
@@ -128,11 +128,24 @@ class AppointmentController extends Controller
             }
         }
 
+        if ($request->download == 'pdf') {
+            $title = $appointment->id . '_' . $appointment->patient_id . '_' . str_replace(' ', '_', trim($appointment->patient->name));
+            $pdf = Pdf::loadView('appointments.print-detail', [
+                'title' => $title,
+                'appointment' => $appointment,
+                'subTotalTreatments' => $subTotalTreatments,
+                'subTotalMedicines' => $subTotalMedicines
+            ]);
+    
+            return $pdf->stream($title);
+        }
+
         return view('appointments.show', [
             'appointment' => $appointment,
             'subTotalTreatments' => $subTotalTreatments,
             'subTotalMedicines' => $subTotalMedicines
         ]);
+
     }
 
     /**
@@ -142,8 +155,8 @@ class AppointmentController extends Controller
     {
         return view('appointments.edit', [
             'appointment' => $appointment,
-            'doctors' => Doctor::all(),
-            'assistants' => Assistant::all()
+            'doctors' => Doctor::active()->get(),
+            'assistants' => Assistant::active()->get()
         ]);
     }
 
@@ -184,7 +197,25 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
-        //
+        try {
+            DB::transaction(function () use($appointment) {
+                // Kembalikan stok obat
+                if ($appointment->medicines) {
+                    foreach ($appointment->medicines as $medicine) {
+                        $medicine->update([
+                            'stock' => $medicine->stock + $medicine->pivot->quantity
+                        ]);
+                    }
+                }
+
+                // Hapus appointment
+                Appointment::destroy($appointment->id);
+            });
+            
+            return redirect(session('appointments_url', '/appointments'))->with('success', 'Pertemuan berhasil dihapus!');
+        } catch (\Exception $e) {
+            return redirect(session('appointments_url', '/appointments'))->with('error', 'Gagal menghapus pertemuan!' . $e->getMessage());
+        }
     }
 
     // ----- Examination
@@ -200,7 +231,7 @@ class AppointmentController extends Controller
 
         return view('appointments.examination', [
             'appointment' => $appointment,
-            'appointmentHistories' => Appointment::where('patient_id', $appointment->patient_id)->where('id', '<>', $appointment->id)->orderByDesc('created_at')->get()
+            'appointmentHistories' => Appointment::where('patient_id', $appointment->patient_id)->where('id', '<>', $appointment->id)->orderByDesc('date_time')->get()
         ]);
     }
 

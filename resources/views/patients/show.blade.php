@@ -83,7 +83,7 @@
                             @foreach ($appointments as $appointment)
                                 <!-- Timeline time label -->
                                 <div class="time-label">
-                                    <span class="bg-success font-weight-normal">{{ \Carbon\Carbon::parse($appointment->created_at)->translatedFormat('l, j F Y') }}</span>
+                                    <span class="bg-success font-weight-normal">{{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('l, j F Y') }}</span>
                                 </div>
                                 <div>
                                     <!-- Before each timeline item corresponds to one icon on the left scale -->

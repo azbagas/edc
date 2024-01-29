@@ -103,10 +103,15 @@ class DatabaseSeeder extends Seeder
         foreach ($randomAppointments as $appointment) {
             $medicineIDs = $this->generateRandomArrayNumberUnique($medicines_count);
             foreach ($medicineIDs as $medicineID) {
+                $medicine = Medicine::find($medicineID);
+                $randomQuantity = mt_rand(1, 5);
+
+                $medicine->update(['stock' => $medicine->stock - $randomQuantity]);
+
                 $appointment->medicines()
                                 ->attach($medicineID, 
-                                            ['price' => Medicine::find($medicineID)->price, 
-                                            'quantity' => mt_rand(1, 5)]);
+                                            ['price' => $medicine->price, 
+                                            'quantity' => $randomQuantity]);
             }
         }
 

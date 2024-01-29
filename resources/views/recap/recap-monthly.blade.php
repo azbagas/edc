@@ -107,13 +107,13 @@
                                             <th style="vertical-align: middle;">Biaya Operasional</th>
                                             <th style="vertical-align: middle;">Biaya Lab</th>
                                             @foreach ($finalResults->first()['doctors'] as $doctorName => $doctorCost)
-                                                <th style="vertical-align: middle;">{{ $doctorName }}</th>
+                                                <th style="vertical-align: middle;">{{ implode(array_slice(explode(" ", $doctorName), 0, 2)) }}</th>
                                             @endforeach
                                             <th style="vertical-align: middle;">Total untuk klinik</th>
                                             <th style="vertical-align: middle;">Zakat 2,5%</th>
                                             <th style="vertical-align: middle;">Pengeluaran</th>
                                             <th style="vertical-align: middle;">Netto</th>
-                                            <th colspan="3" style="vertical-align: middle;">
+                                            <th colspan="{{ $finalResults->first()['payment_types']->count() }}" style="vertical-align: middle;">
                                                 <div>
                                                     <div class="row">
                                                         <div class="col">
@@ -132,28 +132,6 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    {{-- <thead class="text-center">
-                                        <tr>
-                                            <th rowspan="2" style="vertical-align: middle;">No</th>
-                                            <th rowspan="2" style="vertical-align: middle;">Tanggal</th>
-                                            <th rowspan="2" style="vertical-align: middle;">Biaya Pasien</th>
-                                            <th rowspan="2" style="vertical-align: middle;">Biaya Operasional</th>
-                                            <th rowspan="2" style="vertical-align: middle;">Biaya Lab</th>
-                                            @foreach ($finalResults->first()['doctors'] as $doctorName => $doctorCost)
-                                                <th rowspan="2" style="vertical-align: middle;">{{ $doctorName }}</th>
-                                            @endforeach
-                                            <th rowspan="2" style="vertical-align: middle;">Total untuk klinik</th>
-                                            <th rowspan="2" style="vertical-align: middle;">Zakat 2,5%</th>
-                                            <th rowspan="2" style="vertical-align: middle;">Pengeluaran</th>
-                                            <th rowspan="2" style="vertical-align: middle;">Netto</th>
-                                            <th colspan="{{ $finalResults->first()['payment_types']->count() }}">Total</th>
-                                        </tr>
-                                        <tr>
-                                            @foreach ($finalResults->first()['payment_types'] as $paymentTypeName => $paymentTypeAmount)
-                                                <th>{{ $paymentTypeName }}</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead> --}}
                                     <tbody>
                                         @foreach ($finalResults as $finalResult)
                                             <tr>
@@ -203,6 +181,12 @@
                             </div>
                         </div>
                         <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <a href="{{ route('recap-monthly', ['month' => request('month'), 'year' => request('year'), 'download' => 'pdf']) }}" target="_blank" class="btn btn-default">
+                                <i class="fas fa-download"></i> Download PDF
+                            </a>
+                        </div>
                     </div>
 
                 </div>

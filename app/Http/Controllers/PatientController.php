@@ -85,7 +85,7 @@ class PatientController extends Controller
     {
         return view('patients.show', [
             'patient' => Patient::find($id),
-            'appointments' => Appointment::where('patient_id', $id)->orderByDesc('created_at')->get()
+            'appointments' => Appointment::where('patient_id', $id)->orderByDesc('date_time')->get()
         ]);
     }
 
