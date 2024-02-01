@@ -162,6 +162,7 @@
             singleDatePicker: true,
             timePicker: true,
             timePicker24Hour: true,
+            timePickerIncrement: 5,
             showDropdowns: true,
             startDate: start,
             locale: {

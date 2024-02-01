@@ -18,15 +18,15 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col">
-                    
-                    <a href="/patients/create" class="btn btn-primary">
-                        <i class="fa fa-plus mr-2"></i>Buat pasien baru
-                    </a>
-                    
+            @can('admin')
+                <div class="row mb-3">
+                    <div class="col">
+                        <a href="/patients/create" class="btn btn-primary">
+                            <i class="fa fa-plus mr-2"></i>Buat pasien baru
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @endcan
 
             <div class="row">
                 <div class="col">
@@ -107,15 +107,20 @@
                                             <td>{{ $patient->gender }}</td>
                                             <td>{{ $patient->phone }}</td>
                                             <td class="text-nowrap">
-                                                <a href="/patients/{{ $patient->id }}/edit" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pen"></i>
-                                                </a>
+                                                @can('admin')
+                                                    <a href="/patients/{{ $patient->id }}/edit" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-pen"></i>
+                                                    </a>
+                                                    
+                                                @endcan
                                                 <a href="/patients/{{ $patient->id }}" class="btn btn-primary btn-sm">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a href="appointments/create?patient={{ $patient->id }}" class="btn btn-success btn-sm">
-                                                    <i class="fa fa-plus"></i>
-                                                </a>
+                                                @can('admin')
+                                                    <a href="appointments/create?patient={{ $patient->id }}" class="btn btn-success btn-sm">
+                                                        <i class="fa fa-plus"></i>
+                                                    </a>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @empty

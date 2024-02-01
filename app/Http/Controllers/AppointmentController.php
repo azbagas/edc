@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Role;
 use App\Models\Doctor;
 use App\Models\Status;
 use App\Models\Patient;
@@ -11,10 +12,10 @@ use App\Models\Medicine;
 use App\Models\Assistant;
 use App\Models\Appointment;
 use App\Models\PaymentType;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
@@ -28,9 +29,14 @@ class AppointmentController extends Controller
     {
         $query = Appointment::query();
 
-        $query->when($request->doctor, function ($query) use ($request) {
-            return $query->where('doctor_id', $request->doctor);
-        });
+        // Jika user adalah dokter, maka hanya menampilkan appointment yang dokternya adalah dia
+        if (Auth::user()->roles->contains(Role::IS_DOCTOR)) {
+            $query->where('doctor_id', Auth::user()->doctor->id);
+        } else {
+            $query->when($request->doctor, function ($query) use ($request) {
+                return $query->where('doctor_id', $request->doctor);
+            });
+        }
 
         $query->when($request->status, function ($query) use ($request) {
             return $query->where('status_id', $request->status);
@@ -61,6 +67,10 @@ class AppointmentController extends Controller
      */
     public function create(Request $request)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $patient = Patient::findOrFail($request->patient);
         
         return view('appointments.create', [
@@ -153,6 +163,10 @@ class AppointmentController extends Controller
      */
     public function edit(Appointment $appointment)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         return view('appointments.edit', [
             'appointment' => $appointment,
             'doctors' => Doctor::active()->get(),
@@ -197,6 +211,10 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         try {
             DB::transaction(function () use($appointment) {
                 // Kembalikan stok obat
@@ -222,6 +240,12 @@ class AppointmentController extends Controller
 
     public function examination(Appointment $appointment)
     {
+        if (Auth::user()->roles->contains(Role::IS_DOCTOR)) {
+            if ($appointment->doctor_id != Auth::user()->doctor->id) {
+                abort(403);
+            }
+        }
+
         if ($appointment->status_id == 1) {
             // ubah ke sedang diperiksa
             $appointment->update([
@@ -334,6 +358,12 @@ class AppointmentController extends Controller
 
     public function payment(Appointment $appointment)
     {
+        if (Auth::user()->roles->contains(Role::IS_DOCTOR)) {
+            if ($appointment->doctor_id != Auth::user()->doctor->id) {
+                abort(403);
+            }
+        }
+
         $subTotalTreatments = 0;
         if (!$appointment->treatments->isEmpty()) {
             foreach ($appointment->treatments as $treatment) {

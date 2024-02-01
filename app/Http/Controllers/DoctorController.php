@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Doctor;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class DoctorController extends Controller
@@ -39,6 +40,10 @@ class DoctorController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('owner')) {
+            abort(403);
+        }
+
         return view('doctors.create');
     }
 
@@ -47,6 +52,10 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Gate::allows('owner')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'username' => 'required|alpha_num:ascii|unique:users,username|min:3',
             'password' => 'required|min:5|confirmed',
@@ -100,6 +109,10 @@ class DoctorController extends Controller
      */
     public function edit(Doctor $doctor)
     {
+        if (!Gate::allows('owner')) {
+            abort(403);
+        }
+
         return view('doctors.edit', [
             'doctor' => $doctor
         ]);
@@ -110,6 +123,10 @@ class DoctorController extends Controller
      */
     public function update(Request $request, Doctor $doctor)
     {
+        if (!Gate::allows('owner')) {
+            abort(403);
+        }
+
         $rules = [
             'name' => 'required',
             'sip' => 'required',
@@ -158,6 +175,10 @@ class DoctorController extends Controller
      */
     public function destroy(Doctor $doctor)
     {
+        if (!Gate::allows('owner')) {
+            abort(403);
+        }
+        
         try {
             DB::transaction(function () use ($doctor) {
                 $user = $doctor->user;

@@ -168,7 +168,7 @@
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td>{{ $treatment->treatment_type->name }} - {{ $treatment->name }}</td>
-                    <td>{{ $diagnosis->pivot->note }}</td>
+                    <td>{{ $treatment->pivot->note }}</td>
                     <td align="right">Rp{{ change_decimal_format_to_currency($treatment->pivot->price) }}</td>
                 </tr>
             @empty

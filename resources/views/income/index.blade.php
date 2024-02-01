@@ -92,17 +92,19 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
-                                        <th>Dokter</th>
                                         <th>No Pasien</th>
                                         <th>Nama Pasien</th>
+                                        <th>Dokter</th>
                                         <th>Biaya Pasien (Rp)</th>
                                         <th>Biaya Operasional (Rp)</th>
                                         <th>Biaya Lab (Rp)</th>
                                         <th>Metode Pembayaran</th>
                                         <th>Status Pembayaran</th>
-                                        <th>% Dokter</th>
-                                        <th>Jasa Dokter (Rp)</th>
-                                        <th>Total Klinik (Rp)</th>
+                                        @can('owner')
+                                            <th>% Dokter</th>
+                                            <th>Jasa Dokter (Rp)</th>
+                                            <th>Total Klinik (Rp)</th>
+                                        @endcan
                                         <th class="text-nowrap">Aksi</th>
                                     </tr>
                                 </thead>
@@ -111,25 +113,28 @@
                                         <tr>
                                             <td>{{ $appointments->firstItem() + $loop->index }}</td>
                                             <td>{{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('d M Y') }}</td>
-                                            <td>{{ $appointment->doctor->user->name }}</td>
                                             <td>{{ $appointment->patient->id }}</td>
                                             <td>{{ $appointment->patient->name }}</td>
+                                            <td>{{ $appointment->doctor->user->name }}</td>
                                             <td class="text-right">{{ change_decimal_format_to_currency($appointment->payment->amount) }}</td>
                                             <td class="text-right">{{ change_decimal_format_to_currency($appointment->payment->operational_cost) }}</td>
                                             <td class="text-right">{{ change_decimal_format_to_currency($appointment->payment->lab_cost) }}</td>
                                             <td>{{ $appointment->payment->payment_type->name }}</td>
                                             <td><span class="badge badge-{{ $appointment->payment->status == 'Lunas' ? 'success' : 'danger' }}">{{ $appointment->payment->status }}</span></td>
-                                            <td>{{ change_decimal_format_to_percentage($appointment->payment->doctor_percentage) }}</td>
-                                            <td class="text-right">
-                                                {{ change_decimal_format_to_currency(
-                                                    ($appointment->payment->amount - $appointment->payment->operational_cost - $appointment->payment->lab_cost) * $appointment->payment->doctor_percentage
-                                                ) }}
-                                            </td>
-                                            <td class="text-right">
-                                                {{ change_decimal_format_to_currency( $appointment->payment->amount - 
-                                                    (($appointment->payment->amount - $appointment->payment->operational_cost - $appointment->payment->lab_cost) * $appointment->payment->doctor_percentage)
-                                                ) }}
-                                            </td>
+                                            @can('owner')
+                                                <td>{{ change_decimal_format_to_percentage($appointment->payment->doctor_percentage) }}</td>
+                                                <td class="text-right">
+                                                    {{ change_decimal_format_to_currency(
+                                                        ($appointment->payment->amount - $appointment->payment->operational_cost - $appointment->payment->lab_cost) * $appointment->payment->doctor_percentage
+                                                    ) }}
+                                                </td>
+                                                <td class="text-right">
+                                                    {{ change_decimal_format_to_currency( $appointment->payment->amount - 
+                                                        (($appointment->payment->amount - $appointment->payment->operational_cost - $appointment->payment->lab_cost) * $appointment->payment->doctor_percentage)
+                                                    ) }}
+                                                </td>
+                                                
+                                            @endcan
                                             <td>
                                                 <a href="/appointments/{{ $appointment->id }}" class="btn btn-primary btn-sm">
                                                     <i class="fa fa-eye"></i>

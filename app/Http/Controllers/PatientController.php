@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
 use App\Models\Patient;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,6 +46,10 @@ class PatientController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         return view('patients.create', ['newPatientId' => Patient::max('id') + 1]);
     }
 
@@ -53,6 +58,10 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'name' => 'required',
             'date_of_birth' => 'required|date_format:d-m-Y',
@@ -94,6 +103,10 @@ class PatientController extends Controller
      */
     public function edit(string $id)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         return view('patients.edit', [
             'patient' => Patient::find($id)
         ]);
@@ -104,6 +117,10 @@ class PatientController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'name' => 'required',
             'date_of_birth' => 'required|date_format:d-m-Y',
@@ -122,6 +139,10 @@ class PatientController extends Controller
      */
     public function destroy(string $id)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         try {
             Patient::destroy($id);
             return redirect('/patients')->with('success', 'Pasien berhasil dihapus');

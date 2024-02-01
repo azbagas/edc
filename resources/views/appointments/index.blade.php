@@ -59,19 +59,22 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4 col-xl-3">
-                                        <div class="form-group">
-                                            <label for="doctor">Dokter</label>
-                                            <select class="form-control" name="doctor" id="doctor">
-                                                <option value="">Semua dokter</option>
-                                                @foreach ($doctors as $doctor)
-                                                    <option value="{{ $doctor->id }}" {{ request('doctor') == $doctor->id ? 'selected' : '' }}>
-                                                        {{ $doctor->user->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                    @can('admin')
+                                        <div class="col-md-4 col-xl-3">
+                                            <div class="form-group">
+                                                <label for="doctor">Dokter</label>
+                                                <select class="form-control" name="doctor" id="doctor">
+                                                    <option value="">Semua dokter</option>
+                                                    @foreach ($doctors as $doctor)
+                                                        <option value="{{ $doctor->id }}" {{ request('doctor') == $doctor->id ? 'selected' : '' }}>
+                                                            {{ $doctor->user->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+                                        
+                                    @endcan
                                     <div class="col-md-3 col-xl-2">
                                         <div class="form-group">
                                             <label for="status">Status</label>
@@ -133,18 +136,22 @@
                                             <td>{{ $appointment->complaint }}</td>
                                             <td><span class="badge badge-{{ $appointment->status->type }}">{{ $appointment->status->name }}</span></td>
                                             <td class="text-nowrap">
-                                                @if ($appointment->status->name != 'Selesai')
-                                                    <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
-                                                        @method('delete')
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                                <a href="/appointments/{{ $appointment->id }}/edit" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pen"></i>
-                                                </a>
+                                                @can('admin')
+                                                    @if ($appointment->status->name != 'Selesai')
+                                                        <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                @endcan
+                                                @can('admin')
+                                                    <a href="/appointments/{{ $appointment->id }}/edit" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-pen"></i>
+                                                    </a>
+                                                @endcan
                                                 @if ($appointment->status->name == 'Selesai')
                                                     <a href="/appointments/{{ $appointment->id }}" class="btn btn-primary btn-sm">
                                                         <i class="fa fa-eye"></i>

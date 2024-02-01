@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Medicine;
 use App\Models\MedicineType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class MedicineTypeController extends Controller
 {
@@ -34,6 +35,10 @@ class MedicineTypeController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         return view('medicine-types.create');
     }
 
@@ -42,6 +47,10 @@ class MedicineTypeController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'name' => 'required'
         ]);
@@ -64,6 +73,10 @@ class MedicineTypeController extends Controller
      */
     public function edit(MedicineType $medicineType)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         return view('medicine-types.edit', [
             'medicine_type' => $medicineType
         ]);
@@ -74,6 +87,10 @@ class MedicineTypeController extends Controller
      */
     public function update(Request $request, MedicineType $medicineType)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'name' => 'required'
         ]);
@@ -88,6 +105,10 @@ class MedicineTypeController extends Controller
      */
     public function destroy(MedicineType $medicineType)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         try {
             MedicineType::destroy($medicineType->id);
             return redirect(session('medicine_types_url', '/medicine-types'))->with('success', 'Jenis obat berhasil dihapus!');

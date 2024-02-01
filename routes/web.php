@@ -14,13 +14,16 @@ use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AssistantController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\TreatmentTypeController;
 use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PaymentTypeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecapController;
 use App\Http\Controllers\ReportController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,12 +41,10 @@ Route::middleware(['auth'])->group(function () {
         return redirect('/dashboard');
     });
     
-    Route::get('/dashboard', function () {
-        return view('dashboard.index', [
-            'totalPatients' => Patient::count(),
-            'todayAppointments' => Appointment::whereDate('date_time', now()->today())->count()
-        ]);
-    });
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::put('/profile', [ProfileController::class, 'update']);
     
     Route::resource('/patients', PatientController::class);
     Route::resource('/appointments', AppointmentController::class);
@@ -54,12 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/appointments/{appointment}/payment', [AppointmentController::class, 'payment']);
     Route::put('/appointments/{appointment}/payment', [AppointmentController::class, 'payment_update']);
 
-    Route::resource('/income', IncomeController::class)->only([
-        'index'
-    ]);
-    Route::resource('/expenses', ExpenseController::class)->except([
-        'show'
-    ]);
+    
+    
     Route::resource('/treatment-types', TreatmentTypeController::class)->except([
         'show'
     ]);
@@ -78,24 +75,40 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/medicines', MedicineController::class)->except([
         'show'
     ]);
-    Route::resource('/doctors', DoctorController::class)->except([
-        'show'
-    ]);
-    Route::resource('/admins', AdminController::class)->except([
-        'show'
-    ]);
-    Route::resource('/assistants', AssistantController::class)->except([
-        'show'
-    ]);
-    Route::resource('/payment-types', PaymentTypeController::class)->except([
-        'show'
-    ]);
-
-    Route::get('/reports/community-health-center/daily', [ReportController::class, 'communityHealthCenterDaily'])->name('community-health-center-daily');
-    Route::get('/reports/community-health-center/monthly', [ReportController::class, 'communityHealthCenterMonthly'])->name('community-health-center-monthly');
     
-    Route::get('/recap/daily', [RecapController::class, 'recapDaily'])->name('recap-daily');
-    Route::get('/recap/monthly', [RecapController::class, 'recapMonthly'])->name('recap-monthly');
+    
+    Route::middleware(['owner'])->group(function() {
+        Route::get('/recap/daily', [RecapController::class, 'recapDaily'])->name('recap-daily');
+        Route::get('/recap/monthly', [RecapController::class, 'recapMonthly'])->name('recap-monthly');
+        Route::resource('/admins', AdminController::class)->except([
+            'show'
+        ]);
+    });
+
+    Route::middleware(['admin'])->group(function() {
+        Route::resource('/doctors', DoctorController::class)->except([
+            'show'
+        ]);
+
+        Route::resource('/assistants', AssistantController::class)->except([
+            'show'
+        ]);
+
+        Route::resource('/expenses', ExpenseController::class)->except([
+            'show'
+        ]);
+
+        Route::resource('/income', IncomeController::class)->only([
+            'index'
+        ]);
+
+        Route::resource('/payment-types', PaymentTypeController::class)->except([
+            'show'
+        ]);
+
+        Route::get('/reports/community-health-center/daily', [ReportController::class, 'communityHealthCenterDaily'])->name('community-health-center-daily');
+        Route::get('/reports/community-health-center/monthly', [ReportController::class, 'communityHealthCenterMonthly'])->name('community-health-center-monthly');
+    });
 
     
     Route::get('/get-diseases', [DependantDropdownController::class, 'getDiseases'])->name('getDiseases');

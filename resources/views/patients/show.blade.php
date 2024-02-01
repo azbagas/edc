@@ -30,21 +30,24 @@
                         <div class="card-header">
                             <h3 class="card-title mt-1">Data Diri Pasien</h3>
 
-                            <div class="card-tools">
-                                <form action="/patients/{{ $patient->id }}" method="POST" class="d-inline">
-                                    @method('delete')
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                        <i class="fa fa-trash"></i> Hapus Pasien
-                                    </button>
-                                </form>
-                                <a href="/patients/{{ $patient->id }}/edit" class="btn btn-warning btn-sm">
-                                    <i class="fa fa-pen"></i> Edit
-                                </a>
-                                <a href="/../appointments/create?patient={{ $patient->id }}" class="btn btn-success btn-sm">
-                                    <i class="fa fa-plus"></i> Tambah ke pertemuan
-                                </a>
-                            </div>
+                            @can('admin')
+                                <div class="card-tools">
+                                    <form action="/patients/{{ $patient->id }}" method="POST" class="d-inline">
+                                        @method('delete')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                            <i class="fa fa-trash"></i> Hapus Pasien
+                                        </button>
+                                    </form>
+                                    <a href="/patients/{{ $patient->id }}/edit" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-pen"></i> Edit
+                                    </a>
+                                    <a href="/../appointments/create?patient={{ $patient->id }}" class="btn btn-success btn-sm">
+                                        <i class="fa fa-plus"></i> Tambah ke pertemuan
+                                    </a>
+                                </div>
+                                
+                            @endcan
                         </div>
                         <div class="card-body">
                             <dl class="row mb-0">

@@ -40,19 +40,24 @@
                             </h3>
 
                             <div class="card-tools">
-                                <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
-                                    @method('delete')
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                        <i class="fa fa-trash"></i> Hapus pertemuan
-                                    </button>
-                                </form>
+                                @can('admin')
+                                    <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
+                                        @method('delete')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                            <i class="fa fa-trash"></i> Hapus pertemuan
+                                        </button>
+                                    </form>
+                                    
+                                @endcan
                                 <a href="/patients/{{ $appointment->patient_id }}" class="btn btn-primary btn-sm">
                                     <i class="fa fa-eye"></i> Lihat pasien
                                 </a>
-                                <a href="/appointments/{{ $appointment->id }}/examination" class="btn btn-warning btn-sm">
-                                    <i class="fa fa-pen"></i> Edit
-                                </a>
+                                @can('admin')
+                                    <a href="/appointments/{{ $appointment->id }}/examination" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-pen"></i> Edit
+                                    </a>
+                                @endcan
                             </div>
                         </div>
                         <div class="card-body">
@@ -62,8 +67,6 @@
                                     <div class="col-12">
                                         <h4>
                                             <i class="fas fa-tooth"></i> Ely Dental Clinic
-                                            <small
-                                                class="float-right">{{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('l, j F Y') }}</small>
                                         </h4>
                                     </div>
                                 </div>
@@ -92,6 +95,9 @@
                                     </div>
                                     <div class="col-6 invoice-col">
                                         <dl class="row">
+                                            <dt class="col-sm-3 col-xl-2">Tanggal</dt>
+                                            <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('j F Y') }}</dd>
+
                                             <dt class="col-sm-3 col-xl-2">Dokter</dt>
                                             <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->doctor->user->name }}</dd>
                                             
@@ -272,11 +278,14 @@
                                 Pembayaran & Catatan Klinik
                             </h3>
 
-                            <div class="card-tools">
-                                <a href="/appointments/{{ $appointment->id }}/payment" class="btn btn-warning btn-sm">
-                                    <i class="fa fa-pen"></i> Edit
-                                </a>
-                            </div>
+                            @can('admin')
+                                <div class="card-tools">
+                                    <a href="/appointments/{{ $appointment->id }}/payment" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-pen"></i> Edit
+                                    </a>
+                                </div>
+                                
+                            @endcan
                         </div>
                         <div class="card-body">
 

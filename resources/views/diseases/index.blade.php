@@ -18,13 +18,15 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col">
-                    <a href="/diseases/create" class="btn btn-primary">
-                        <i class="fa fa-plus mr-2"></i>Tambah Penyakit
-                    </a>
+            @can('admin')
+                <div class="row mb-3">
+                    <div class="col">
+                        <a href="/diseases/create" class="btn btn-primary">
+                            <i class="fa fa-plus mr-2"></i>Tambah Penyakit
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @endcan
 
 
             <div class="row">
@@ -73,7 +75,9 @@
                                         {{-- <th>No</th> --}}
                                         <th class="col-2">Kode Penyakit</th>
                                         <th>Penyakit</th>
-                                        <th>Aksi</th>
+                                        @can('admin')
+                                            <th>Aksi</th>
+                                        @endcan
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -82,18 +86,21 @@
                                             {{-- <td class="col-1">{{ $diseases->firstItem() + $loop->index }}</td> --}}
                                             <td>{{ $disease->disease_code }}</td>
                                             <td>{{ $disease->name }}</td>
-                                            <td class="text-nowrap col-1">
-                                                <form action="/diseases/{{ $disease->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="/diseases/{{ $disease->id }}/edit" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pen"></i>
-                                                </a>
-                                            </td>
+                                            @can('admin')
+                                                <td class="text-nowrap col-1">
+                                                    <form action="/diseases/{{ $disease->id }}" method="POST" class="d-inline">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="/diseases/{{ $disease->id }}/edit" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-pen"></i>
+                                                    </a>
+                                                </td>
+                                                
+                                            @endcan
                                         </tr>
                                     @empty
                                         <tr>

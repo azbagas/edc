@@ -18,13 +18,16 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col">
-                    <a href="/doctors/create" class="btn btn-primary">
-                        <i class="fa fa-plus mr-2"></i>Tambah Dokter
-                    </a>
+            @can('owner')
+                <div class="row mb-3">
+                    <div class="col">
+                        <a href="/doctors/create" class="btn btn-primary">
+                            <i class="fa fa-plus mr-2"></i>Tambah Dokter
+                        </a>
+                    </div>
                 </div>
-            </div>
+                
+            @endcan
 
 
             <div class="row">
@@ -72,14 +75,20 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Dokter</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
+                                        @can('owner')
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                        @endcan
                                         <th>SIP</th>
                                         <th>Alamat</th>
                                         <th>No Telepon</th>
-                                        <th>% Gaji</th>
+                                        @can('owner')
+                                            <th>% Gaji</th>
+                                        @endcan
                                         <th>Status</th>
-                                        <th>Aksi</th>
+                                        @can('owner')
+                                            <th>Aksi</th>
+                                        @endcan
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -87,12 +96,16 @@
                                         <tr>
                                             <td>{{ $doctors->firstItem() + $loop->index }}</td>
                                             <td>{{ $doctor->user->name }}</td>
-                                            <td>{{ $doctor->user->username }}</td>
-                                            <td>{{ $doctor->user->email }}</td>
+                                            @can('owner')
+                                                <td>{{ $doctor->user->username }}</td>
+                                                <td>{{ $doctor->user->email }}</td>
+                                            @endcan
                                             <td>{{ $doctor->sip }}</td>
                                             <td>{{ $doctor->user->address }}</td>
                                             <td>{{ $doctor->user->phone }}</td>
-                                            <td>{{ change_decimal_format_to_percentage($doctor->doctor_percentage) }}</td>
+                                            @can('owner')
+                                                <td>{{ change_decimal_format_to_percentage($doctor->doctor_percentage) }}</td>
+                                            @endcan
                                             <td>
                                                 @if ($doctor->user->is_active)
                                                     <span class="badge badge-success">Aktif</span>
@@ -100,18 +113,20 @@
                                                     <span class="badge badge-danger">Nonaktif</span>
                                                 @endif
                                             </td>
-                                            <td class="text-nowrap col-1">
-                                                <form action="/doctors/{{ $doctor->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="/doctors/{{ $doctor->id }}/edit" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pen"></i>
-                                                </a>
-                                            </td>
+                                            @can('owner')
+                                                <td class="text-nowrap col-1">
+                                                    <form action="/doctors/{{ $doctor->id }}" method="POST" class="d-inline">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="/doctors/{{ $doctor->id }}/edit" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-pen"></i>
+                                                    </a>
+                                                </td>
+                                            @endcan
                                         </tr>
                                     @empty
                                         <tr>

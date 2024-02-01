@@ -18,13 +18,15 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col">
-                    <a href="/treatment-types/create" class="btn btn-primary">
-                        <i class="fa fa-plus mr-2"></i>Tambah jenis tindakan
-                    </a>
+            @can('admin')
+                <div class="row mb-3">
+                    <div class="col">
+                        <a href="/treatment-types/create" class="btn btn-primary">
+                            <i class="fa fa-plus mr-2"></i>Tambah jenis tindakan
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @endcan
 
 
             <div class="row">
@@ -72,26 +74,31 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Jenis Tindakan</th>
-                                        <th>Aksi</th>
+                                        @can('admin')
+                                            <th>Aksi</th>
+                                        @endcan
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($treatment_types as $treatment_type)
                                         <tr>
                                             <td class="col-1">{{ $treatment_types->firstItem() + $loop->index }}</td>
-                                        <td>{{ $treatment_type->name }}</td>
-                                            <td class="text-nowrap col-1">
-                                                <form action="/treatment-types/{{ $treatment_type->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="/treatment-types/{{ $treatment_type->id }}/edit" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pen"></i>
-                                                </a>
-                                            </td>
+                                            <td>{{ $treatment_type->name }}</td>
+                                            @can('admin')
+                                                <td class="text-nowrap col-1">
+                                                    <form action="/treatment-types/{{ $treatment_type->id }}" method="POST" class="d-inline">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="/treatment-types/{{ $treatment_type->id }}/edit" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-pen"></i>
+                                                    </a>
+                                                </td>
+                                                
+                                            @endcan
                                         </tr>
                                     @empty
                                         <tr>

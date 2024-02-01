@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Medicine;
 use App\Models\MedicineType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class MedicineController extends Controller
 {
@@ -40,6 +41,10 @@ class MedicineController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         return view('medicines.create', [
             'medicine_types' => MedicineType::orderBy('name', 'asc')->get()
         ]);
@@ -50,6 +55,10 @@ class MedicineController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         if ($request->price) {
             $request->merge(['price' => change_currency_format_to_decimal($request->price)]);
         }
@@ -81,6 +90,10 @@ class MedicineController extends Controller
      */
     public function edit(Medicine $medicine)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         return view('medicines.edit', [
             'medicine' => $medicine,
             'medicine_types' => MedicineType::orderBy('name', 'asc')->get(),
@@ -92,6 +105,10 @@ class MedicineController extends Controller
      */
     public function update(Request $request, Medicine $medicine)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         if ($request->price) {
             $request->merge(['price' => change_currency_format_to_decimal($request->price)]);
         }
@@ -115,6 +132,10 @@ class MedicineController extends Controller
      */
     public function destroy(Medicine $medicine)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         try {
             Medicine::destroy($medicine->id);
             return redirect(session('medicines_url', '/medicines'))->with('success', 'Obat berhasil dihapus!');

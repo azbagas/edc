@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Treatment;
-use App\Models\TreatmentType;
 use Illuminate\Http\Request;
+use App\Models\TreatmentType;
+use Illuminate\Support\Facades\Gate;
 
 class TreatmentController extends Controller
 {
@@ -41,6 +42,10 @@ class TreatmentController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         return view('treatments.create', [
             'treatment_types' =>TreatmentType::orderBy('name', 'asc')->get()
         ]);
@@ -51,6 +56,10 @@ class TreatmentController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'treatment_type_id' => 'required',
             'name' => 'required'
@@ -74,6 +83,10 @@ class TreatmentController extends Controller
      */
     public function edit(Treatment $treatment)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         return view('treatments.edit', [
             'treatment' => $treatment,
             'treatment_types' => TreatmentType::orderBy('name', 'asc')->get(),
@@ -85,6 +98,10 @@ class TreatmentController extends Controller
      */
     public function update(Request $request, Treatment $treatment)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'treatment_type_id' => 'required',
             'name' => 'required'
@@ -100,6 +117,10 @@ class TreatmentController extends Controller
      */
     public function destroy(Treatment $treatment)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         try {
             Treatment::destroy($treatment->id);
             return redirect(session('treatments_url', '/treatments'))->with('success', 'Tindakan berhasil dihapus!');

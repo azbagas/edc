@@ -18,13 +18,15 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col">
-                    <a href="/medicine-types/create" class="btn btn-primary">
-                        <i class="fa fa-plus mr-2"></i>Tambah jenis Obat
-                    </a>
+            @can('admin')
+                <div class="row mb-3">
+                    <div class="col">
+                        <a href="/medicine-types/create" class="btn btn-primary">
+                            <i class="fa fa-plus mr-2"></i>Tambah jenis Obat
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @endcan
 
 
             <div class="row">
@@ -72,26 +74,30 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Jenis Obat</th>
-                                        <th>Aksi</th>
+                                        @can('admin')
+                                            <th>Aksi</th>
+                                        @endcan
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($medicine_types as $medicine_type)
                                         <tr>
                                             <td class="col-1">{{ $medicine_types->firstItem() + $loop->index }}</td>
-                                        <td>{{ $medicine_type->name }}</td>
-                                            <td class="text-nowrap col-1">
-                                                <form action="/medicine-types/{{ $medicine_type->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="/medicine-types/{{ $medicine_type->id }}/edit" class="btn btn-warning btn-sm">
-                                                    <i class="fa fa-pen"></i>
-                                                </a>
-                                            </td>
+                                            <td>{{ $medicine_type->name }}</td>
+                                            @can('admin')
+                                                <td class="text-nowrap col-1">
+                                                    <form action="/medicine-types/{{ $medicine_type->id }}" method="POST" class="d-inline">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="/medicine-types/{{ $medicine_type->id }}/edit" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-pen"></i>
+                                                    </a>
+                                                </td>
+                                            @endcan
                                         </tr>
                                     @empty
                                         <tr>

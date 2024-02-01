@@ -12,10 +12,10 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image" style="width: 2.1rem; height: 2.1rem; object-fit: cover;">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+                <a href="/profile" class="d-block">{{ Auth::user()->name }}</a>
             </div>
         </div>
 
@@ -125,110 +125,120 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item {{ Request::is('doctors*') || Request::is('admins*') || Request::is('assistants*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-user"></i>
-                        <p>
-                            Data User
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/doctors" class="nav-link {{ Request::is('doctors*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Data Dokter</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/admins" class="nav-link {{ Request::is('admins*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Data Admin</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/assistants" class="nav-link {{ Request::is('assistants*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Data Asisten</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item {{ Request::is('income*') || Request::is('expenses*') || Request::is('payment-types*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-money-bill"></i>
-                        <p>
-                            Keuangan
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/expenses" class="nav-link {{ Request::is('expenses*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Pengeluaran</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/income" class="nav-link {{ Request::is('income*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Pendapatan</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/payment-types" class="nav-link {{ Request::is('payment-types*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Metode Pembayaran</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item {{ Request::is('reports*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-file"></i>
-                        <p>
-                            Laporan
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('community-health-center-daily') }}" class="nav-link {{ Request::is('reports/community-health-center/daily*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Laporan untuk Puskesmas (Harian)</p>
-                            </a>
-                        </li> 
-                        <li class="nav-item">
-                            <a href="{{ route('community-health-center-monthly') }}" class="nav-link {{ Request::is('reports/community-health-center/monthly*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Laporan untuk Puskesmas (Bulanan)</p>
-                            </a>
-                        </li> 
-                    </ul>
-                </li>
-                <li class="nav-item {{ Request::is('recap*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-scroll"></i>
-                        <p>
-                            Rekap
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('recap-daily') }}" class="nav-link {{ Request::is('recap/daily*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Rekap (Harian)</p>
-                            </a>
-                        </li> 
-                        <li class="nav-item">
-                            <a href="{{ route('recap-monthly') }}" class="nav-link {{ Request::is('recap/monthly*') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Rekap (Bulanan)</p>
-                            </a>
-                        </li> 
-                    </ul>
-                </li>
+                @can('admin')
+                    <li class="nav-item {{ Request::is('doctors*') || Request::is('admins*') || Request::is('assistants*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-user"></i>
+                            <p>
+                                Data User
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/doctors" class="nav-link {{ Request::is('doctors*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Data Dokter</p>
+                                </a>
+                            </li>
+                            @can('owner')
+                                <li class="nav-item">
+                                    <a href="/admins" class="nav-link {{ Request::is('admins*') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Data Admin</p>
+                                    </a>
+                                </li>
+                            @endcan
+                            <li class="nav-item">
+                                <a href="/assistants" class="nav-link {{ Request::is('assistants*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Data Asisten</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+                @can('admin')
+                    <li class="nav-item {{ Request::is('income*') || Request::is('expenses*') || Request::is('payment-types*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-money-bill"></i>
+                            <p>
+                                Keuangan
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/expenses" class="nav-link {{ Request::is('expenses*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Pengeluaran</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/income" class="nav-link {{ Request::is('income*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Pendapatan</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/payment-types" class="nav-link {{ Request::is('payment-types*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Metode Pembayaran</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+                @can('admin')
+                    <li class="nav-item {{ Request::is('reports*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-file"></i>
+                            <p>
+                                Laporan
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('community-health-center-daily') }}" class="nav-link {{ Request::is('reports/community-health-center/daily*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Laporan untuk Puskesmas (Harian)</p>
+                                </a>
+                            </li> 
+                            <li class="nav-item">
+                                <a href="{{ route('community-health-center-monthly') }}" class="nav-link {{ Request::is('reports/community-health-center/monthly*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Laporan untuk Puskesmas (Bulanan)</p>
+                                </a>
+                            </li> 
+                        </ul>
+                    </li>
+                @endcan
+                @can('owner')
+                    <li class="nav-item {{ Request::is('recap*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-scroll"></i>
+                            <p>
+                                Rekap
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('recap-daily') }}" class="nav-link {{ Request::is('recap/daily*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Rekap (Harian)</p>
+                                </a>
+                            </li> 
+                            <li class="nav-item">
+                                <a href="{{ route('recap-monthly') }}" class="nav-link {{ Request::is('recap/monthly*') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Rekap (Bulanan)</p>
+                                </a>
+                            </li> 
+                        </ul>
+                    </li>
+                @endcan
                 <li class="nav-header">LOGOUT</li>
                 <li class="nav-item">
                     <form action="/logout" method="POST" id="logout" class="d-none">

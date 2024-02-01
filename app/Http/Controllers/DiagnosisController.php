@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Diagnosis;
 use App\Models\Disease;
+use App\Models\Diagnosis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class DiagnosisController extends Controller
 {
@@ -41,6 +42,10 @@ class DiagnosisController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         return view('diagnoses.create', [
             'diseases' => Disease::orderBy('disease_code', 'asc')->get()
         ]);
@@ -51,6 +56,10 @@ class DiagnosisController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'disease_id' => 'required',
             'diagnosis_code' => 'required|unique:diagnoses',
@@ -75,6 +84,10 @@ class DiagnosisController extends Controller
      */
     public function edit(Diagnosis $diagnosis)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         return view('diagnoses.edit', [
             'diagnosis' => $diagnosis,
             'diseases' => Disease::orderBy('disease_code', 'asc')->get(),
@@ -86,6 +99,10 @@ class DiagnosisController extends Controller
      */
     public function update(Request $request, Diagnosis $diagnosis)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $rules = [
             'disease_id' => 'required',
             'name' => 'required'
@@ -107,6 +124,10 @@ class DiagnosisController extends Controller
      */
     public function destroy(Diagnosis $diagnosis)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         try {
             Diagnosis::destroy($diagnosis->id);
             return redirect(session('diagnoses_url', '/diagnoses'))->with('success', 'Diagnosis berhasil dihapus!');

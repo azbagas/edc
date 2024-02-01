@@ -18,13 +18,16 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col">
-                    <a href="/treatments/create" class="btn btn-primary">
-                        <i class="fa fa-plus mr-2"></i>Tambah tindakan
-                    </a>
+            @can('admin')
+                <div class="row mb-3">
+                    <div class="col">
+                        <a href="/treatments/create" class="btn btn-primary">
+                            <i class="fa fa-plus mr-2"></i>Tambah tindakan
+                        </a>
+                    </div>
                 </div>
-            </div>
+                
+            @endcan
 
 
             <div class="row">
@@ -87,7 +90,10 @@
                                         <th>No</th>
                                         <th>Jenis Tindakan</th>
                                         <th>Nama Tindakan</th>
-                                        <th>Aksi</th>
+                                        @can('admin')
+                                            <th>Aksi</th>
+                                            
+                                        @endcan
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -102,18 +108,21 @@
 
                                                 <td style="padding: 12px;">{{ $treatment->name }}</td>
                                                 
-                                                <td class="text-nowrap col-1">
-                                                    <form action="/treatments/{{ $treatment->id }}" method="POST" class="d-inline">
-                                                        @method('delete')
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                    <a href="/treatments/{{ $treatment->id }}/edit" class="btn btn-warning btn-sm">
-                                                        <i class="fa fa-pen"></i>
-                                                    </a>
-                                                </td>
+                                                @can('admin')
+                                                    <td class="text-nowrap col-1">
+                                                        <form action="/treatments/{{ $treatment->id }}" method="POST" class="d-inline">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                        <a href="/treatments/{{ $treatment->id }}/edit" class="btn btn-warning btn-sm">
+                                                            <i class="fa fa-pen"></i>
+                                                        </a>
+                                                    </td>
+                                                    
+                                                @endcan
                                             </tr>
                                         @endforeach
                                     @empty

@@ -40,20 +40,22 @@
                     </div>
                 </div>
                 <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>{{ $totalPatients }}</h3>
+                @can('admin')
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ $totalPatients }}</h3>
 
-                            <p>Jumlah Pasien</p>
+                                <p>Jumlah Pasien</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person"></i>
+                            </div>
+                            <a href="/patients" class="small-box-footer">Lihat selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-person"></i>
-                        </div>
-                        <a href="/patients" class="small-box-footer">Lihat selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
+                @endcan
                 <!-- ./col -->
                 {{-- <div class="col-lg-3 col-6">
                     <!-- small box -->

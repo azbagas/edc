@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TreatmentType;
 use Illuminate\Http\Request;
+use App\Models\TreatmentType;
+use Illuminate\Support\Facades\Gate;
 
 class TreatmentTypeController extends Controller
 {
@@ -33,6 +34,10 @@ class TreatmentTypeController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         return view('treatment-types.create');
     }
 
@@ -41,6 +46,10 @@ class TreatmentTypeController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'name' => 'required'
         ]);
@@ -63,6 +72,10 @@ class TreatmentTypeController extends Controller
      */
     public function edit(TreatmentType $treatmentType)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         return view('treatment-types.edit', [
             'treatment_type' => $treatmentType
         ]);
@@ -73,6 +86,10 @@ class TreatmentTypeController extends Controller
      */
     public function update(Request $request, TreatmentType $treatmentType)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'name' => 'required'
         ]);
@@ -87,6 +104,10 @@ class TreatmentTypeController extends Controller
      */
     public function destroy(TreatmentType $treatmentType)
     {
+        if (!Gate::allows('admin')) {
+            abort(403);
+        }
+        
         try {
             TreatmentType::destroy($treatmentType->id);
             return redirect(session('treatment_types_url', '/treatment-types'))->with('success', 'Jenis tindakan berhasil dihapus!');
