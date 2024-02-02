@@ -16,7 +16,7 @@ class Appointment extends Model
 
     protected $guarded = ['id'];
 
-    protected $with = ['doctor', 'assistant', 'admin', 'patient', 'treatments', 'diagnoses', 'medicines', 'status', 'payment'];
+    protected $with = ['doctor', 'assistant', 'admin', 'patient', 'treatments', 'diagnoses', 'medicines', 'status', 'payment', 'patient_condition'];
 
     public function patient(): BelongsTo
     {
@@ -61,5 +61,10 @@ class Appointment extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function patient_condition(): HasOne
+    {
+        return $this->hasOne(PatientCondition::class);
     }
 }

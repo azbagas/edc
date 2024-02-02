@@ -21,6 +21,7 @@ use App\Models\Treatment;
 use App\Models\Appointment;
 use App\Models\PaymentType;
 use App\Models\MedicineType;
+use App\Models\PatientCondition;
 use App\Models\TreatmentType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -162,6 +163,19 @@ class DatabaseSeeder extends Seeder
                 'amount' => $amount,
                 'patient_money' => $amount,
                 'doctor_percentage' => $appointment->doctor->doctor_percentage
+            ]);
+        }
+
+        // patient condition
+        foreach ($appointments as $appointment) {
+            $isPregnant = false;
+            if ($appointment->patient->gender == 'Perempuan') {
+                $isPregnant = fake()->boolean();
+            }
+            
+            PatientCondition::create([
+                'appointment_id' => $appointment->id,
+                'is_pregnant' => $isPregnant
             ]);
         }
 

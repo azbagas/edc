@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\Medicine;
 use App\Models\Assistant;
 use App\Models\Appointment;
+use App\Models\PatientCondition;
 use App\Models\PaymentType;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -96,6 +97,7 @@ class AppointmentController extends Controller
             'doctor_id' => 'required',
             'assistant_id' => 'required',
             'complaint' => 'required',
+            'is_pregnant' => 'nullable|boolean'
         ]);
 
         $validatedData['admin_id'] = Auth::user()->admin->id;
@@ -109,9 +111,19 @@ class AppointmentController extends Controller
             session(['todayAssistant' => $validatedData['assistant_id']]);
         }
 
-        Appointment::create($validatedData);
+        try {
+            DB::transaction(function() use($validatedData) {
+                $appointment = Appointment::create($validatedData);
+                PatientCondition::create([
+                    'appointment_id' => $appointment->id,
+                    'is_pregnant' => $validatedData['is_pregnant'] ?? 0
+                ]);
+            });
+            return redirect('/appointments')->with('success', 'Pertemuan berhasil dibuat!');
+        } catch (\Exception $e) {
+            return redirect('/appointments')->with('error', 'Pertemuan gagal dibuat!');
+        }
 
-        return redirect('/appointments')->with('success', 'Pertemuan berhasil dibuat');
     }
 
     /**
@@ -189,21 +201,30 @@ class AppointmentController extends Controller
             'doctor_id' => 'required',
             'assistant_id' => 'required',
             'complaint' => 'required',
+            'is_pregnant' => 'nullable|boolean'
         ]);
 
-        $appointment->update($validatedData);
+        try {
+            DB::transaction(function() use($appointment, $validatedData) {
+                $appointment->update($validatedData);
+                $appointment->patient_condition->update([
+                    'is_pregnant' => $validatedData['is_pregnant'] ?? 0
+                ]);
+                
+                // Kalo sudah melakukan payment maka ubah doctor_percentage karena takut dokter yang diubah
+                if ($appointment->payment) {
+                    $payment = $appointment->payment;
+                    $doctor = Doctor::find($validatedData['doctor_id']);
         
-        // Kalo sudah melakukan payment maka ubah doctor_percentage karena takut dokter yang diubah
-        if ($appointment->payment) {
-            $payment = $appointment->payment;
-            $doctor = Doctor::find($validatedData['doctor_id']);
-
-            $payment->update([
-                'doctor_percentage' => $doctor->doctor_percentage
-            ]);
+                    $payment->update([
+                        'doctor_percentage' => $doctor->doctor_percentage
+                    ]);
+                }                
+            });
+            return redirect($request->fromUrl)->with('success', 'Pertemuan berhasil diedit');
+        } catch (\Exception $e) {
+            return redirect($request->fromUrl)->with('error', 'Pertemuan gagal diedit');
         }
-
-        return redirect($request->fromUrl)->with('success', 'Pertemuan berhasil diedit');
     }
 
     /**

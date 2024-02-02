@@ -49,7 +49,7 @@
 
                             </div>
                             <div class="card-footer text-right">
-                                <button type="submit" class="btn btn-primary">Edit</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
                             </div>
                         </form>
                     </div>

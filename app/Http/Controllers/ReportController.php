@@ -31,6 +31,7 @@ class ReportController extends Controller
 
         // I. PatientTypes
         $patientTypes = [
+            ['id' => 0, 'name' => 'Kunjungan rawat jalan ibu hamil'],
             ['id' => 1, 'name' => 'Kunjungan rawat jalan gigi anak ( 1 - 6 th)'],
             ['id' => 2, 'name' => 'Kunjungan rawat jalan gigi golongan penderita lain']
         ];
@@ -98,7 +99,9 @@ class ReportController extends Controller
                         $diseasesCount[$diagnosis->disease->id]['countFemaleNew']++;
                     }
 
-                    if (Carbon::parse($appointment->patient->date_of_birth)->diffInYears(Carbon::parse($appointment->date_time)) <= 6) {
+                    if ($appointment->patient_condition->is_pregnant == 1) {
+                        $patientTypesCount[0]['countFemaleNew']++;
+                    } else if (Carbon::parse($appointment->patient->date_of_birth)->diffInYears(Carbon::parse($appointment->date_time)) <= 6) {
                         // Kurang dari 6 tahun
                         $patientTypesCount[1]['countFemaleNew']++;
                     } else {
@@ -128,7 +131,9 @@ class ReportController extends Controller
                         $diseasesCount[$diagnosis->disease->id]['countFemaleOld']++;
                     }
 
-                    if (Carbon::parse($appointment->patient->date_of_birth)->diffInYears(Carbon::parse($appointment->date_time)) <= 6) {
+                    if ($appointment->patient_condition->is_pregnant == 1) {
+                        $patientTypesCount[0]['countFemaleOld']++;
+                    } else if (Carbon::parse($appointment->patient->date_of_birth)->diffInYears(Carbon::parse($appointment->date_time)) <= 6) {
                         // Kurang dari 6 tahun
                         $patientTypesCount[1]['countFemaleOld']++;
                     } else {
@@ -189,6 +194,7 @@ class ReportController extends Controller
 
         // I. PatientTypes
         $patientTypes = [
+            ['id' => 0, 'name' => 'Kunjungan rawat jalan ibu hamil'],
             ['id' => 1, 'name' => 'Kunjungan rawat jalan gigi anak ( 1 - 6 th)'],
             ['id' => 2, 'name' => 'Kunjungan rawat jalan gigi golongan penderita lain']
         ];
@@ -255,8 +261,10 @@ class ReportController extends Controller
                     foreach ($appointment->diagnoses as $diagnosis) {
                         $diseasesCount[$diagnosis->disease->id]['countFemaleNew']++;
                     }
-
-                    if (Carbon::parse($appointment->patient->date_of_birth)->diffInYears(Carbon::parse($appointment->date_time)) <= 6) {
+                    
+                    if ($appointment->patient_condition->is_pregnant == 1) {
+                        $patientTypesCount[0]['countFemaleNew']++;
+                    } else if (Carbon::parse($appointment->patient->date_of_birth)->diffInYears(Carbon::parse($appointment->date_time)) <= 6) {
                         // Kurang dari 6 tahun
                         $patientTypesCount[1]['countFemaleNew']++;
                     } else {
@@ -286,7 +294,9 @@ class ReportController extends Controller
                         $diseasesCount[$diagnosis->disease->id]['countFemaleOld']++;
                     }
 
-                    if (Carbon::parse($appointment->patient->date_of_birth)->diffInYears(Carbon::parse($appointment->date_time)) <= 6) {
+                    if ($appointment->patient_condition->is_pregnant == 1) {
+                        $patientTypesCount[0]['countFemaleOld']++;
+                    } else if(Carbon::parse($appointment->patient->date_of_birth)->diffInYears(Carbon::parse($appointment->date_time)) <= 6) {
                         // Kurang dari 6 tahun
                         $patientTypesCount[1]['countFemaleOld']++;
                     } else {
