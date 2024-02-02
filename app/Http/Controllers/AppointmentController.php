@@ -39,6 +39,10 @@ class AppointmentController extends Controller
             });
         }
 
+        $query->when($request->id, function ($query) use ($request) {
+            return $query->where('id', $request->id);
+        });
+
         $query->when($request->status, function ($query) use ($request) {
             return $query->where('status_id', $request->status);
         });

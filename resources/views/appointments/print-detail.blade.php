@@ -89,6 +89,14 @@
                 <table>
                     <tr>
                         <td>
+                            <strong>No. Pertemuan</strong>
+                        </td>
+                        <td>
+                            : {{ format_appointment_id($appointment->id) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <strong>Tanggal</strong>
                         </td>
                         <td>

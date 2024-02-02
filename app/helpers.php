@@ -25,3 +25,10 @@ if (!function_exists('change_decimal_format_to_percentage')) {
         return ($decimal * 100) . '%';
     }
 }
+
+if (!function_exists('format_appointment_id')) {
+    function format_appointment_id($id)
+    {
+        return sprintf("%09d", $id);
+    }
+}

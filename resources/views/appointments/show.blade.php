@@ -95,17 +95,20 @@
                                     </div>
                                     <div class="col-6 invoice-col">
                                         <dl class="row">
-                                            <dt class="col-sm-3 col-xl-2">Tanggal</dt>
-                                            <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('j F Y') }}</dd>
+                                            <dt class="col-sm-3 col-xl-3">No. Pertemuan</dt>
+                                            <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ format_appointment_id($appointment->id) }}</dd>
 
-                                            <dt class="col-sm-3 col-xl-2">Dokter</dt>
-                                            <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->doctor->user->name }}</dd>
+                                            <dt class="col-sm-3 col-xl-3">Tanggal</dt>
+                                            <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('j F Y') }}</dd>
+
+                                            <dt class="col-sm-3 col-xl-3">Dokter</dt>
+                                            <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->doctor->user->name }}</dd>
                                             
-                                            <dt class="col-sm-3 col-xl-2">Asisten</dt>
-                                            <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->assistant->name }}</dd>
+                                            <dt class="col-sm-3 col-xl-3">Asisten</dt>
+                                            <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->assistant->name }}</dd>
                                             
-                                            <dt class="col-sm-3 col-xl-2">Admin</dt>
-                                            <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->admin->user->name }}</dd>
+                                            <dt class="col-sm-3 col-xl-3">Admin</dt>
+                                            <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->admin->user->name }}</dd>
                                         </dl>
                                     </div>
                                 </div>
