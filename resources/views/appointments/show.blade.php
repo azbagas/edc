@@ -66,7 +66,7 @@
                                 <div class="row mb-3">
                                     <div class="col-12">
                                         <h4>
-                                            <i class="fas fa-tooth"></i> Ely Dental Clinic
+                                            <img src="{{ asset('storage/images/logo-tooth-only.png') }}" alt="Logo Klinik" style="-webkit-filter: invert(100%); filter: invert(100%); width:1.5rem; margin-right:0.4rem"> Ely Dental Clinic
                                         </h4>
                                     </div>
                                 </div>

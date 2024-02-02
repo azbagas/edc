@@ -50,22 +50,7 @@
 
 @section('content')
 
-    <table width="100%">
-        <tr>
-            <td>
-                <img src="{{ asset('storage/images/profile-pictures/default-profile-picture.jpg') }}"
-                    alt="logo-klinik" width="80" />
-            </td>
-            <td align="left">
-                <div style="font-size: 1.2rem">Ely Dental Clinic</div>
-                <div>
-                    Jl. Raya Serang Km 24, Talagasari, Kec. Balaraja, Kabupaten Tangerang, Banten 15610
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <hr>
+    @include('partials/letter-head')
 
     <div class="text-center">
         <h5>
