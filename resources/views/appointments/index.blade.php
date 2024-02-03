@@ -57,18 +57,20 @@
                                             <!-- /.input group -->
                                         </div>
                                     </div>
-                                    <div class="col-md-7 col-xl-3">
-                                        <div class="form-group">
-                                            <label for="id">No Pertemuan</label>
-                                            <div class="input-group">
-                                                <input type="text" id="id" name="id" class="form-control" placeholder="Cari no pertemuan..." value="{{ request('id') }}">
-                                                <div class="input-group-append">
-                                                    <button type="submit" class="btn btn-info"><i class="fa fa-search"></i></button>
+                                    @can('admin')
+                                        <div class="col-md-7 col-xl-3">
+                                            <div class="form-group">
+                                                <label for="id">No Pertemuan</label>
+                                                <div class="input-group">
+                                                    <input type="text" id="id" name="id" class="form-control" placeholder="Cari no pertemuan..." value="{{ request('id') }}">
+                                                    <div class="input-group-append">
+                                                        <button type="submit" class="btn btn-info"><i class="fa fa-search"></i></button>
+                                                    </div>
                                                 </div>
+                                                
                                             </div>
-                                            
                                         </div>
-                                    </div>
+                                    @endcan
                                 </div>
                                 <div class="row">
                                     @can('admin')
