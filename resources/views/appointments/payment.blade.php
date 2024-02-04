@@ -44,12 +44,11 @@
                         <div class="row mb-3">
                             <div class="col-12">
                                 <h4>
-                                    <i class="fas fa-tooth"></i> Ely Dental Clinic
-                                    <small
-                                        class="float-right">{{ \Carbon\Carbon::parse($appointment->created_at)->translatedFormat('l, j F Y') }}</small>
+                                    <img src="{{ asset('storage/images/logo-tooth-only.png') }}" alt="Logo Klinik" style="-webkit-filter: invert(100%); filter: invert(100%); width:1.5rem; margin-right:0.4rem"> Ely Dental Clinic
                                 </h4>
                             </div>
                         </div>
+                        
 
                         <div class="row invoice-info">
                             <div class="col-6 invoice-col">
@@ -82,15 +81,21 @@
                             </div>
                             <div class="col-6 invoice-col">
                                 <dl class="row">
-                                    <dt class="col-sm-3 col-xl-2">Dokter</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span>
+                                    <dt class="col-sm-3 col-xl-3">No. Pertemuan</dt>
+                                    <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ format_appointment_id($appointment->id) }}</dd>
+
+                                    <dt class="col-sm-3 col-xl-3">Tanggal</dt>
+                                    <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('j F Y') }}</dd>
+
+                                    <dt class="col-sm-3 col-xl-3">Dokter</dt>
+                                    <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span>
                                         {{ $appointment->doctor->user->name }}</dd>
 
-                                    <dt class="col-sm-3 col-xl-2">Asisten</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->assistant->name }}</dd>
+                                    <dt class="col-sm-3 col-xl-3">Asisten</dt>
+                                    <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->assistant->name }}</dd>
                                     
-                                    <dt class="col-sm-3 col-xl-2">Admin</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->admin->user->name }}</dd>
+                                    <dt class="col-sm-3 col-xl-3">Admin</dt>
+                                    <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->admin->user->name }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -269,7 +274,7 @@
                             </div>
         
                             <div class="card-body">
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-xl-4">
                                         <div class="form-group">
                                             <label for="payment_type_id">Metode pembayaran<span
@@ -287,7 +292,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="row">
                                     <div class="col-xl-4">
                                         <div class="form-group">
@@ -304,22 +309,30 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xl-4">
-                                        <div class="form-group">
-                                            <label for="patient_money">Uang pasien<span class="text-danger">*</span></label>
-                                            <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">Rp</span>
+                                @foreach ($paymentTypes as $paymentType)
+                                    <div class="row">
+                                        <div class="col-xl-4">
+                                            <div class="form-group">
+                                                <label for="patient_money_{{ $paymentType->id }}">{{ $paymentType->name }}</label>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Rp</span>
+                                                    </div>
+                                                    <input id="patient_money_{{ $paymentType->id }}" type="text" name="patient_money[{{ $paymentType->id }}]"
+                                                        class="form-control rupiah" placeholder="0,00"
+                                                        @if ($appointment->payment)
+                                                            value="{{ change_decimal_format_to_currency(old('patient_money[' . $paymentType->id . ']', ($appointment->payment->payment_types->where('id', $paymentType->id)->first()->pivot->patient_money ?? 0))) }}"
+                                                        @else
+                                                            value="{{ change_decimal_format_to_currency(old('patient_money[' . $paymentType->id . ']', 0)) }}"
+                                                        @endif
+                                                        required>
                                                 </div>
-                                                <input id="patient_money" type="text" name="patient_money"
-                                                    class="form-control rupiah" placeholder="0,00"
-                                                    value="{{ change_decimal_format_to_currency(old('patient_money', $appointment->payment->patient_money ?? $grandTotal)) }}"
-                                                    required>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
+                                
+                                
                             </div>
                         </div>
 

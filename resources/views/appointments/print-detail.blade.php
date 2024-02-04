@@ -117,6 +117,7 @@
     </table>
 
     <br />
+    {{-- <hr> --}}
 
     <div style="font-size:small">Diagnosis</div>
     <table width="100%">
@@ -233,22 +234,52 @@
         </tfoot>
     </table>
 
+    {{-- <br> --}}
+    <hr>
+
+    <div style="font-size:small">Pembayaran</div>
+    <table width="100%">
+        <thead style="background-color: lightgray;">
+            <tr>
+                <th width="30px">No</th>
+                <th>Metode Pembayaran</th>
+                <th width="100px">Jumlah</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($appointment->payment->payment_types as $payment_type)
+                <tr>
+                    <th scope="row">{{ $loop->iteration }}</th>
+                    <td>{{ $payment_type->name }}</td>
+                    <td align="right">Rp{{ change_decimal_format_to_currency($payment_type->pivot->patient_money) }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3">
+                        Tidak ada pembayaran
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td align="right" colspan="2">Total</td>
+                <td align="right" class="gray">Rp{{ change_decimal_format_to_currency($appointment->payment->payment_types->sum('pivot.patient_money')) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+
     <br>
     <br>
 
     <table width="40%" style="border: 0.5px solid black;">
-        <tr>
-            <td>Uang</td>
-            <td>: Rp{{ change_decimal_format_to_currency($appointment->payment->patient_money) }}</td>
-        </tr>
+        
         <tr>
             <td>Sisa</td>
-            <td>: Rp{{ change_decimal_format_to_currency($appointment->payment->amount - $appointment->payment->patient_money) }}</td>
+            <td>: Rp{{ change_decimal_format_to_currency($appointment->payment->amount - $appointment->payment->payment_types->sum('pivot.patient_money')) }}</td>
         </tr>
-        <tr>
-            <td>Metode Pembayaran</td>
-            <td>: {{ $appointment->payment->payment_type->name }}</td>
-        </tr>
+        
         <tr>
             <td>Status</td>
             <td>: {{ $appointment->payment->status }}</td>

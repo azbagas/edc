@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class PaymentType extends Model
 {
@@ -12,8 +12,8 @@ class PaymentType extends Model
 
     protected $guarded = ['id'];
 
-    public function payments(): HasMany
+    public function payments(): BelongsToMany
     {
-        return $this->hasMany(Payment::class);
+        return $this->belongsToMany(Payment::class)->withPivot('patient_money')->withTimestamps();
     }
 }

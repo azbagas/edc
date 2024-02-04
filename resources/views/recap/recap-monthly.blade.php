@@ -106,14 +106,14 @@
                                             <th style="vertical-align: middle;">Biaya Pasien</th>
                                             <th style="vertical-align: middle;">Biaya Operasional</th>
                                             <th style="vertical-align: middle;">Biaya Lab</th>
-                                            @foreach ($finalResults->first()['doctors'] as $doctorName => $doctorCost)
+                                            @foreach ($totalPerMonth->first()['doctor_cost'] as $doctorName => $doctorCost)
                                                 <th style="vertical-align: middle;">{{ implode(array_slice(explode(" ", $doctorName), 0, 2)) }}</th>
                                             @endforeach
                                             <th style="vertical-align: middle;">Total untuk klinik</th>
                                             <th style="vertical-align: middle;">Zakat 2,5%</th>
                                             <th style="vertical-align: middle;">Pengeluaran</th>
                                             <th style="vertical-align: middle;">Netto</th>
-                                            <th colspan="{{ $finalResults->first()['payment_types']->count() }}" style="vertical-align: middle;">
+                                            <th colspan="{{ $totalPerMonth->first()['payment_types']->count() }}" style="vertical-align: middle;">
                                                 <div>
                                                     <div class="row">
                                                         <div class="col">
@@ -122,8 +122,8 @@
                                                     </div>
                                                     <hr class="my-2">
                                                     <div class="row">
-                                                        @foreach ($finalResults->first()['payment_types'] as $paymentTypeName => $paymentTypeAmount)
-                                                            <div class="col-{{ 12/$finalResults->first()['payment_types']->count() }}">
+                                                        @foreach ($totalPerMonth->first()['payment_types'] as $paymentTypeName => $paymentTypeAmount)
+                                                            <div class="col-{{ 12/$totalPerMonth->first()['payment_types']->count() }}">
                                                                 {{ $paymentTypeName }}
                                                             </div>
                                                         @endforeach
@@ -133,42 +133,42 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($finalResults as $finalResult)
+                                        @foreach ($totalPerMonth as $totalPerDay)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td class="text-nowrap">{{ \Carbon\Carbon::parse($finalResult['date'])->translatedFormat('j M Y') }}</td>
-                                                <td class="text-right">{{ change_decimal_format_to_currency($finalResult['sum_total_amount']) }}</td>
-                                                <td class="text-right">{{ change_decimal_format_to_currency($finalResult['sum_total_operational_cost']) }}</td>
-                                                <td class="text-right">{{ change_decimal_format_to_currency($finalResult['sum_total_lab_cost']) }}</td>
-                                                @foreach ($finalResult['doctors'] as $doctorName => $doctorCost)
+                                                <td class="text-nowrap">{{ \Carbon\Carbon::parse($totalPerDay['date'])->translatedFormat('j M Y') }}</td>
+                                                <td class="text-right">{{ change_decimal_format_to_currency($totalPerDay['amount']) }}</td>
+                                                <td class="text-right">{{ change_decimal_format_to_currency($totalPerDay['operational_cost']) }}</td>
+                                                <td class="text-right">{{ change_decimal_format_to_currency($totalPerDay['lab_cost']) }}</td>
+                                                @foreach ($totalPerDay['doctor_cost'] as $doctorName => $doctorCost)
                                                     <td class="text-right">{{ change_decimal_format_to_currency($doctorCost) }}</td>
                                                 @endforeach
-                                                <td class="text-right">{{ change_decimal_format_to_currency($finalResult['sum_total_clinic_total']) }}</td>
-                                                <td class="text-right">{{ change_decimal_format_to_currency($finalResult['zakat']) }}</td>
-                                                <td class="text-right">{{ change_decimal_format_to_currency($finalResult['expenses']) }}</td>
-                                                <td class="text-right">{{ change_decimal_format_to_currency($finalResult['netto']) }}</td>
-                                                @foreach ($finalResult['payment_types'] as $paymentTypeName => $paymentTypeAmount)
+                                                <td class="text-right">{{ change_decimal_format_to_currency($totalPerDay['clinic_cost']) }}</td>
+                                                <td class="text-right">{{ change_decimal_format_to_currency($totalPerDay['zakat']) }}</td>
+                                                <td class="text-right">{{ change_decimal_format_to_currency($totalPerDay['expenses']) }}</td>
+                                                <td class="text-right">{{ change_decimal_format_to_currency($totalPerDay['netto']) }}</td>
+                                                @foreach ($totalPerDay['payment_types'] as $paymentTypeName => $paymentTypeAmount)
                                                     <td class="text-right">{{ change_decimal_format_to_currency($paymentTypeAmount) }}</td>
                                                 @endforeach
                                             </tr>
                                         @endforeach
                                         <tr class="font-weight-bold text-right">
                                             <td colspan="2">Total</td>
-                                            <td>{{ change_decimal_format_to_currency($finalResults->sum('sum_total_amount')) }}</td>
-                                            <td>{{ change_decimal_format_to_currency($finalResults->sum('sum_total_operational_cost')) }}</td>
-                                            <td>{{ change_decimal_format_to_currency($finalResults->sum('sum_total_lab_cost')) }}</td>
-                                            @foreach ($finalResults->first()['doctors'] as $doctorName => $doctorAmount)
-                                                <td class="text-right">{{ change_decimal_format_to_currency($finalResults->sum(function ($finalResult) use($doctorName) {
-                                                    return $finalResult['doctors'][$doctorName];
+                                            <td>{{ change_decimal_format_to_currency($totalPerMonth->sum('amount')) }}</td>
+                                            <td>{{ change_decimal_format_to_currency($totalPerMonth->sum('operational_cost')) }}</td>
+                                            <td>{{ change_decimal_format_to_currency($totalPerMonth->sum('lab_cost')) }}</td>
+                                            @foreach ($totalPerMonth->first()['doctor_cost'] as $doctorName => $doctorAmount)
+                                                <td class="text-right">{{ change_decimal_format_to_currency($totalPerMonth->sum(function ($totalPerDay) use($doctorName) {
+                                                    return $totalPerDay['doctor_cost'][$doctorName];
                                                 })) }}</td>
                                             @endforeach
-                                            <td>{{ change_decimal_format_to_currency($finalResults->sum('sum_total_clinic_total')) }}</td>
-                                            <td>{{ change_decimal_format_to_currency($finalResults->sum('zakat')) }}</td>
-                                            <td>{{ change_decimal_format_to_currency($finalResults->sum('expenses')) }}</td>
-                                            <td>{{ change_decimal_format_to_currency($finalResults->sum('netto')) }}</td>
-                                            @foreach ($finalResults->first()['payment_types'] as $paymentTypeName => $paymentTypeAmount)
-                                                <td class="text-right">{{ change_decimal_format_to_currency($finalResults->sum(function ($finalResult) use($paymentTypeName) {
-                                                    return $finalResult['payment_types'][$paymentTypeName];
+                                            <td>{{ change_decimal_format_to_currency($totalPerMonth->sum('clinic_cost')) }}</td>
+                                            <td>{{ change_decimal_format_to_currency($totalPerMonth->sum('zakat')) }}</td>
+                                            <td>{{ change_decimal_format_to_currency($totalPerMonth->sum('expenses')) }}</td>
+                                            <td>{{ change_decimal_format_to_currency($totalPerMonth->sum('netto')) }}</td>
+                                            @foreach ($totalPerMonth->first()['payment_types'] as $paymentTypeName => $paymentTypeAmount)
+                                                <td class="text-right">{{ change_decimal_format_to_currency($totalPerMonth->sum(function ($totalPerDay) use($paymentTypeName) {
+                                                    return $totalPerDay['payment_types'][$paymentTypeName];
                                                 })) }}</td>
                                             @endforeach
                                         </tr>

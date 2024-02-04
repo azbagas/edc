@@ -88,24 +88,29 @@
                     <div class="card">
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover table-bordered">
-                                <thead>
+                                <thead class="text-center">
                                     <tr>
-                                        <th>No</th>
-                                        <th>Tanggal</th>
-                                        <th>No Pasien</th>
-                                        <th>Nama Pasien</th>
-                                        <th>Dokter</th>
-                                        <th>Biaya Pasien (Rp)</th>
-                                        <th>Biaya Operasional (Rp)</th>
-                                        <th>Biaya Lab (Rp)</th>
-                                        <th>Metode Pembayaran</th>
-                                        <th>Status Pembayaran</th>
+                                        <th rowspan="2" style="vertical-align: middle;">No</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Tanggal</th>
+                                        <th rowspan="2" style="vertical-align: middle;">No Pasien</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Nama Pasien</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Dokter</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Biaya Pasien (Rp)</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Biaya Operasional (Rp)</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Biaya Lab (Rp)</th>
+                                        <th colspan="{{ $paymentTypes->count() }}">Uang Pasien (Rp)</th>
+                                        <th rowspan="2" style="vertical-align: middle;">Status Pembayaran</th>
                                         @can('owner')
-                                            <th>% Dokter</th>
-                                            <th>Jasa Dokter (Rp)</th>
-                                            <th>Total Klinik (Rp)</th>
+                                            <th rowspan="2" style="vertical-align: middle;">% Dokter</th>
+                                            <th rowspan="2" style="vertical-align: middle;">Jasa Dokter (Rp)</th>
+                                            <th rowspan="2" style="vertical-align: middle;">Total Klinik (Rp)</th>
                                         @endcan
-                                        <th class="text-nowrap">Aksi</th>
+                                        <th class="text-nowrap" rowspan="2" style="vertical-align: middle;">Aksi</th>
+                                    </tr>
+                                    <tr>
+                                        @foreach ($paymentTypes as $paymentType)
+                                            <th>{{ $paymentType->name }}</th>
+                                        @endforeach
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -119,7 +124,9 @@
                                             <td class="text-right">{{ change_decimal_format_to_currency($appointment->payment->amount) }}</td>
                                             <td class="text-right">{{ change_decimal_format_to_currency($appointment->payment->operational_cost) }}</td>
                                             <td class="text-right">{{ change_decimal_format_to_currency($appointment->payment->lab_cost) }}</td>
-                                            <td>{{ $appointment->payment->payment_type->name }}</td>
+                                            @foreach ($paymentTypes as $paymentType)
+                                                <td>{{ change_decimal_format_to_currency($appointment->payment->payment_types->where('id', $paymentType->id)->first()->pivot->patient_money ?? 0) }}</td>
+                                            @endforeach
                                             <td><span class="badge badge-{{ $appointment->payment->status == 'Lunas' ? 'success' : 'danger' }}">{{ $appointment->payment->status }}</span></td>
                                             @can('owner')
                                                 <td>{{ change_decimal_format_to_percentage($appointment->payment->doctor_percentage) }}</td>

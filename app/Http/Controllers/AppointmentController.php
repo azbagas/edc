@@ -391,9 +391,7 @@ class AppointmentController extends Controller
 
         $subTotalTreatments = 0;
         if (!$appointment->treatments->isEmpty()) {
-            foreach ($appointment->treatments as $treatment) {
-                $subTotalTreatments += $treatment->pivot->price;
-            }
+            $subTotalTreatments = $appointment->treatments->sum('pivot.price');
         }
 
         $subTotalMedicines = 0;
@@ -427,11 +425,14 @@ class AppointmentController extends Controller
         }
 
         if ($request->patient_money) {
-            $request->merge(['patient_money' => change_currency_format_to_decimal($request->patient_money)]);
+            $formattedPatientMoney = [];
+            foreach ($request->patient_money as $key => $value) {
+                $formattedPatientMoney[$key] = change_currency_format_to_decimal($value);
+            }
+            $request->merge(['patient_money' => $formattedPatientMoney]);
         }
 
         $validatedData = $request->validate([
-            'payment_type_id' => 'required',
             'operational_cost' => 'required',
             'lab_cost' => 'required',
             'patient_money' => 'required',
@@ -439,11 +440,12 @@ class AppointmentController extends Controller
             'date_time' => 'nullable|date_format:Y-m-d H:i',
         ]);
 
+        // dd($validatedData);
+
+        // Hitung treatment dan medicine untuk grandtotal
         $subTotalTreatments = 0;
         if (!$appointment->treatments->isEmpty()) {
-            foreach ($appointment->treatments as $treatment) {
-                $subTotalTreatments += $treatment->pivot->price;
-            }
+            $subTotalTreatments = $appointment->treatments->sum('pivot.price');
         }
 
         $subTotalMedicines = 0;
@@ -456,7 +458,12 @@ class AppointmentController extends Controller
 
         $grandTotal = $subTotalTreatments + $subTotalMedicines;
 
-        if ($validatedData['patient_money'] >= $grandTotal) {
+        // Total uang pasien
+        $patientMoneyTotal = 0;
+        foreach ($validatedData['patient_money'] as $key => $value) {
+            $patientMoneyTotal += $value; 
+        }
+        if ($patientMoneyTotal >= $grandTotal) {
             $validatedData['status'] = 'Lunas';
         } else {
             $validatedData['status'] = 'Belum lunas';
@@ -467,25 +474,32 @@ class AppointmentController extends Controller
             // Create payment baru
             try {
                 DB::transaction(function () use($appointment, $validatedData, $grandTotal) {
-                    Payment::create([
+                    $payment = Payment::create([
                         'appointment_id' => $appointment->id,
-                        'payment_type_id' => $validatedData['payment_type_id'],
                         'amount' => $grandTotal,
                         'operational_cost' => $validatedData['operational_cost'],
                         'lab_cost' => $validatedData['lab_cost'],
-                        'patient_money' => $validatedData['patient_money'],
                         'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
                         'status' =>  $validatedData['status'],
                         'note' => $validatedData['note']
                     ]);
-        
-                    $appointmentData = ['next_appointment_date_time' => $validatedData['date_time']];
+                    
+                    $paymentIn = [];
+                    foreach ($validatedData['patient_money'] as $paymentTypeId => $value) {
+                        if ($value == 0) {
+                            continue;
+                        }
+                        $paymentIn[$paymentTypeId] = ['patient_money' => $value];
+                    }
+                    $payment->payment_types()->sync($paymentIn);
 
                     if ($appointment->status_id == 2) {
                         $appointmentData['status_id'] = 3;
                     }
 
-                    $appointment->update($appointmentData);
+                    $appointment->update([
+                        'next_appointment_date_time' => $validatedData['date_time']
+                    ]);
                 });
                 
                 return redirect('/appointments/'. $appointment->id)->with('success', 'Pemeriksaan berhasil!');
@@ -500,15 +514,22 @@ class AppointmentController extends Controller
                 DB::transaction(function () use($payment, $appointment, $validatedData, $grandTotal) {
                     $payment->update([
                         'appointment_id' => $appointment->id,
-                        'payment_type_id' => $validatedData['payment_type_id'],
                         'amount' => $grandTotal,
                         'operational_cost' => $validatedData['operational_cost'],
                         'lab_cost' => $validatedData['lab_cost'],
-                        'patient_money' => $validatedData['patient_money'],
                         'doctor_percentage' => Doctor::find($appointment->doctor->id)->doctor_percentage,
                         'status' =>  $validatedData['status'],
                         'note' => $validatedData['note']
                     ]);
+
+                    $paymentIn = [];
+                    foreach ($validatedData['patient_money'] as $paymentTypeId => $value) {
+                        if ($value == 0) {
+                            continue;
+                        }
+                        $paymentIn[$paymentTypeId] = ['patient_money' => $value];
+                    }
+                    $payment->payment_types()->sync($paymentIn);
         
                     $appointment->update([
                         'next_appointment_date_time' => $validatedData['date_time']

@@ -148,6 +148,7 @@ class DatabaseSeeder extends Seeder
         $this->seedFromCSV('app/initial-data/payment_types.csv', PaymentType::class);
         
         // payment
+        $paymentTypesCount = PaymentType::all()->count();
         foreach ($appointments as $appointment) {
             $amount = 0;
             foreach ($appointment->medicines as $medicine) {
@@ -158,12 +159,17 @@ class DatabaseSeeder extends Seeder
                 $amount += $treatment->pivot->price;
             }
 
-            Payment::factory()->create([
+            $payment = Payment::create([
                 'appointment_id' => $appointment->id,
                 'amount' => $amount,
-                'patient_money' => $amount,
-                'doctor_percentage' => $appointment->doctor->doctor_percentage
+                'operational_cost' => fake()->randomElement([0, 20000, 50000, 75000]),
+                'doctor_percentage' => $appointment->doctor->doctor_percentage,
+                'note' => fake()->randomElement(['', fake()->sentence()]),
+                'status' => 'Lunas'
             ]);
+
+            $paymentTypeId = fake()->numberBetween(1, $paymentTypesCount);
+            $payment->payment_types()->attach($paymentTypeId, ['patient_money' => $amount]);
         }
 
         // patient condition

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Appointment;
+use App\Models\PaymentType;
 use Illuminate\Http\Request;
 
 class IncomeController extends Controller
@@ -35,6 +36,7 @@ class IncomeController extends Controller
 
         return view('income.index', [
             'appointments' => $query->orderBy('date_time', 'desc')->paginate($per_page)->appends($request->all()),
+            'paymentTypes' => PaymentType::all(),
             'per_page_options' => [10, 25, 50]
         ]);
     }

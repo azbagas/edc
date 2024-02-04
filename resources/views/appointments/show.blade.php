@@ -295,14 +295,13 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <dl class="row">
-                                        <dt class="col-sm-5 col-xl-4">Uang Pasien</dt>
-                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($appointment->payment->patient_money) }}</dd>
+                                        @foreach ($appointment->payment->payment_types as $payment_type)
+                                            <dt class="col-sm-5 col-xl-4">{{ $payment_type->name }}</dt>
+                                            <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($payment_type->pivot->patient_money) }}</dd>
+                                        @endforeach
                                         
                                         <dt class="col-sm-5 col-xl-4">Sisa</dt>
-                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($appointment->payment->amount - $appointment->payment->patient_money) }}</dd>
-                                        
-                                        <dt class="col-sm-5 col-xl-4">Metode Pembayaran</dt>
-                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->payment->payment_type->name }}</dd>
+                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> Rp{{ change_decimal_format_to_currency($appointment->payment->amount - $appointment->payment->payment_types->sum('pivot.patient_money')) }}</dd>
                                         
                                         <dt class="col-sm-5 col-xl-4">Status Pembayaran</dt>
                                         <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> <span class="badge badge-{{ $appointment->payment->status == 'Lunas' ? 'success' : 'danger' }}">{{ $appointment->payment->status }}</span></dd>
