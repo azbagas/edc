@@ -332,7 +332,7 @@ class ReportController extends Controller
         }
 
         if ($request->download == 'pdf') {
-            $title = 'Laporan_untuk_puskesmas_' . ($request->year ?? now()->year) . '-' . (sprintf("%02d", $request->month) ?? now()->format('m'));
+            $title = 'Laporan_untuk_puskesmas_' . ($request->year ?? now()->year) . '-' . ($request->month ? sprintf("%02d", $request->month) : now()->format('m'));
             $pdf = Pdf::loadView('reports.print-community-health-center-monthly', [
                 'title' => $title,
                 'patientTypesCount' => $patientTypesCount,

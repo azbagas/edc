@@ -283,7 +283,7 @@ class RecapController extends Controller
         }
 
         if ($request->download == 'pdf') {
-            $title = 'Rekap_bulanan_' . ($request->year ?? now()->year) . '-' . (sprintf("%02d", $request->month) ?? now()->format('m'));
+            $title = 'Rekap_bulanan_' . ($request->year ?? now()->year) . '-' . ($request->month ? sprintf("%02d", $request->month) : now()->format('m'));
             $pdf = Pdf::loadView('recap.print-recap-monthly', [
                 'title' => $title,
                 'totalPerMonth' => $totalPerMonth,
