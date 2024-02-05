@@ -39,22 +39,29 @@
                                 <input type="hidden" name="per_page" value="{{ request('per_page') }}">
 
                                 <div class="row">
-                                    <div class="col-md-7 col-xl-2">
+                                    <div class="col-md-8 col-xl-2">
                                         <div class="form-group">
                                             <label for="id">No Pasien</label>
                                             <input type="text" id="id" name="id" class="form-control" placeholder="Cari no pasien..." value="{{ request('id') }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-7 col-xl-5">
+                                    <div class="col-md-8 col-xl-2">
+                                        <div class="form-group">
+                                            <label for="id_ori">No Pasien Lama</label>
+                                            <input type="text" id="id_ori" name="id_ori" class="form-control" placeholder="Cari no pasien..." value="{{ request('id_ori') }}">
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 col-xl-4">
                                         <div class="form-group">
                                             <label for="name">Nama Pasien</label>
                                             <input type="text" id="name" name="name" class="form-control" placeholder="Cari nama pasien..." value="{{ request('name') }}">
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-7 col-xl-7">
+                                    <div class="col-md-4 col-xl-4">
                                         <div class="form-group">
                                             <label for="address">Alamat Pasien</label>
                                             <input type="text" id="address" name="address" class="form-control" placeholder="Cari alamat pasien..." value="{{ request('address') }}">
@@ -64,7 +71,7 @@
 
 
                                 <div class="row">
-                                    <div class="col-md-7 col-xl-7">
+                                    <div class="col-md-8 col-xl-8">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <a href="/patients" class="btn btn-default btn-sm">
                                                 Reset pencarian

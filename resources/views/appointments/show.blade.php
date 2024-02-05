@@ -81,7 +81,7 @@
                                             <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->name }}</dd>
         
                                             <dt class="col-sm-5 col-xl-4">Tanggal Lahir</dt>
-                                            <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->date_of_birth }} ({{ $appointment->patient->age }} tahun)</dd>
+                                            <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->date_of_birth }} ({{ \Carbon\Carbon::parse($appointment->patient->date_of_birth)->diffInYears(\Carbon\Carbon::parse($appointment->date_time)) }} tahun)</dd>
         
                                             <dt class="col-sm-5 col-xl-4">Jenis Kelamin</dt>
                                             <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->gender }}</dd>

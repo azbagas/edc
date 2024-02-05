@@ -22,6 +22,11 @@ class PatientController extends Controller
             return $query->where('id', 'like', $request->id . '%');
         });
 
+        $query->when($request->id_ori, function ($query) use ($request) {
+            // return $query->where('id_ori', 'like', '%' . $request->id_ori . '%');
+            return $query->where('id_ori', $request->id_ori);
+        });
+
         $query->when($request->name, function ($query) use ($request) {
             return $query->where('name', 'like', '%' . $request->name . '%');
         });
@@ -30,12 +35,18 @@ class PatientController extends Controller
             return $query->where('address', 'like', '%' . $request->address . '%');
         });
 
+        $query->when($request->all(), function ($query) {
+            return $query->orderBy('id');
+        }, function ($query) {
+            return $query->orderByDesc('id');
+        });
+
         $per_page = $request->per_page ?? 10;
         
         session(['patients_url' => request()->fullUrl()]);
 
         return view('patients.index', [
-            'patients' => $query->orderByDesc('id')->paginate($per_page)->appends($request->all()),
+            'patients' => $query->paginate($per_page)->appends($request->all()),
             'newPatientId' => Patient::max('id') + 1,
             'per_page_options' => [10, 25, 50]
         ]);

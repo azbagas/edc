@@ -493,12 +493,9 @@ class AppointmentController extends Controller
                     }
                     $payment->payment_types()->sync($paymentIn);
 
-                    if ($appointment->status_id == 2) {
-                        $appointmentData['status_id'] = 3;
-                    }
-
                     $appointment->update([
-                        'next_appointment_date_time' => $validatedData['date_time']
+                        'next_appointment_date_time' => $validatedData['date_time'],
+                        'status_id' => 3
                     ]);
                 });
                 

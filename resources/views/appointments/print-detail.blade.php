@@ -56,7 +56,7 @@
                             <strong>Tanggal Lahir</strong>
                         </td>
                         <td>
-                            : {{ $appointment->patient->date_of_birth }} ({{ $appointment->patient->age }} tahun)
+                            : {{ $appointment->patient->date_of_birth }} ({{ \Carbon\Carbon::parse($appointment->patient->date_of_birth)->diffInYears(\Carbon\Carbon::parse($appointment->date_time)) }} tahun)
                         </td>
                     </tr>
                     <tr>
