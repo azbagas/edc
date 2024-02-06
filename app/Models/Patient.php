@@ -19,6 +19,11 @@ class Patient extends Model
         return $this->hasMany(Appointment::class);
     }
 
+    public function patient_promises(): HasMany
+    {
+        return $this->hasMany(PatientPromise::class);
+    }
+
     // Accessor and Mutators
     protected function dateOfBirth(): Attribute
     {

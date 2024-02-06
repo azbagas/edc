@@ -124,6 +124,11 @@
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                                 @can('admin')
+                                                    <a href="patient-promises/create?patient={{ $patient->id }}" class="btn btn-info btn-sm">
+                                                        <i class="fa fa-clock"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('admin')
                                                     <a href="appointments/create?patient={{ $patient->id }}" class="btn btn-success btn-sm">
                                                         <i class="fa fa-plus"></i>
                                                     </a>

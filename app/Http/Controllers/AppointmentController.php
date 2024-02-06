@@ -11,11 +11,12 @@ use App\Models\Payment;
 use App\Models\Medicine;
 use App\Models\Assistant;
 use App\Models\Appointment;
-use App\Models\PatientCondition;
 use App\Models\PaymentType;
 use Illuminate\Http\Request;
+use App\Models\PatientPromise;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use App\Models\PatientCondition;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -497,6 +498,13 @@ class AppointmentController extends Controller
                         'next_appointment_date_time' => $validatedData['date_time'],
                         'status_id' => 3
                     ]);
+
+                    if ($validatedData['date_time']) {
+                        PatientPromise::create([
+                            'patient_id' => $appointment->patient_id,
+                            'date_time' => $validatedData['date_time']
+                        ]);
+                    }
                 });
                 
                 return redirect('/appointments/'. $appointment->id)->with('success', 'Pemeriksaan berhasil!');

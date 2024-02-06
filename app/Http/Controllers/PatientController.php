@@ -35,7 +35,7 @@ class PatientController extends Controller
             return $query->where('address', 'like', '%' . $request->address . '%');
         });
 
-        $query->when($request->all(), function ($query) {
+        $query->when(($request->id || $request->id_ori || $request->name || $request->address), function ($query) {
             return $query->orderBy('id');
         }, function ($query) {
             return $query->orderByDesc('id');

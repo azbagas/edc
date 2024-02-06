@@ -22,6 +22,7 @@ use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\TreatmentTypeController;
 use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\PatientPromiseController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -72,6 +73,9 @@ Route::middleware(['auth'])->group(function () {
         'show'
     ]);
     Route::resource('/medicines', MedicineController::class)->except([
+        'show'
+    ]);
+    Route::resource('/patient-promises', PatientPromiseController::class)->except([
         'show'
     ]);
     

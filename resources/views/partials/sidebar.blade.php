@@ -55,6 +55,12 @@
                         <p>Data Pasien</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/patient-promises" class="nav-link {{ Request::is('patient-promises*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>Janji Pasien</p>
+                    </a>
+                </li>
                 <li class="nav-item {{ Request::is('treatment-types*') || Request::is('treatments*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-stethoscope"></i>
