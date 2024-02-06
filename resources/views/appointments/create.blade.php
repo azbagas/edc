@@ -124,7 +124,7 @@
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
-                                                    <label for="complaint">Keluhan<span class="text-danger">*</span></label>
+                                                    <label for="complaint">Keluhan/Tujuan<span class="text-danger">*</span></label>
                                                     <textarea id="complaint" name="complaint" class="form-control @error('complaint') is-invalid @enderror" rows="3"  required
                                                         placeholder="Masukkan keluhan pasien...">{{ old('complaint') }}</textarea>
                                                     @error('complaint')
