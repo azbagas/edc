@@ -1,11 +1,13 @@
 @extends('layouts.guest')
 
+@section('title', 'Login')
+
 @section('content')
     <div class="login-box">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <h1>Ely Dental Clinic</h1>
+                <h2><img src="{{ asset('storage/images/logo-tooth-only.png') }}" alt="Logo Klinik" style="-webkit-filter: invert(100%); filter: invert(100%); width:2rem; margin-right:0.4rem"> Ely Dental Clinic</h2>
             </div>
             <div class="card-body">
                 <form action="/login" method="post">
@@ -46,7 +48,7 @@
                 </form>
 
                 <p class="mb-1 mt-3">
-                    <a href="#">Lupa password</a>
+                    <a href="{{ route('password.request') }}">Lupa password</a>
                 </p>
             </div>
             <!-- /.card-body -->

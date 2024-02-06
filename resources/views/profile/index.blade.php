@@ -67,6 +67,15 @@
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        id="email" name="email" placeholder="Masukkan email..."
+                                        value="{{ old('email', Auth::user()->email) }}">
+                                    @error('email')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
                                 <br>
                                 <h4>Update Password</h4>
                                 <div class="form-group">

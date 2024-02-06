@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Laravel') }} | Login</title>
+    <title>{{ config('app.name', 'Laravel') }} | @yield('title')</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -40,6 +40,14 @@
     <script>
         @if (session()->has('error'))
             toastr.error("{{ session('error') }}")
+        @endif
+
+        @if (session()->has('success'))
+            toastr.success("{{ session('success') }}")
+        @endif
+
+        @if (session()->has('info'))
+            toastr.info("{{ session('info') }}")
         @endif
     </script>
 </body>

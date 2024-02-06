@@ -1,28 +1,27 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Models\Patient;
-use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RecapController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DiseaseController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\AssistantController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\AssistantController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\MedicineTypeController;
 use App\Http\Controllers\TreatmentTypeController;
 use App\Http\Controllers\DependantDropdownController;
-use App\Http\Controllers\DoctorController;
-use App\Http\Controllers\PaymentTypeController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RecapController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ForgotPasswordController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -125,5 +124,10 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'authenticate']);
+
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'updatePassword'])->name('password.update');
 });
 

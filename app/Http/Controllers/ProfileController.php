@@ -24,6 +24,11 @@ class ProfileController extends Controller
             $rules['username'] = 'required|unique:users,username';
         }
 
+        // Kalau email berubah
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|email:rfc,dns|unique:users,email';
+        }
+
         // Kalau form password diisi, artinya ingin mengubah password
         $isChangingPassword = $request->current_password || $request->new_password || $request->new_password_confirmation; 
         if ($isChangingPassword) {

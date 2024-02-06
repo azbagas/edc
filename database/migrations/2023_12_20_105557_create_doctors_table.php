@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->string('sip');
+            $table->string('sip')->nullable();
             $table->decimal('doctor_percentage');
             $table->timestamps();
         });
