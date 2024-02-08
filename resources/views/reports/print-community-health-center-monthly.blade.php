@@ -163,10 +163,10 @@
             </td>
             <td class="text-center" width="50%">
                 <span style="border-bottom: 0.5px solid black; width: 35%">
-                    {{ $doctor->user->name }}
+                    {{ $doctor['name'] }}
                 </span>
                 <br>
-                {{ $doctor->sip }}
+                {{ $doctor['sip'] }}
             </td>
         </tr>
     </table>

@@ -12,6 +12,12 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
 {
+    // Untuk ttd dokter
+    public $doctor = [
+        'name' => 'drg. Erlita Nindya Gushyana',
+        'sip' => 'SIPxxxxxxx'
+    ];
+
     public function communityHealthCenterDaily(Request $request) {
         $query = Appointment::query();
 
@@ -161,7 +167,7 @@ class ReportController extends Controller
                 'diseasesCount' => $diseasesCount,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'doctor' => Doctor::findOrFail(1)
+                'doctor' => $this->doctor
             ]);
     
             return $pdf->stream($title);
@@ -340,7 +346,7 @@ class ReportController extends Controller
                 'diseasesCount' => $diseasesCount,
                 'months' => $months,
                 'years' => $years,
-                'doctor' => Doctor::findOrFail(1)
+                'doctor' => $this->doctor
             ]);
     
             return $pdf->stream($title);
