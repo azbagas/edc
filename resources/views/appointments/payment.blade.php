@@ -90,12 +90,6 @@
                                     <dt class="col-sm-3 col-xl-3">Dokter</dt>
                                     <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span>
                                         {{ $appointment->doctor->user->name }}</dd>
-
-                                    <dt class="col-sm-3 col-xl-3">Asisten</dt>
-                                    <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->assistant->name }}</dd>
-                                    
-                                    <dt class="col-sm-3 col-xl-3">Admin</dt>
-                                    <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->admin->user->name }}</dd>
                                 </dl>
                             </div>
                         </div>

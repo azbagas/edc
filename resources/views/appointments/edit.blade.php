@@ -122,9 +122,9 @@
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
-                                                    <label for="complaint">Keluhan<span class="text-danger">*</span></label>
+                                                    <label for="complaint">Keluhan/Tujuan<span class="text-danger">*</span></label>
                                                     <textarea id="complaint" name="complaint" class="form-control @error('complaint') is-invalid @enderror" rows="3" required
-                                                        placeholder="Masukkan keluhan pasien...">{{ old('complaint', $appointment->complaint) }}</textarea>
+                                                        placeholder="Masukkan keluhan/tujuan pasien...">{{ old('complaint', $appointment->complaint) }}</textarea>
                                                     @error('complaint')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
@@ -188,7 +188,7 @@
                             </div>
                             <div class="card-footer d-flex">
                                 <div class="mr-auto">
-                                    <button type="reset" class="btn btn-default">Reset</button>
+                                    {{-- <button type="reset" class="btn btn-default">Reset</button> --}}
                                 </div>
                                 <div>
                                     

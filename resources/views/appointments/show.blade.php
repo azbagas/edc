@@ -23,13 +23,80 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            {{-- <div class="row">
-                <div class="col text-right">
-                    <a href="/appointments/{{ $appointment->id }}/examination" class="btn btn-warning btn-sm mb-3">
-                        <i class="fa fa-pen mr-2"></i>Edit
+            <div class="row mb-3">
+                <div class="col">
+                    @can('admin')
+                        <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
+                            @method('delete')
+                            @csrf
+                            <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                <i class="fa fa-trash"></i> Hapus pertemuan
+                            </button>
+                        </form>
+                    @endcan
+                    <a href="/patients/{{ $appointment->patient_id }}" class="btn btn-primary btn-sm">
+                        <i class="fa fa-eye"></i> Lihat pasien
                     </a>
                 </div>
-            </div> --}}
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Informasi Pertemuan
+                            </h3>
+                            <div class="card-tools">
+                                @can('admin')
+                                    <a href="/appointments/{{ $appointment->id }}/edit" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-pen"></i> Edit Informasi Pertemuan
+                                    </a>
+                                @endcan
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <dl class="row">
+                                        <dt class="col-sm-5 col-xl-4">Tanggal</dt>
+                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span>
+                                            {{ \Carbon\Carbon::parse($appointment->date_time)->translatedFormat('j F Y, H:i') }}        
+                                        </dd>
+
+                                        <dt class="col-sm-5 col-xl-4">Dokter</dt>
+                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->doctor->user->name }}</dd>
+                                        
+                                        <dt class="col-sm-5 col-xl-4">Asisten</dt>
+                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->assistant->name }}</dd>
+                                        
+                                        <dt class="col-sm-5 col-xl-4">Admin</dt>
+                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->admin->user->name }}</dd>
+                                        
+                                    </dl>
+                                </div>
+                                <div class="col-sm-6">
+                                    <dl class="row">
+                                        <dt class="col-sm-5 col-xl-4">Nomor Pasien</dt>
+                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient_id }}</dd>
+
+                                        <dt class="col-sm-5 col-xl-4">Nama Pasien</dt>
+                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->name }}</dd>
+
+                                        <dt class="col-sm-5 col-xl-4">Keluhan/Tujuan</dt>
+                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ $appointment->complaint }}</dd>
+
+                                        <dt class="col-sm-5 col-xl-4">Kondisi Pasien</dt>
+                                        <dd class="col-sm-7 col-xl-8"><span class="d-none d-sm-inline">:</span> {{ generate_patient_conditions_string($appointment->patient_condition) }}</dd>
+
+                                    </dl>
+    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col">
@@ -40,22 +107,10 @@
                             </h3>
 
                             <div class="card-tools">
-                                @can('admin')
-                                    <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
-                                        @method('delete')
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                            <i class="fa fa-trash"></i> Hapus pertemuan
-                                        </button>
-                                    </form>
-                                    
-                                @endcan
-                                <a href="/patients/{{ $appointment->patient_id }}" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-eye"></i> Lihat pasien
-                                </a>
+                                
                                 @can('admin')
                                     <a href="/appointments/{{ $appointment->id }}/examination" class="btn btn-warning btn-sm">
-                                        <i class="fa fa-pen"></i> Edit
+                                        <i class="fa fa-pen"></i> Edit Pemeriksaan
                                     </a>
                                 @endcan
                             </div>
@@ -104,11 +159,6 @@
                                             <dt class="col-sm-3 col-xl-3">Dokter</dt>
                                             <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->doctor->user->name }}</dd>
                                             
-                                            <dt class="col-sm-3 col-xl-3">Asisten</dt>
-                                            <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->assistant->name }}</dd>
-                                            
-                                            <dt class="col-sm-3 col-xl-3">Admin</dt>
-                                            <dd class="col-sm-9 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->admin->user->name }}</dd>
                                         </dl>
                                     </div>
                                 </div>
