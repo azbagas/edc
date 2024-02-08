@@ -33,7 +33,7 @@
 
     <table width="100%">
         <tr>
-            <td>
+            <td width="50%">
                 <table>
                     <tr>
                         <td>
@@ -85,7 +85,7 @@
                     </tr>
                 </table>
             </td>
-            <td valign='top'>
+            <td valign='top' width="50%">
                 <table>
                     <tr>
                         <td>
@@ -188,12 +188,12 @@
 
     <br>
 
-    <div style="font-size:small">Obat</div>
+    <div style="font-size:small">Resep Obat</div>
     <table width="100%">
         <thead style="background-color: lightgray;">
             <tr>
                 <th width="30px">No</th>
-                <th>Obat</th>
+                <th>Resep Obat</th>
                 <th>Harga</th>
                 <th>Jumlah</th>
                 <th width="100px">Subtotal</th>
@@ -213,7 +213,7 @@
             @empty
                 <tr>
                     <td colspan="5">
-                        Tidak ada obat
+                        Tidak ada resep obat
                     </td>
                 </tr>
             @endforelse

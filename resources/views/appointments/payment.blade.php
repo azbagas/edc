@@ -100,6 +100,13 @@
                             </div>
                         </div>
 
+                        <h5>Kondisi Pasien</h5>
+                        <div class="row mb-3">
+                            <div class="col">
+                                {{ generate_patient_conditions_string($appointment->patient_condition) }}
+                            </div>
+                        </div>
+
                         <h5>Diagnosis</h5>
                         <div class="row mb-3">
                             <div class="col-12 table-responsive">
@@ -178,14 +185,14 @@
                             </div>
                         </div>
 
-                        <h5>Obat</h5>
+                        <h5>Resep Obat</h5>
                         <div class="row mb-3">
                             <div class="col-12 table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th class="col-1">No</th>
-                                            <th>Obat</th>
+                                            <th>Resep Obat</th>
                                             <th>Harga</th>
                                             <th>Jumlah</th>
                                             <th class="col-2">Subtotal</th>
@@ -215,7 +222,7 @@
                                         @empty
                                             <tr>
                                                 <td colspan="5">
-                                                    Tidak ada obat
+                                                    Tidak ada resep obat
                                                 </td>
                                             </tr>
                                         @endforelse
@@ -238,7 +245,7 @@
                                     <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span>
                                         Rp{{ change_decimal_format_to_currency($subTotalTreatments) }}</dd>
 
-                                    <dt class="col-sm-4 col-md-3 col-lg-4">Total obat</dt>
+                                    <dt class="col-sm-4 col-md-3 col-lg-4">Total resep obat</dt>
                                     <dd class="col-sm-8 col-md-9 col-lg-8"><span class="d-none d-sm-inline">:</span>
                                         Rp{{ change_decimal_format_to_currency($subTotalMedicines) }}</dd>
 

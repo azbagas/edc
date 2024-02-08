@@ -218,7 +218,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Obat
+                                    Resep Obat
                                 </h3>
                             </div>
                             <div class="card-body">
