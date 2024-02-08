@@ -137,12 +137,48 @@
                                     <div class="col ml-xl-5">
                                         <div class="row">
                                             <div class="col">
-                                                <div class="form-group">
-                                                    <label>Kondisi Pasien</label>
+                                                <h5>Kondisi Pasien</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group mb-1">
+                                                    {{-- <label>Kondisi Pasien</label> --}}
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" id="is_pregnant" name="is_pregnant" value="1" @checked(old('is_pregnant') == 1)>
                                                         <label class="form-check-label" for="is_pregnant">Sedang hamil</label>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group mb-1">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="is_diabetes" name="is_diabetes" value="1" @checked(old('is_diabetes') == 1)>
+                                                        <label class="form-check-label" for="is_diabetes">Diabetes</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group mb-1">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="is_hypertension" name="is_hypertension" value="1" @checked(old('is_hypertension') == 1)>
+                                                        <label class="form-check-label" for="is_hypertension">Hipertensi</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group mt-1">
+                                                    <textarea id="note" name="note" class="form-control @error('note') is-invalid @enderror" rows="3"
+                                                        placeholder="Kondisi lainnya...">{{ old('note') }}</textarea>
+                                                    @error('note')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>

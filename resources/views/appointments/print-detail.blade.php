@@ -117,7 +117,11 @@
     </table>
 
     <br />
-    {{-- <hr> --}}
+    
+    <div style="font-size:small">Kondisi Pasien</div>
+    <div style="font-size:x-small">{{ generate_patient_conditions_string($appointment->patient_condition) }}</div>
+
+    <br>
 
     <div style="font-size:small">Diagnosis</div>
     <table width="100%">

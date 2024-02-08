@@ -112,6 +112,14 @@
                                         </dl>
                                     </div>
                                 </div>
+
+                                <h5>Kondisi Pasien</h5>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        {{ generate_patient_conditions_string($appointment->patient_condition) }}
+                                    </div>
+                                </div>
+
         
                                 <h5>Diagnosis</h5>
                                 <div class="row mb-3">

@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+use App\Models\PatientCondition;
 
 if (!function_exists('change_currency_format_to_decimal')) {
     function change_currency_format_to_decimal($currency)
@@ -30,5 +32,30 @@ if (!function_exists('format_appointment_id')) {
     function format_appointment_id($id)
     {
         return sprintf("%09d", $id);
+    }
+
+}
+if (!function_exists('generate_patient_conditions_string')) {
+    function generate_patient_conditions_string(PatientCondition $patient_condition)
+    {
+        $patientConditions = [];
+        if ($patient_condition->is_pregnant == 1) {
+            array_push($patientConditions, 'sedang hamil');
+        }
+        if ($patient_condition->is_diabetes == 1) {
+            array_push($patientConditions, 'diabetes');
+        }
+        if ($patient_condition->is_hypertension == 1) {
+            array_push($patientConditions, 'hipertensi');
+        }
+        if ($patient_condition->note) {
+            array_push($patientConditions, $patient_condition->note);
+        }
+        $patientConditions = ucfirst(implode(", ", $patientConditions));
+        if ($patientConditions == '') {
+            $patientConditions = 'Normal';
+        }
+
+        return $patientConditions;
     }
 }

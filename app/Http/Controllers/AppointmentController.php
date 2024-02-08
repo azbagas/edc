@@ -101,7 +101,10 @@ class AppointmentController extends Controller
             'doctor_id' => 'required',
             'assistant_id' => 'required',
             'complaint' => 'required',
-            'is_pregnant' => 'nullable|boolean'
+            'is_pregnant' => 'nullable|boolean',
+            'is_diabetes' => 'nullable|boolean',
+            'is_hypertension' => 'nullable|boolean',
+            'note' => 'nullable'
         ]);
 
         $validatedData['admin_id'] = Auth::user()->admin->id;
@@ -120,7 +123,10 @@ class AppointmentController extends Controller
                 $appointment = Appointment::create($validatedData);
                 PatientCondition::create([
                     'appointment_id' => $appointment->id,
-                    'is_pregnant' => $validatedData['is_pregnant'] ?? 0
+                    'is_pregnant' => $validatedData['is_pregnant'] ?? 0,
+                    'is_diabetes' => $validatedData['is_diabetes'] ?? 0,
+                    'is_hypertension' => $validatedData['is_hypertension'] ?? 0,
+                    'note' => $validatedData['note']
                 ]);
             });
             return redirect('/appointments')->with('success', 'Pertemuan berhasil dibuat!');
@@ -205,14 +211,20 @@ class AppointmentController extends Controller
             'doctor_id' => 'required',
             'assistant_id' => 'required',
             'complaint' => 'required',
-            'is_pregnant' => 'nullable|boolean'
+            'is_pregnant' => 'nullable|boolean',
+            'is_diabetes' => 'nullable|boolean',
+            'is_hypertension' => 'nullable|boolean',
+            'note' => 'nullable'
         ]);
 
         try {
             DB::transaction(function() use($appointment, $validatedData) {
                 $appointment->update($validatedData);
                 $appointment->patient_condition->update([
-                    'is_pregnant' => $validatedData['is_pregnant'] ?? 0
+                    'is_pregnant' => $validatedData['is_pregnant'] ?? 0,
+                    'is_diabetes' => $validatedData['is_diabetes'] ?? 0,
+                    'is_hypertension' => $validatedData['is_hypertension'] ?? 0,
+                    'note' => $validatedData['note']
                 ]);
                 
                 // Kalo sudah melakukan payment maka ubah doctor_percentage karena takut dokter yang diubah

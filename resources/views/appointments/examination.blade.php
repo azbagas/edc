@@ -80,25 +80,34 @@
                                 </h3>
                             </div>
                             <div class="card-body">
-                                <dl class="row mb-0">
-                                    <dt class="col-sm-3 col-xl-2">Nomor Pasien</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->id }}</dd>
-    
-                                    <dt class="col-sm-3 col-xl-2">Nama</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->name }}</dd>
-    
-                                    <dt class="col-sm-3 col-xl-2">Tanggal Lahir</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->date_of_birth }} ({{ \Carbon\Carbon::parse($appointment->patient->date_of_birth)->diffInYears(\Carbon\Carbon::parse($appointment->date_time)) }} tahun)</dd>
-    
-                                    <dt class="col-sm-3 col-xl-2">Jenis Kelamin</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->gender }}</dd>
-                                    
-                                    <dt class="col-sm-3 col-xl-2">Nomor Telepon</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->phone }}</dd>
-                                    
-                                    <dt class="col-sm-3 col-xl-2">Alamat</dt>
-                                    <dd class="col-sm-9 col-xl-10"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->address }}</dd>
-                                </dl>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <dl class="row mb-0">
+                                            <dt class="col-sm-4 col-xl-3">Nomor Pasien</dt>
+                                            <dd class="col-sm-8 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->id }}</dd>
+            
+                                            <dt class="col-sm-4 col-xl-3">Nama</dt>
+                                            <dd class="col-sm-8 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->name }}</dd>
+            
+                                            <dt class="col-sm-4 col-xl-3">Tanggal Lahir</dt>
+                                            <dd class="col-sm-8 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->date_of_birth }} ({{ \Carbon\Carbon::parse($appointment->patient->date_of_birth)->diffInYears(\Carbon\Carbon::parse($appointment->date_time)) }} tahun)</dd>
+            
+                                            <dt class="col-sm-4 col-xl-3">Jenis Kelamin</dt>
+                                            <dd class="col-sm-8 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->gender }}</dd>
+                                            
+                                            <dt class="col-sm-4 col-xl-3">Nomor Telepon</dt>
+                                            <dd class="col-sm-8 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->phone }}</dd>
+                                            
+                                            <dt class="col-sm-4 col-xl-3">Alamat</dt>
+                                            <dd class="col-sm-8 col-xl-9"><span class="d-none d-sm-inline">:</span> {{ $appointment->patient->address }}</dd>
+                                        </dl>
+                                        
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h5>Kondisi Pasien</h5>
+                                        <p>{{ generate_patient_conditions_string($appointment->patient_condition) }}</p>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col">
                                         @include('appointments._show-appointment-histories-modal')
@@ -107,6 +116,7 @@
                                         </button>
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
