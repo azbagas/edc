@@ -14,7 +14,7 @@
                 <img src="{{ asset('storage/' . Auth::user()->photo) }}" class="img-circle elevation-2" alt="User Image" style="width: 2.1rem; height: 2.1rem; object-fit: cover;">
             </div>
             <div class="info">
-                <a href="/profile" class="d-block">{{ Auth::user()->name }}</a>
+                <a href="/profile" class="d-block">{{ cut_name(Auth::user()->name) }}</a>
             </div>
         </div>
 

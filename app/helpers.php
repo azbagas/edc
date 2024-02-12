@@ -35,6 +35,7 @@ if (!function_exists('format_appointment_id')) {
     }
 
 }
+
 if (!function_exists('generate_patient_conditions_string')) {
     function generate_patient_conditions_string(PatientCondition $patient_condition)
     {
@@ -57,5 +58,28 @@ if (!function_exists('generate_patient_conditions_string')) {
         }
 
         return $patientConditions;
+    }
+}
+
+if (!function_exists('cut_name')) {
+    function cut_name($name, $max=26)
+    {
+        if (strlen($name) <= $max) {
+            return $name;
+        }
+        
+        $words = explode(' ', $name);
+        
+        $cutName = $name;
+        
+        $index = count($words) - 1;
+        while (strlen($cutName) > $max) {
+            $words[$index] = strtoupper($words[$index][0]) . '.';
+            
+            $cutName = implode(' ', $words);
+            $index--;
+        }
+        
+        return $cutName;
     }
 }
