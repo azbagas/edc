@@ -37,6 +37,14 @@
                         </ul>
                     </div>
                 @endif
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <a href="javascript:history.back()" class="btn btn-info btn-sm">
+                            <i class="fa fa-arrow-left"></i> Kembali
+                        </a>
+                    </div>
+                </div>
                 
     
                 {{-- Informasi pemeriksaan --}}

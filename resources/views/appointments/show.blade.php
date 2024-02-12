@@ -25,18 +25,31 @@
         <div class="container-fluid">
             <div class="row mb-3">
                 <div class="col">
-                    @can('admin')
-                        <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
-                            @method('delete')
-                            @csrf
-                            <button type="submit" class="btn btn-danger btn-sm delete-button">
-                                <i class="fa fa-trash"></i> Hapus pertemuan
-                            </button>
-                        </form>
-                    @endcan
-                    <a href="/patients/{{ $appointment->patient_id }}" class="btn btn-primary btn-sm">
-                        <i class="fa fa-eye"></i> Lihat pasien
-                    </a>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            @if (url()->previous() == route('payment', ['appointment' => $appointment->id]) ||
+                                 url()->previous() == route('appointments.edit', ['appointment' => $appointment->id]))
+                                <a href="{{ session("appointments_url", "/appointments") }}" class="btn btn-info btn-sm">
+                                    <i class="fa fa-arrow-left"></i> Kembali
+                                </a>
+                            @else
+                                <a href="javascript:history.back()" class="btn btn-info btn-sm">
+                                    <i class="fa fa-arrow-left"></i> Kembali
+                                </a>   
+                            @endif
+                        </div>
+                        <div>
+                            @can('admin')
+                                <form action="/appointments/{{ $appointment->id }}" method="POST" class="d-inline">
+                                    @method('delete')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm delete-button">
+                                        <i class="fa fa-trash"></i> Hapus pertemuan
+                                    </button>
+                                </form>
+                            @endcan
+                        </div>
+                    </div>
                 </div>
             </div>
 

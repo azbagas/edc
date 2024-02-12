@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/appointments/{appointment}/examination', [AppointmentController::class, 'examination']);
     Route::put('/appointments/{appointment}/examination', [AppointmentController::class, 'examination_update']);
     
-    Route::get('/appointments/{appointment}/payment', [AppointmentController::class, 'payment']);
+    Route::get('/appointments/{appointment}/payment', [AppointmentController::class, 'payment'])->name('payment');
     Route::put('/appointments/{appointment}/payment', [AppointmentController::class, 'payment_update']);
 
     
